@@ -7,11 +7,8 @@ lazy val root = (project in file("."))
   .settings(
     scalaVersion := "3.1.2",
     name := "risiko-scala",
-    assembly / mainClass := Some("GuiProgramOne"),
+    assembly / mainClass := Some("view.GuiProgramOne"),
     assembly / assemblyJarName := "risiko.jar",
-    ThisBuild / assemblyMergeStrategy := {
-      case "./img/map_grey.jpg" => MergeStrategy.concat
-    },
     // javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
