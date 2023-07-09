@@ -1,14 +1,20 @@
 package view
 
+import view.GameScreen.getClass
+
 import java.awt.BorderLayout
-import javax.swing.{JFrame, JPanel}
+import javax.swing.{JFrame, JPanel, WindowConstants}
 
 class GameWindow {
-  private val frame = new JFrame("GUI con sfondo")
+  private val TITILE = "Risiko"
+  private val ICON_PATH = "/map_ref.png"
+  private val frame = new JFrame(TITILE)
 
   def show() =
     // Imposta le dimensioni del frame e visualizzalo
+    frame.setIconImage(javax.imageio.ImageIO.read(getClass.getResourceAsStream(ICON_PATH)))
     frame.pack()
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setVisible(true)
 
   def changeScreen(p: JPanel) =
