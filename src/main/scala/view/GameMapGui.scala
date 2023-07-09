@@ -4,16 +4,21 @@ import controller.Controller
 import model.{Model, ModelImpl, PlayerColor, PlayerImpl}
 
 import java.awt.{BorderLayout, Color, Font, Graphics, Graphics2D}
-import java.awt.event.ActionEvent
+import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
 import java.awt.geom.{Ellipse2D, Point2D}
+import java.io.{File, FileReader}
 import javax.swing.{BorderFactory, JButton, JFrame, JPanel}
+import scala.collection.mutable
+import scala.io.Source
 import scala.swing.{Dimension, Image}
+import scala.collection.mutable.Map
 
 
 object GameMapGui extends App {
 
   val model = new ModelImpl()
   val controller = new Controller(model)
+  val buttonMap: mutable.Map[String, JButton] = mutable.Map()
 
   // Carica l'immagine di sfondo
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/map_grey.jpg"))
@@ -39,6 +44,62 @@ object GameMapGui extends App {
   }
   panel.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
+  val file = new File("src/main/resources/config/states.txt")
+  val lines = Source.fromFile(file).getLines().toList
+
+  lines.foreach { line =>
+    val parts = line.split(",")
+    if (parts.length >= 2) {
+      val name = parts(0).trim
+      val posX = parts(1).trim
+      val posY = parts(2).trim
+
+      val btnState = new JButton() {
+        setBorder(BorderFactory.createEmptyBorder())
+        setContentAreaFilled(false) // Rimuove lo sfondo del bottone
+        setForeground(Color.BLACK) // Imposta il colore del testo
+        setFocusPainted(false) // Rimuove l'effetto di focuss
+        setText(name)
+        setFont(new Font("Arial", 12, 10))
+
+        override def paintComponent(g: Graphics): Unit = {
+          val g2d = g.asInstanceOf[Graphics2D]
+          val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
+          val radius = Math.min(getWidth, getHeight) / 2.0f
+          val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
+          g2d.setColor(Color.YELLOW) // Imposta il colore del cerchio
+          g2d.fill(circle) // Disegna il cerchio
+          super.paintComponent(g) // Disegna il testo del bottone
+        }
+      }
+      import javax.swing.UIManager
+      import java.awt.Color
+      btnState.addMouseListener(new MouseAdapter() {
+        override def mouseEntered(evt: MouseEvent): Unit = {
+          btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+        }
+
+        override def mouseExited(evt: MouseEvent): Unit = {
+          btnState.setBorder(BorderFactory.createEmptyBorder())
+        }
+      })
+      btnState.addActionListener((_: ActionEvent) => {
+        if (!btnState.isSelected) {
+          val neighbors: Set[String] = controller.getNeighbor(name, controller.getCurrentPlayer())
+          println(neighbors)
+          neighbors.foreach(neighbor => {
+            buttonMap(neighbor).setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
+          })
+        } else
+          resetButton()
+        btnState.setSelected(!btnState.isSelected)
+      })
+      btnState.setBounds(posX.toInt, posY.toInt, 100, 40)
+      panel.add(btnState)
+      buttonMap += (name -> btnState)
+    }
+  }
+/*
   // Aggiungi gli elementi alla GUI
   val btnItaly = new JButton() {
     //setBorder(BorderFactory.createEmptyBorder())
@@ -189,13 +250,14 @@ object GameMapGui extends App {
     "argentina" -> btnArgentina,
     "chile" -> btnChile
   )
-
+  */
   val btnShowMyStates = new JButton() {
     setText("Show my States")
   }
   btnShowMyStates.setBounds(400,500,200,50)
   panel.add(btnShowMyStates)
   btnShowMyStates.addActionListener((_: ActionEvent) => {
+    println(buttonMap.size)
     controller.getPlayerStates(controller.getCurrentPlayer()).foreach(state => buttonMap(state.name).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2)))
   })
 
@@ -206,10 +268,12 @@ object GameMapGui extends App {
   frame.setVisible(true)
 
   def resetButton(): Unit =
-    btnItaly.setBorder(BorderFactory.createEmptyBorder())
+    buttonMap.foreach((name, button) => button.setBorder(BorderFactory.createEmptyBorder()))
+    /*btnItaly.setBorder(BorderFactory.createEmptyBorder())
     btnFrance.setBorder(BorderFactory.createEmptyBorder())
     btnSwisse.setBorder(BorderFactory.createEmptyBorder())
     btnChile.setBorder(BorderFactory.createEmptyBorder())
     btnArgentina.setBorder(BorderFactory.createEmptyBorder())
     btnBrazil.setBorder(BorderFactory.createEmptyBorder())
+*/
 }
