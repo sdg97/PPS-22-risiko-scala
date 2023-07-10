@@ -20,6 +20,9 @@ class GameWindow {
   def changeScreen(p: JPanel) =
     frame.getContentPane.removeAll()
     frame.getContentPane.add(p, BorderLayout.CENTER)
+    frame.pack()
+    /**
     frame.getContentPane.doLayout()
     frame.update(frame.getGraphics())
+    */
 }

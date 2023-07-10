@@ -1,5 +1,6 @@
 package view
 import controller.*
+import model.ModelImpl
 
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D}
@@ -31,6 +32,33 @@ private[view] object SettingsScreen {
     val player5Field=new JTextField()
     val player6Field=new JTextField()
 
+    val restartButton = new JButton() {
+
+      setContentAreaFilled(false) // Rimuove lo sfondo del bottone
+      setForeground(Color.BLACK) // Imposta il colore del testo
+      setFocusPainted(false) // Rimuove l'effetto di focuss
+      setText("Restart")
+      setFont(new Font("Arial", 12, 10))
+
+      override def paintComponent(g: Graphics): Unit = {
+        val g2d = g.asInstanceOf[Graphics2D]
+        val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
+        val radius = Math.min(getWidth, getHeight) / 2.0f
+        val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
+        g2d.setColor(Color.YELLOW) // Imposta il colore del cerchio
+        g2d.fill(circle) // Disegna il cerchio
+        super.paintComponent(g) // Disegna il testo del bottone
+      }
+    }
+
+    restartButton.addActionListener((_) => {
+      val m = new ModelImpl()
+      val c = new Controller(m)
+      c.start()
+    })
+    restartButton.setBounds(38, 78, 40, 40)
+
+    panel.add(restartButton)
     panel.add(player1Label)
     panel.add(player1Field)
     panel.add(player2Label)
