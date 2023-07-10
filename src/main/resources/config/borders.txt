@@ -1,6 +1,98 @@
-italy, france
-italy, swisse
-france, swisse
-brazil, argentina
-brazil, chile
-argentina, chile
+alaska, alberta
+alaska, territori del nord ovest
+alaska, kamchatka
+
+territori del nord ovest, alberta
+territori del nord ovest, ontario
+territori del nord ovest, groenlandia
+
+alberta, stati uniti occidentali
+alberta, ontario
+
+stati uniti occidentali, america centrale
+stati uniti occidentali, stati uniti orientali
+stati uniti orientali, america centrale
+
+ontario, stati uniti occidentali
+ontario, stati uniti orientali
+ontario, quebec
+ontario, groenlandia
+
+quebec, stati uniti orientali
+quebec, groenlandia
+
+groenlandia, islanda
+
+america centrale, venezuela
+venezuela, perù
+venezuela, brasile
+perù, brasile
+perù, argentina
+brasile, africa del nord
+brasile, argentina
+
+islanda, gran bretagna
+islanda, scandinavia
+gran bretagna, europa occidentale
+gran bretagna, europa settentrionale
+gran bretagna, scandinavia
+scandinavia, europa settentrionale
+scandinavia, ucraina
+europa occidentale, europa settentrionale
+europa occidentale, europa meridionale
+europa occidentale, africa del nord
+europa settentrionale, europa meridionale
+europa settentrionale, ucraina
+europa meridionale, ucraina
+europa meridionale, africa del nord
+europa meridionale, egitto
+europa meridionale, medio oriente
+
+africa del nord, egitto
+africa del nord, congo
+africa del nord, africa orientale
+egitto, africa orientale
+egitto, medio oriente
+congo, africa orientale
+congo, africa del sud
+africa orientale, africa del sud
+africa orientale, madagascar
+africa orientale, medio oriente
+africa del sud, madagascar
+
+ucraina, afghanistan
+ucraina, medio oriente
+ucraina, urali
+urali, siberia
+urali, cina
+afghanistan, medio oriente
+afghanistan, india
+afghanistan, cina
+afghanistan, urali
+medio oriente, india
+siberia, jacuzia
+siberia, cita
+siberia, mongolia
+siberia, cina
+jacuzia, kamchatka
+jacuzia, cita
+cita, kamchatka
+cita, mongolia
+kamchatka, giappone
+kamchatka, mongolia
+giappone, mongolia
+mongolia, cina
+cina, india
+cina, siam
+siam, india
+siam, indonesia
+indonesia, nuova guinea
+indonesia, australia occidentale
+australia orientale, australia occidentale
+australia orientale, nuova guinea
+australia occidentale, nuova guinea
+
+
+
+
+

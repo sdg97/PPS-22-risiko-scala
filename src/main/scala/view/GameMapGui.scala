@@ -23,11 +23,12 @@ object GameMapGui extends App {
   val buttonMap: mutable.Map[String, JButton] = mutable.Map()
 
   // Carica l'immagine di sfondo
-  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/map_grey.jpg"))
+  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/map_ref.png"))
 
   // Crea il frame principale
   val frame = new JFrame("GUI Map")
   frame.setLayout(new BorderLayout())
+  frame.setResizable(false)
 
   // Crea il pannello per contenere gli elementi della GUI
   val panel = new JPanel(null) {
@@ -75,7 +76,9 @@ object GameMapGui extends App {
         }
       }
 
-      btnState.addMouseListener(new MouseAdapter() {
+      btnState.addMouseListener(
+
+        new MouseAdapter() {
         override def mouseEntered(evt: MouseEvent): Unit = {
           if(!btnState.isSelected)
             btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
