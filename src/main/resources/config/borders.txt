@@ -1,0 +1,6 @@
+italy, france
+italy, swisse
+france, swisse
+brazil, argentina
+brazil, chile
+argentina, chile
