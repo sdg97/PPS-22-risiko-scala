@@ -5,7 +5,7 @@ trait Graph:
   def edges: Set[(String,String)]
   def addEdge(state1: String, state2: String): Unit
   def addNode(state: State): Unit
-  def getNeighborStates(state: String): Set[String]
+  def getNeighborStates(state: String, player: Player): Set[String]
   def getNeighborStatesOfPlayer(state: String, player: Player): Set[String]
   def getStateByName(nameState: String): State
   def getPlayerStates(player: Player): Set[State]
@@ -17,21 +17,22 @@ class GameMap extends Graph:
   override def edges: Set[(String,String)] = edgesSet
   override def addEdge(state1: String, state2: String): Unit = edgesSet += ((state1,state2))
   override def addNode(state: State): Unit = nodeSet += state
-  override def getNeighborStates(state: String): Set[String] = edgesSet collect {
-    case (`state`, state2) => (state2)
-    case (state2, `state`) => (state2)
+
+  override def getNeighborStates(state: String, player: Player): Set[String] = edgesSet collect {
+    case (`state`, state2) if getStateByName(state2).player != player => state2
+    case (state2, `state`) if getStateByName(state2).player != player => state2
   }
   override def getNeighborStatesOfPlayer(state: String, player: Player): Set[String] = edgesSet collect {
-    case (`state`, state2) if getStateByName(state2).player == player => (state2)
-    case (state2, `state`) if getStateByName(state2).player == player => (state2)
+    case (`state`, state2) if getStateByName(state2).player == player => state2
+    case (state2, `state`) if getStateByName(state2).player == player => state2
   }
   override def getStateByName(nameState: String): State = nodeSet.filter(s => s.name == nameState).head
   override def getPlayerStates(player: Player): Set[State] = nodeSet.filter(s => s.player == player)
 
 object TryMap extends App:
   val map = new GameMap()
-  val player1 = new PlayerImpl("pie", Color.Yellow)
-  val player2 = new PlayerImpl("martin", Color.Blue)
+  val player1 = new PlayerImpl("pie", PlayerColor.Yellow)
+  val player2 = new PlayerImpl("martin", PlayerColor.Blue)
 
   val italy = new StateImpl("italy", 3, player1)
   val france = new StateImpl("france", 3, player2)
@@ -51,7 +52,7 @@ object TryMap extends App:
   println("Info stato: "+ state.name + " "+ state.player + " " + state.numberOfWagon)
 
   println("NeighborStates: ")
-  map.getNeighborStates("italy").foreach(s => println(s))
+  map.getNeighborStates("italy", player1).foreach(s => println(s))
 
   println("Player NeighborStates: ")
   map.getNeighborStatesOfPlayer("italy", player1).foreach(s => println(s))

@@ -1,0 +1,6 @@
+italy, 450, 270
+france, 410, 200
+swisse, 330, 260
+brazil, 250, 430
+argentina, 170, 430
+chile, 190, 500

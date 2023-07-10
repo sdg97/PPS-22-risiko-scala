@@ -13,6 +13,7 @@ import scala.swing.{Font, Graphics2D}
  * View for setup simulation.
  */
 private[view] object GameScreen {
+  
   def apply(c: Controller) =
 
     val image = getClass.getResourceAsStream("/map_ref.png")
