@@ -18,7 +18,7 @@ class ModelImpl() extends Model {
       val name = parts(0).trim
       parts(1).trim
       parts(2).trim
-      gameMap.addNode(new StateImpl(name, 0, null))
+      gameMap.addNode(new StateImpl(name))
     }
   }
   
