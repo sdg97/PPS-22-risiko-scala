@@ -6,8 +6,9 @@ class Controller(model: ModelImpl) {
 
   def start() =
     View.showSettingsView(this)
-  def setGameSettings(inputDataPlayer: Set[(String, Int)]) =
-    model.setGameSettings(inputDataPlayer: Set[(String, Int)])
+  def setGameSettings(inputDataPlayer: Set[(String, String)]) =
+    model.setGameSettings(inputDataPlayer: Set[(String, String)])
+    model.getSetOfPlayers().foreach(player=>println(player.username+", "+player.color.toString))
     View.showDeploymentTroopsView(this)
 
   def deployTroops() =

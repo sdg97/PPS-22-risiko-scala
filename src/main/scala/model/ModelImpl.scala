@@ -5,9 +5,9 @@ import scala.io.Source
 
 class ModelImpl() extends Model {
   val gameMap = new GameMap()
-  val player1 = new PlayerImpl("pie", PlayerColor.Yellow)
-  val player2 = new PlayerImpl("martin", PlayerColor.Blue)
-  val player3 = new PlayerImpl("simo", PlayerColor.Red)
+  val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
+  val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
+  val player3 = new PlayerImpl("simo", PlayerColor.RED)
 
   val stateFile = new File("src/main/resources/config/states.txt")
   val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
@@ -42,9 +42,9 @@ class ModelImpl() extends Model {
   private var setOfPlayer = Set[Player]()
   override def deployTroops(): Unit = ???
 
-  override def setGameSettings(inputDataPlayer: Set[(String, Int)]): Unit =
+  override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit =
     inputDataPlayer.foreach(element =>
-      setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.fromOrdinal(element._2))
+      setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
     )
 
   override def getSetOfPlayers(): Set[Player] = setOfPlayer

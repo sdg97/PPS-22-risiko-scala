@@ -1,6 +1,6 @@
 package view
 import controller.*
-import model.ModelImpl
+import model.{ModelImpl, Player}
 
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D}
@@ -34,7 +34,7 @@ private[view] object SettingsScreen {
     panel.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
     val panelInfoPlayer=new JPanel(null){
-      setBounds(450,120,400,400)
+      setBounds(450,100,400,500)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.gray, 30))
     };
@@ -83,8 +83,55 @@ private[view] object SettingsScreen {
       }
     })
 
+    val buttonStart= new JButton(){
+      setContentAreaFilled(false) // Rimuove lo sfondo del bottone
+      setForeground(Color.WHITE) // Imposta il colore del testo
+      setFocusPainted(false) // Rimuove l'effetto di focuss
+      setText("START")
+      setFont(new Font("Arial", 12, 10))
+      setBackground(Color.BLACK)
+    }
+    buttonStart.setBounds(130, 370, 140, 40)
 
+    val labelError = new JLabel() {
+      setForeground(Color.BLACK) // Imposta il colore del testo
+      setText("")
+      setFont(new Font("Arial", 12, 13))
+    }
+    labelError.setBounds(30, 420, 340, 40)
 
+    buttonStart.addActionListener((_) => {
+      if (panelInfo.getComponentCount == 0) {
+        labelError.setText("Choose the number of players")
+      }
+      else{
+        val numberOfPlayer=comboBoxMenu.getSelectedItem().toString.toInt
+        var inputDataPlayer: Set[(String, String)]=Set()
+        var i=1;
+        while(i<=numberOfPlayer){
+          if(panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer"+i)).get.getText.equals("")){
+            labelError.setText("All username field must be completed")
+            i=numberOfPlayer;
+          }
+          else if(inputDataPlayer.exists(_._2==panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor"+i)).get.getSelectedItem.toString)) {
+            labelError.setText("A color must be assigned at only one player")
+            i = numberOfPlayer;
+          }
+          else{
+            inputDataPlayer = inputDataPlayer + ((panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer"+i)).get.getText,
+              panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor"+i)).get.getSelectedItem.toString))
+          }
+          i=i+1
+        }
+        if(inputDataPlayer.size.equals(3)){
+          //labelError.setText(inputDataPlayer.head._1+", "+inputDataPlayer.head._2)
+          c.setGameSettings(inputDataPlayer)
+//          val m = new ModelImpl()
+//          labelError.setText(m.getSetOfPlayers().head.toString)
+        }
+
+      }
+    })
 
     val restartButton = new JButton() {
 
@@ -105,16 +152,19 @@ private[view] object SettingsScreen {
       }
     }
 
-    restartButton.addActionListener((_) => {
-      val m = new ModelImpl()
-      val c = new Controller(m)
-      c.start()
-    })
-    restartButton.setBounds(38, 78, 40, 40)
+//    restartButton.addActionListener((_) => {
+//      val m = new ModelImpl()
+//      val c = new Controller(m)
+//      c.start()
+//    })
+//    restartButton.setBounds(1, 378, 40, 40)
 
     panelInfoPlayer.add(labelNumberOfPlayers)
     panelInfoPlayer.add(comboBoxMenu)
     panelInfoPlayer.add(panelInfo)
+    panelInfoPlayer.add(buttonStart)
+    panelInfoPlayer.add(labelError)
+    //panelInfoPlayer.add(restartButton)
     panel.add(panelInfoPlayer)
 
 
