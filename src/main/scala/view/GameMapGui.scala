@@ -23,7 +23,7 @@ object GameMapGui extends App {
   val buttonMap: mutable.Map[String, JButton] = mutable.Map()
 
   // Carica l'immagine di sfondo
-  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/map_ref.png"))
+  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
 
   // Crea il frame principale
   val frame = new JFrame("GUI Map")
