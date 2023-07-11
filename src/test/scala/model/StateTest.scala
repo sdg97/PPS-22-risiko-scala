@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class StateTest extends AnyFunSuite with Matchers:
-  val player = new PlayerImpl("player1", PlayerColor.Yellow)
+  val player = new PlayerImpl("player1", PlayerColor.YELLOW)
   val state = new StateImpl("Brasile", 10, player)
 
   test("Test create State"){
