@@ -6,5 +6,5 @@ enum PlayerColor(val rgb: Int) {
   case Blue extends PlayerColor(0x0000FF)
   case Yellow extends PlayerColor(0xFFFF00)
   case Black extends PlayerColor(0x000000)
-  case Purple extends PlayerColor(0x4C0099)
+  case White extends PlayerColor(0x4C0099)
 }

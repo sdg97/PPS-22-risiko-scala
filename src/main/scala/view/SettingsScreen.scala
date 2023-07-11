@@ -51,35 +51,40 @@ private[view] object SettingsScreen {
     }
     labelNumberOfPlayers.setBounds(70, 40, 120, 40)
 
-
-    val menuBar=new JMenuBar(){
-      setFont(new Font("Arial", 12, 13))
-    }
-    val fileMenu = new JMenu() {
-      setFont(new Font("Arial", 12, 13))
-
-    }
-    val threePlayersItem = new JMenuItem(){
-      setText(3.toString)
-    }
-    val fourPlayersItem = new JMenuItem("4")
-    val fivePlayersItem = new JMenuItem("5")
-    val sixPlayersItem = new JMenuItem("6")
-
-    fileMenu.add(threePlayersItem)
-    fileMenu.add(fourPlayersItem)
-    fileMenu.add(fivePlayersItem)
-    fileMenu.add(sixPlayersItem)
-    menuBar.add(fileMenu)
-    menuBar.setBounds(250, 52, 50,18)
-
-    val panelInfo=new JPanel(new GridLayout(6,3)){
-      setBounds(450, 200, 300, 300)
+    val panelInfo = new JPanel() {
+      setBounds(30, 90, 350, 250)
       setBackground(Color.gray)
-      setBorder(BorderFactory.createLineBorder(Color.gray, 30))
+      setBorder(BorderFactory.createLineBorder(Color.BLACK, 10))
     }
 
-    val labelPlayer1=new JLabel()
+    val comboBoxMenu=new JComboBox[String](Array("3","4","5","6"))
+    comboBoxMenu.setBounds(200, 52, 80,18)
+    comboBoxMenu.addActionListener((_: ActionEvent) => {
+      panelInfo.removeAll()
+
+      val numberOfPlayer=comboBoxMenu.getSelectedItem().toString.toInt
+      panelInfo.setLayout(new GridLayout(numberOfPlayer, numberOfPlayer))
+      var i = 1
+      while(i<=numberOfPlayer){
+
+        panelInfo.add(new JLabel() {
+          setForeground(Color.BLACK) // Imposta il colore del testo
+          setText("Player "+i+": ")
+          setFont(new Font("Arial", 12, 13))
+        })
+        panelInfo.add(new JTextField() {
+          setName("txtFieldPlayer" + i)
+        })
+        val comboBoxColor = new JComboBox[String](Array("RED", "GREEN", "YELLOW", "PURPLE", "BLUE", "BLACK")) {
+          setName("cmbColor" + i)
+        }
+        panelInfo.add(comboBoxColor)
+        i=i+1
+      }
+    })
+
+
+
 
     val restartButton = new JButton() {
 
@@ -108,49 +113,12 @@ private[view] object SettingsScreen {
     restartButton.setBounds(38, 78, 40, 40)
 
     panelInfoPlayer.add(labelNumberOfPlayers)
-    panelInfoPlayer.add(menuBar)
+    panelInfoPlayer.add(comboBoxMenu)
+    panelInfoPlayer.add(panelInfo)
     panel.add(panelInfoPlayer)
 
 
     panel
-
-
-
-//    val player1Label=new JLabel("Player1: ")
-//    val player2Label=new JLabel("Player2: ")
-//    val player3Label=new JLabel("Player3: ")
-//    val player4Label=new JLabel("Player4: ")
-//    val player5Label=new JLabel("Player5: ")
-//    val player6Label=new JLabel("Player6: ")
-//
-//
-//    val player1Field=new JTextField()
-//    val player2Field=new JTextField()
-//    val player3Field=new JTextField()
-//    val player4Field=new JTextField()
-//    val player5Field=new JTextField()
-//    val player6Field=new JTextField()
-//
-//    panel.add(player1Label)
-//    panel.add(player1Field)
-//    panel.add(player2Label)
-//    panel.add(player2Field)
-//    panel.add(player3Label)
-//    panel.add(player3Field)
-//    panel.add(player4Label)
-//    panel.add(player4Field)
-//    panel.add(player5Label)
-//    panel.add(player5Field)
-//    panel.add(player6Label)
-//    panel.add(player6Field)
-
-
-
-
-
-      //la view deve fare inserire dei dati simili agli utenti
-      //lista dei giocatori e colore assegnato
-      // non è una scelta definitiva ma è per far partire il gioco in maniera ciclica
 
 
 //    val button1 = new JButton() {

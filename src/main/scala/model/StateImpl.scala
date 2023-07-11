@@ -12,4 +12,12 @@ class StateImpl (_name: String, var _numberOfWagon: Int, _player: Player) extend
 
   override def removeWagon(numberOfWagonToRemove: Int): Unit =
     _numberOfWagon= _numberOfWagon-numberOfWagonToRemove
+
+  def this(_name:String)={
+    this(_name,0,null)
+  }
+  
+  
+
+
 }
