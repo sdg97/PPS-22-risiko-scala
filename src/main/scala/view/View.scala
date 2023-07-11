@@ -17,11 +17,13 @@ object ViewModule:
   trait Component:
     context: Requirements =>
     class ViewImpl extends View:
-      private val gw = new GameWindow(controller)
-      def show() = gw.show()
-      def showSettingsView() = gw changeScreen SettingsScreen(context.controller)
-      def showDeploymentTroopsView() = gw changeScreen DeployTroopScreen(context.controller)
-      def showGameView() = gw changeScreen GameScreen(context.controller)
+      private var gw : Option[GameWindow] = None
+      def show() =
+        gw = Some(new GameWindow(controller))
+        gw.get.show()
+      def showSettingsView() = gw.get changeScreen SettingsScreen(context.controller)
+      def showDeploymentTroopsView() = gw.get changeScreen DeployTroopScreen(context.controller)
+      def showGameView() = gw.get changeScreen GameScreen(context.controller)
 
   trait Interface extends Provider with Component:
     self: Requirements =>

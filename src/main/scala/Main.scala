@@ -1,7 +1,7 @@
 import controller.*
 import model.*
 import view.*
-class MVC
+object MVC
   extends ModelModule.Interface
     with ViewModule.Interface
     with ControllerModule.Interface:
@@ -11,6 +11,5 @@ class MVC
   override val view = new ViewImpl()
   override val controller = new ControllerImpl()
 
-
 object Main extends App:
-  new MVC().view.show()
+  MVC.view.show()

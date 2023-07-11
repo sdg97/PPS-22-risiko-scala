@@ -2,8 +2,6 @@ package controller
 
 import model.*
 import view.*
-
-
 object ControllerModule:
   trait Controller:
     def startNewGame() : Unit
@@ -21,6 +19,7 @@ object ControllerModule:
   trait Component:
     context: Requirements =>
     class ControllerImpl extends Controller:
+
       def startNewGame() =
         context.view.showSettingsView()
 
@@ -28,7 +27,6 @@ object ControllerModule:
         context.model.setGameSettings(inputDataPlayer)
         context.model.setGameSettings(inputDataPlayer: Set[(String, String)])
         context.model.getSetOfPlayers().foreach(player => println(player.username + ", " + player.color.toString))
-
         context.view.showDeploymentTroopsView()
 
       def deployTroops() =

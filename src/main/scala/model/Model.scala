@@ -53,15 +53,11 @@ object ModelModule:
       }
 
       override def getNeighbor(stateName: String, player: Player): Set[String] = gameMap.getNeighborStates(stateName, player)
-
       override def getPlayerStates(player: Player): Set[State] = gameMap.getPlayerStates(player)
-
       override def getCurrentPlayer(): Player = player1
 
       private var setOfPlayer = Set[Player]()
-
-      override def deployTroops(): Unit = ???
-
+      override def deployTroops(): Unit = println("troop deployed")
       override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit =
         inputDataPlayer.foreach(element =>
           setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))

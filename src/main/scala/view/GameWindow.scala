@@ -1,7 +1,6 @@
 package view
 
 import controller.ControllerModule.*
-import view.GameScreen.getClass
 
 import java.awt.BorderLayout
 import javax.swing.{JFrame, JPanel, WindowConstants}
@@ -17,6 +16,7 @@ class GameWindow(c: Controller) {
     frame.pack()
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setVisible(true)
+    //frame.setResizable(false)
     c.startNewGame()
 
   def changeScreen(p: JPanel) =
