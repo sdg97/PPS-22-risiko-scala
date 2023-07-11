@@ -1,7 +1,11 @@
 package model
+
+import java.io.File
+import scala.io.Source
+
 object ModelModule:
   trait Model {
-    def setGameSettings(inputDataPlayer: Set[(String, Int)]): Unit
+    def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit
 
     def getSetOfPlayers(): Set[Player]
 
@@ -20,30 +24,33 @@ object ModelModule:
   trait Component:
     class ModelImpl extends Model:
       val gameMap = new GameMap()
-      val player1 = new PlayerImpl("pie", PlayerColor.Yellow)
-      val player2 = new PlayerImpl("martin", PlayerColor.Blue)
-      val player3 = new PlayerImpl("simo", PlayerColor.Red)
+      val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
+      val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
+      val player3 = new PlayerImpl("simo", PlayerColor.RED)
 
-      val italy = new StateImpl("italy", 3, player1)
-      val france = new StateImpl("france", 3, player2)
-      val swisse = new StateImpl("swisse", 5, player2)
-      val brazil = new StateImpl("brazil", 5, player3)
-      val argentina = new StateImpl("argentina", 5, player3)
-      val chile = new StateImpl("chile", 5, player1)
+      val stateFile = new File("src/main/resources/config/states.txt")
+      val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
 
-      gameMap.addNode(italy)
-      gameMap.addNode(france)
-      gameMap.addNode(swisse)
-      gameMap.addNode(brazil)
-      gameMap.addNode(argentina)
-      gameMap.addNode(chile)
+      stateFileLines.foreach { line =>
+        val parts = line.split(",")
+        if (parts.length >= 3) {
+          val name = parts(0).trim
+          parts(1).trim
+          parts(2).trim
+          gameMap.addNode(new StateImpl(name))
+        }
+      }
 
-      gameMap.addEdge("italy", "france")
-      gameMap.addEdge("swisse", "italy")
-      gameMap.addEdge("swisse", "france")
-      gameMap.addEdge("brazil", "argentina")
-      gameMap.addEdge("brazil", "chile")
-      gameMap.addEdge("argentina", "chile")
+      val borderFile = new File("src/main/resources/config/borders.txt")
+      val borderFileLines: Seq[String] = Source.fromFile(borderFile).getLines().toList
+      borderFileLines.foreach { line =>
+        val parts = line.split(",")
+        if (parts.length >= 2) {
+          val state1 = parts(0).trim
+          val state2 = parts(1).trim
+          gameMap.addEdge(state1, state2)
+        }
+      }
 
       override def getNeighbor(stateName: String, player: Player): Set[String] = gameMap.getNeighborStates(stateName, player)
 
@@ -55,11 +62,14 @@ object ModelModule:
 
       override def deployTroops(): Unit = ???
 
-      override def setGameSettings(inputDataPlayer: Set[(String, Int)]): Unit =
+      override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit =
         inputDataPlayer.foreach(element =>
-          setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.fromOrdinal(element._2))
+          setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
         )
 
       override def getSetOfPlayers(): Set[Player] = setOfPlayer
 
   trait Interface extends Provider with Component
+
+
+

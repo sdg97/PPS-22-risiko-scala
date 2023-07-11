@@ -12,6 +12,8 @@ import scala.collection.mutable
 import scala.io.Source
 import scala.swing.{Dimension, Image}
 import scala.collection.mutable.Map
+import javax.swing.UIManager
+import java.awt.Color
 
 /**
 
@@ -22,11 +24,12 @@ object GameMapGui extends App {
   val buttonMap: mutable.Map[String, JButton] = mutable.Map()
 
   // Carica l'immagine di sfondo
-  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/map_grey.jpg"))
+  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
 
   // Crea il frame principale
   val frame = new JFrame("GUI Map")
   frame.setLayout(new BorderLayout())
+  frame.setResizable(false)
 
   // Crea il pannello per contenere gli elementi della GUI
   val panel = new JPanel(null) {
@@ -50,7 +53,7 @@ object GameMapGui extends App {
 
   lines.foreach { line =>
     val parts = line.split(",")
-    if (parts.length >= 2) {
+    if (parts.length >= 3) {
       val name = parts(0).trim
       val posX = parts(1).trim
       val posY = parts(2).trim
@@ -73,21 +76,24 @@ object GameMapGui extends App {
           super.paintComponent(g) // Disegna il testo del bottone
         }
       }
-      import javax.swing.UIManager
-      import java.awt.Color
-      btnState.addMouseListener(new MouseAdapter() {
+
+      btnState.addMouseListener(
+
+        new MouseAdapter() {
         override def mouseEntered(evt: MouseEvent): Unit = {
-          btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+          if(!btnState.isSelected)
+            btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
         }
 
         override def mouseExited(evt: MouseEvent): Unit = {
-          btnState.setBorder(BorderFactory.createEmptyBorder())
+          if(!btnState.isSelected)
+            btnState.setBorder(BorderFactory.createEmptyBorder())
         }
       })
+
       btnState.addActionListener((_: ActionEvent) => {
         if (!btnState.isSelected) {
           val neighbors: Set[String] = controller.getNeighbor(name, controller.getCurrentPlayer())
-          println(neighbors)
           neighbors.foreach(neighbor => {
             buttonMap(neighbor).setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
           })
@@ -95,7 +101,7 @@ object GameMapGui extends App {
           resetButton()
         btnState.setSelected(!btnState.isSelected)
       })
-      btnState.setBounds(posX.toInt, posY.toInt, 100, 40)
+      btnState.setBounds(posX.toInt, posY.toInt, 40, 40)
       panel.add(btnState)
       buttonMap += (name -> btnState)
     }
@@ -269,7 +275,7 @@ object GameMapGui extends App {
   frame.setVisible(true)
 
   def resetButton(): Unit =
-    buttonMap.foreach((name, button) => button.setBorder(BorderFactory.createEmptyBorder()))
+    buttonMap.foreach((_, button) => button.setBorder(BorderFactory.createEmptyBorder()))
     /*btnItaly.setBorder(BorderFactory.createEmptyBorder())
     btnFrance.setBorder(BorderFactory.createEmptyBorder())
     btnSwisse.setBorder(BorderFactory.createEmptyBorder())

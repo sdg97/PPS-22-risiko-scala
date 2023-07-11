@@ -5,4 +5,4 @@ package view
  * @param players list of player names and colors
  * @param map selected for the current game
  */
-case class GameSettings(players: List[(String,Int)], map: Int)
+case class GameSettings(players: List[(String,String)], map: Int)
