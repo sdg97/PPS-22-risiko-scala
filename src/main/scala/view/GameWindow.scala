@@ -16,6 +16,7 @@ class GameWindow {
     frame.pack()
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setVisible(true)
+    frame.setResizable(false)
 
   def changeScreen(p: JPanel) =
     frame.getContentPane.removeAll()

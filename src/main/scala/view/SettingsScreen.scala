@@ -3,20 +3,21 @@ import controller.*
 import model.{ModelImpl, Player}
 
 import java.awt.event.ActionEvent
-import java.awt.geom.{Ellipse2D, Point2D}
-import java.awt.{Color, Graphics, GridLayout}
+import java.awt.geom.{Ellipse2D, Point2D, RoundRectangle2D}
+import java.awt.{Color, Component, Graphics, GridLayout, RenderingHints}
 import javax.swing.JOptionPane.*
 import javax.swing.*
+import javax.swing.border.Border
 import scala.swing.MenuBar.NoMenuBar.listenTo
 import scala.swing.event.ButtonClicked
-import scala.swing.{Dimension, Font, Graphics2D, Image, Menu, MenuBar, MenuItem}
+import scala.swing.{Dimension, Font, Graphics2D, Image, Insets, Menu, MenuBar, MenuItem}
 
 /**
  * View for setup simulation.
  */
 private[view] object SettingsScreen {
   def apply(c: Controller) = {
-    val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/map_grey.jpg"))
+    val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
     val panel = new JPanel(null) {
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)
@@ -33,11 +34,14 @@ private[view] object SettingsScreen {
     }
     panel.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
+
+
     val panelInfoPlayer=new JPanel(null){
-      setBounds(450,100,400,500)
+      setBounds(300,80,400,500)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.gray, 30))
     };
+    
 
     val labelNumberOfPlayers = new JLabel() {
       setForeground(Color.BLACK) // Imposta il colore del testo
@@ -117,17 +121,17 @@ private[view] object SettingsScreen {
             labelError.setText("A color must be assigned at only one player")
             i = numberOfPlayer;
           }
-          else{
+          else if (inputDataPlayer.exists(_._1 == panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer"+i)).get.getText)) {
+            labelError.setText("A username must be assigned at only one player")
+            i = numberOfPlayer;
+          }else{
             inputDataPlayer = inputDataPlayer + ((panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer"+i)).get.getText,
               panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor"+i)).get.getSelectedItem.toString))
           }
           i=i+1
         }
         if(inputDataPlayer.size.equals(3)){
-          //labelError.setText(inputDataPlayer.head._1+", "+inputDataPlayer.head._2)
           c.setGameSettings(inputDataPlayer)
-//          val m = new ModelImpl()
-//          labelError.setText(m.getSetOfPlayers().head.toString)
         }
 
       }
@@ -152,51 +156,16 @@ private[view] object SettingsScreen {
       }
     }
 
-//    restartButton.addActionListener((_) => {
-//      val m = new ModelImpl()
-//      val c = new Controller(m)
-//      c.start()
-//    })
-//    restartButton.setBounds(1, 378, 40, 40)
 
     panelInfoPlayer.add(labelNumberOfPlayers)
     panelInfoPlayer.add(comboBoxMenu)
     panelInfoPlayer.add(panelInfo)
     panelInfoPlayer.add(buttonStart)
     panelInfoPlayer.add(labelError)
-    //panelInfoPlayer.add(restartButton)
     panel.add(panelInfoPlayer)
 
 
     panel
-
-
-//    val button1 = new JButton() {
-//      //setBorder(BorderFactory.createEmptyBorder())
-//      setContentAreaFilled(false) // Rimuove lo sfondo del bottone
-//      setForeground(Color.BLACK) // Imposta il colore del testo
-//      setFocusPainted(false) // Rimuove l'effetto di focuss
-//      setText(9.toString)
-//      setFont(new Font("Arial", 12, 10))
-//
-//      override def paintComponent(g: Graphics): Unit = {
-//        val g2d = g.asInstanceOf[Graphics2D]
-//        val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
-//        val radius = Math.min(getWidth, getHeight) / 2.0f
-//        val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
-//        g2d.setColor(Color.YELLOW) // Imposta il colore del cerchio
-//        g2d.fill(circle) // Disegna il cerchio
-//        super.paintComponent(g) // Disegna il testo del bottone
-//      }
-//    }
-//    button1.setBounds(38, 78, 40, 40)
-//    button1.addActionListener((_: ActionEvent) => {
-//      val players = ("Martin", 0xFF0000) :: ("Pietro", 0x00FF00) :: ("Simone", 0x0000FF) :: Nil
-//      val mapIndex = 1
-//      //c.setGameSettings()
-//    })
-//    panel add button1
-
   }
 
   /**
