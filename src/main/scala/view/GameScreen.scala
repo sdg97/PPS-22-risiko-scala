@@ -1,6 +1,6 @@
 package view
 
-import controller.Controller
+import controller.ControllerModule.*
 
 import java.awt.event.ActionEvent
 import java.awt.{BorderLayout, Color, Dimension, Graphics, GridLayout, Image}

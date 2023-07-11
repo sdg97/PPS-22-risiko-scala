@@ -1,6 +1,5 @@
 package view
-import controller.*
-import model.ModelImpl
+import controller.ControllerModule.*
 
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D}
@@ -18,6 +17,7 @@ private[view] object SettingsScreen {
   def apply(c: Controller) = {
     val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/map_grey.jpg"))
     val panel = new JPanel(null) {
+      /**
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)
         // Disegna l'immagine di sfondo
@@ -29,7 +29,7 @@ private[view] object SettingsScreen {
         val x = (getWidth - scaledWidth) / 2
         val y = (getHeight - scaledHeight) / 2
         g.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight, null)
-      }
+      }*/
     }
     panel.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
@@ -49,19 +49,21 @@ private[view] object SettingsScreen {
         super.paintComponent(g)
       }
     }
-    labelNumberOfPlayers.setBounds(70, 40, 120, 40)
 
+    labelNumberOfPlayers.setBounds(70, 40, 120, 40)
 
     val menuBar=new JMenuBar(){
       setFont(new Font("Arial", 12, 13))
     }
+
     val fileMenu = new JMenu() {
       setFont(new Font("Arial", 12, 13))
-
     }
+
     val threePlayersItem = new JMenuItem(){
       setText(3.toString)
     }
+
     val fourPlayersItem = new JMenuItem("4")
     val fivePlayersItem = new JMenuItem("5")
     val sixPlayersItem = new JMenuItem("6")
@@ -100,17 +102,22 @@ private[view] object SettingsScreen {
       }
     }
 
-    restartButton.addActionListener((_) => {
-      val m = new ModelImpl()
-      val c = new Controller(m)
-      c.start()
-    })
     restartButton.setBounds(38, 78, 40, 40)
 
+    val playerNumbersLabel = for i <- 2 to 6 yield s"Players${i}"
+
+    val cb = new JComboBox[String](playerNumbersLabel.toArray)
+    cb.setBounds(159, 81, 189, 41)
+
+
+    /**
     panelInfoPlayer.add(labelNumberOfPlayers)
     panelInfoPlayer.add(menuBar)
     panel.add(panelInfoPlayer)
+    */
 
+    panel.add(restartButton)
+    panel.add(cb)
 
     panel
 

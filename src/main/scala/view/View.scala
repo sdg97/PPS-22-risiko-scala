@@ -1,19 +1,27 @@
 package view
 
-import controller.*
+import controller.ControllerModule
 
-/**
- * Implementation of View.
- */
-object View {
-  private val gw = new GameWindow()
-  def start() = gw.show()
+object ViewModule:
+  trait View:
+    def show() : Unit
+    def showSettingsView() : Unit
+    def showDeploymentTroopsView() : Unit
+    def showGameView() : Unit
 
-  def showSettingsView(c: Controller) = gw changeScreen SettingsScreen(c)
+  trait Provider:
+    val view: View
 
-  def showDeploymentTroopsView(c: Controller) = gw changeScreen DeployTroopScreen(c)
-  def showGameView(c: Controller) = gw changeScreen GameScreen(c)
+  type Requirements = ControllerModule.Provider
 
+  trait Component:
+    context: Requirements =>
+    class ViewImpl extends View:
+      private val gw = new GameWindow(controller)
+      def show() = gw.show()
+      def showSettingsView() = gw changeScreen SettingsScreen(context.controller)
+      def showDeploymentTroopsView() = gw changeScreen DeployTroopScreen(context.controller)
+      def showGameView() = gw changeScreen GameScreen(context.controller)
 
-
-}
+  trait Interface extends Provider with Component:
+    self: Requirements =>

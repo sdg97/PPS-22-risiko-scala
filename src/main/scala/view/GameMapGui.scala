@@ -1,7 +1,7 @@
 package view
 
-import controller.Controller
-import model.{Model, ModelImpl, PlayerColor, PlayerImpl}
+import controller.ControllerModule.*
+import model.*
 
 import java.awt.{BorderLayout, Color, Font, Graphics, Graphics2D}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
@@ -13,6 +13,7 @@ import scala.io.Source
 import scala.swing.{Dimension, Image}
 import scala.collection.mutable.Map
 
+/**
 
 object GameMapGui extends App {
 
@@ -277,3 +278,4 @@ object GameMapGui extends App {
     btnBrazil.setBorder(BorderFactory.createEmptyBorder())
 */
 }
+*/

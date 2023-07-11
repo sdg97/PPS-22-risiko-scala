@@ -1,11 +1,12 @@
 package view
 
+import controller.ControllerModule.*
 import view.GameScreen.getClass
 
 import java.awt.BorderLayout
 import javax.swing.{JFrame, JPanel, WindowConstants}
 
-class GameWindow {
+class GameWindow(c: Controller) {
   private val TITILE = "Risiko"
   private val ICON_PATH = "/map_ref.png"
   private val frame = new JFrame(TITILE)
@@ -16,6 +17,7 @@ class GameWindow {
     frame.pack()
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setVisible(true)
+    c.startNewGame()
 
   def changeScreen(p: JPanel) =
     frame.getContentPane.removeAll()

@@ -1,20 +1,41 @@
 package controller
 
-import view.*
 import model.*
-class Controller(model: ModelImpl) {
+import view.*
 
-  def start() =
-    View.showSettingsView(this)
-  def setGameSettings(inputDataPlayer: Set[(String, Int)]) =
-    model.setGameSettings(inputDataPlayer: Set[(String, Int)])
-    View.showDeploymentTroopsView(this)
+object ControllerModule:
+  trait Controller:
+    def startNewGame() : Unit
+    def setGameSettings(inputDataPlayer: Set[(String, Int)]) : Unit
+    def deployTroops() : Unit
+    def getNeighbor(stateName: String, player: Player): Set[String]
+    def getPlayerStates(player: Player): Set[State]
+    def getCurrentPlayer(): Player
 
-  def deployTroops() =
-    model.deployTroops()
-    View.showGameView(this)
+  trait Provider:
+    val controller: Controller
 
-  def getNeighbor(stateName: String, player:Player): Set[String] = model.getNeighbor(stateName, player)
-  def getPlayerStates (player: Player): Set[State] = model.getPlayerStates(player)
-  def getCurrentPlayer(): Player = model.getCurrentPlayer()
-}
+  type Requirements = ViewModule.Provider with ModelModule.Provider
+
+  trait Component:
+    context: Requirements =>
+    class ControllerImpl extends Controller:
+      def startNewGame() =
+        context.view.showSettingsView()
+
+      def setGameSettings(inputDataPlayer: Set[(String, Int)]) =
+        model.setGameSettings(inputDataPlayer: Set[(String, Int)])
+        context.view.showDeploymentTroopsView()
+
+      def deployTroops() =
+        model.deployTroops()
+        context.view.showGameView()
+
+      def getNeighbor(stateName: String, player: Player): Set[String] = model.getNeighbor(stateName, player)
+
+      def getPlayerStates(player: Player): Set[State] = model.getPlayerStates(player)
+
+      def getCurrentPlayer(): Player = model.getCurrentPlayer()
+
+  trait Interface extends Provider with Component:
+    self: Requirements =>
