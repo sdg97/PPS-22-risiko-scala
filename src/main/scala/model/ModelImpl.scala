@@ -41,11 +41,23 @@ class ModelImpl() extends Model {
 
   private var setOfPlayer = Set[Player]()
   override def deployTroops(): Unit = ???
+  override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
+    if(inputDataPlayer.exists(_._1=="")){
+      throw new MyCustomException("All username field must be completed")
+    }
+    else if(inputDataPlayer.exists(element=> inputDataPlayer.count(_._2==element._2)>1)){
+      throw new MyCustomException("A color must be assigned at only one player")
+    }
+    else if(inputDataPlayer.exists(element=> inputDataPlayer.count(_._1==element._1)>1)){
+      throw new MyCustomException("A username must be assigned at only one player")
+    }
+    else{
+      inputDataPlayer.foreach(element =>
+        setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
+      )
+    }
+  }
 
-  override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit =
-    inputDataPlayer.foreach(element =>
-      setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
-    )
 
   override def getSetOfPlayers(): Set[Player] = setOfPlayer
 }

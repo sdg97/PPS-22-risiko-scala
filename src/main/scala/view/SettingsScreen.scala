@@ -1,6 +1,6 @@
 package view
 import controller.*
-import model.{ModelImpl, Player}
+import model.{ModelImpl, MyCustomException, Player}
 
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D, RoundRectangle2D}
@@ -41,7 +41,7 @@ private[view] object SettingsScreen {
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.gray, 30))
     };
-    
+
 
     val labelNumberOfPlayers = new JLabel() {
       setForeground(Color.BLACK) // Imposta il colore del testo
@@ -61,7 +61,7 @@ private[view] object SettingsScreen {
       setBorder(BorderFactory.createLineBorder(Color.BLACK, 10))
     }
 
-    val comboBoxMenu=new JComboBox[String](Array("3","4","5","6"))
+    val comboBoxMenu=new JComboBox[String](Array("3","4","5","6")){}
     comboBoxMenu.setBounds(200, 52, 80,18)
     comboBoxMenu.addActionListener((_: ActionEvent) => {
       panelInfo.removeAll()
@@ -81,6 +81,20 @@ private[view] object SettingsScreen {
         })
         val comboBoxColor = new JComboBox[String](Array("RED", "GREEN", "YELLOW", "PURPLE", "BLUE", "BLACK")) {
           setName("cmbColor" + i)
+          setRenderer(new DefaultListCellRenderer {
+            override def getListCellRendererComponent(list: JList[_], value: Any, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component = {
+              val comp = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus)
+              comp.setBackground(Color.BLACK)
+              value match {
+                case "RED" => comp.setBackground(Color.RED)
+                case "GREEN" => comp.setBackground(Color.GREEN)
+                case "BLUE" => comp.setBackground(Color.BLUE)
+                case "PURPLE" => comp.setBackground(Color.PINK)
+                case "BLACK" => comp.setBackground(Color.BLACK)
+                case "YELLOW" => comp.setBackground(Color.YELLOW)
+              }
+              comp
+          }})
         }
         panelInfo.add(comboBoxColor)
         i=i+1
@@ -112,26 +126,16 @@ private[view] object SettingsScreen {
         val numberOfPlayer=comboBoxMenu.getSelectedItem().toString.toInt
         var inputDataPlayer: Set[(String, String)]=Set()
         var i=1;
-        while(i<=numberOfPlayer){
-          if(panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer"+i)).get.getText.equals("")){
-            labelError.setText("All username field must be completed")
-            i=numberOfPlayer;
-          }
-          else if(inputDataPlayer.exists(_._2==panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor"+i)).get.getSelectedItem.toString)) {
-            labelError.setText("A color must be assigned at only one player")
-            i = numberOfPlayer;
-          }
-          else if (inputDataPlayer.exists(_._1 == panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer"+i)).get.getText)) {
-            labelError.setText("A username must be assigned at only one player")
-            i = numberOfPlayer;
-          }else{
-            inputDataPlayer = inputDataPlayer + ((panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer"+i)).get.getText,
-              panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor"+i)).get.getSelectedItem.toString))
-          }
-          i=i+1
+        while (i <= numberOfPlayer) {
+          inputDataPlayer = inputDataPlayer + ((panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer" + i)).get.getText,
+            panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor" + i)).get.getSelectedItem.toString))
+          i+=1
         }
-        if(inputDataPlayer.size.equals(3)){
+        try {
           c.setGameSettings(inputDataPlayer)
+        } catch {
+          case e: MyCustomException =>
+            labelError.setText(e.getMessage)
         }
 
       }
