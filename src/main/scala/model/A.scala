@@ -20,7 +20,6 @@ trait AImpl() extends A:
 
 trait TraversableGraph extends A:
   g: A =>
-
   private var currentNode : Option[Node] = None
   private var first = true
   abstract override def addEdge(n1: Node, n2: Node, e: Edge) =

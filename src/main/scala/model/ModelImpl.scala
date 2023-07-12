@@ -1,9 +1,9 @@
 package model
 
+import model.ModelModule.Model
 import java.io.File
 import scala.io.Source
-
-class ModelImpl() extends Model {
+class ModelImpl extends Model:
   val gameMap = new GameMap()
   val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
   val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
@@ -21,7 +21,7 @@ class ModelImpl() extends Model {
       gameMap.addNode(new StateImpl(name))
     }
   }
-  
+
   val borderFile = new File("src/main/resources/config/borders.txt")
   val borderFileLines: Seq[String] = Source.fromFile(borderFile).getLines().toList
   borderFileLines.foreach { line =>
@@ -40,7 +40,8 @@ class ModelImpl() extends Model {
   override def getCurrentPlayer(): Player = player1
 
   private var setOfPlayer = Set[Player]()
-  override def deployTroops(): Unit = ???
+<<<<<<< HEAD
+
   override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
     if(inputDataPlayer.exists(_._1=="")){
       throw new MyCustomException("All username field must be completed")
@@ -59,5 +60,8 @@ class ModelImpl() extends Model {
   }
 
 
+  override def deployTroops(): Unit = println("troop deployed")
+
+
+
   override def getSetOfPlayers(): Set[Player] = setOfPlayer
-}

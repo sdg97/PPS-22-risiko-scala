@@ -1,11 +1,15 @@
 import controller.*
 import model.*
-import view.View
+import view.*
+object MVC
+  extends ModelModule.Interface
+    with ViewModule.Interface
+    with ControllerModule.Interface:
 
-/** Entry point for the application */
-object Main extends App {
-  View.start()
-  val m = new ModelImpl()
-  val c = new Controller(m)
-  c.start()
-}
+  // Instantiation of components, dependencies are implicit
+  override val model = new ModelImpl()
+  override val view = new ViewImpl()
+  override val controller = new ControllerImpl()
+
+object Main extends App:
+  MVC.view.show()

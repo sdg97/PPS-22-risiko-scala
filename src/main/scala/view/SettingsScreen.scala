@@ -1,6 +1,11 @@
 package view
+<<<<<<< HEAD
 import controller.*
 import model.{ModelImpl, MyCustomException, Player}
+=======
+import controller.ControllerModule.*
+import model.Player
+>>>>>>> 6cdba8b3314870f28c68a6a493681d1c9d77355c
 
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D, RoundRectangle2D}
@@ -16,7 +21,7 @@ import scala.swing.{Dimension, Font, Graphics2D, Image, Insets, Menu, MenuBar, M
  * View for setup simulation.
  */
 private[view] object SettingsScreen {
-  def apply(c: Controller) = {
+  def apply(c: Controller) =
     val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
     val panel = new JPanel(null) {
       override def paintComponent(g: Graphics): Unit = {
@@ -35,9 +40,8 @@ private[view] object SettingsScreen {
     panel.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
 
-
-    val panelInfoPlayer=new JPanel(null){
-      setBounds(300,80,400,500)
+    val panelInfoPlayer = new JPanel(null) {
+      setBounds(300, 80, 400, 500)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.gray, 30))
     };
@@ -47,6 +51,7 @@ private[view] object SettingsScreen {
       setForeground(Color.BLACK) // Imposta il colore del testo
       setText("Number of players: ")
       setFont(new Font("Arial", 12, 13))
+
       override def paintComponent(g: Graphics): Unit = {
         g.setColor(Color.white)
         g.fillRect(130, 150, 140, 40)
@@ -61,19 +66,24 @@ private[view] object SettingsScreen {
       setBorder(BorderFactory.createLineBorder(Color.BLACK, 10))
     }
 
+<<<<<<< HEAD
     val comboBoxMenu=new JComboBox[String](Array("3","4","5","6")){}
     comboBoxMenu.setBounds(200, 52, 80,18)
+=======
+    val comboBoxMenu = new JComboBox[String](Array("3", "4", "5", "6"))
+    comboBoxMenu.setBounds(200, 52, 80, 18)
+>>>>>>> 6cdba8b3314870f28c68a6a493681d1c9d77355c
     comboBoxMenu.addActionListener((_: ActionEvent) => {
       panelInfo.removeAll()
 
-      val numberOfPlayer=comboBoxMenu.getSelectedItem().toString.toInt
+      val numberOfPlayer = comboBoxMenu.getSelectedItem().toString.toInt
       panelInfo.setLayout(new GridLayout(numberOfPlayer, numberOfPlayer))
       var i = 1
-      while(i<=numberOfPlayer){
+      while (i <= numberOfPlayer) {
 
         panelInfo.add(new JLabel() {
           setForeground(Color.BLACK) // Imposta il colore del testo
-          setText("Player "+i+": ")
+          setText("Player " + i + ": ")
           setFont(new Font("Arial", 12, 13))
         })
         panelInfo.add(new JTextField() {
@@ -97,11 +107,11 @@ private[view] object SettingsScreen {
           }})
         }
         panelInfo.add(comboBoxColor)
-        i=i+1
+        i = i + 1
       }
     })
 
-    val buttonStart= new JButton(){
+    val buttonStart = new JButton() {
       setContentAreaFilled(false) // Rimuove lo sfondo del bottone
       setForeground(Color.WHITE) // Imposta il colore del testo
       setFocusPainted(false) // Rimuove l'effetto di focuss
@@ -122,6 +132,7 @@ private[view] object SettingsScreen {
       if (panelInfo.getComponentCount == 0) {
         labelError.setText("Choose the number of players")
       }
+
       else{
         val numberOfPlayer=comboBoxMenu.getSelectedItem().toString.toInt
         var inputDataPlayer: Set[(String, String)]=Set()
@@ -132,7 +143,10 @@ private[view] object SettingsScreen {
           i+=1
         }
         try {
-          c.setGameSettings(inputDataPlayer)
+          if (inputDataPlayer.size.equals(3)) {
+
+            c.setGameSettings(inputDataPlayer)
+          }
         } catch {
           case e: MyCustomException =>
             labelError.setText(e.getMessage)
@@ -170,14 +184,4 @@ private[view] object SettingsScreen {
 
 
     panel
-  }
-
-  /**
-   * Interessante converte le stringhe in intero, utile per non doverlo specificare tutte
-   * le volte che prendo in ingresso qualcosa dall'interfaccia grafica
-   * occhio che in scala 3 non si fanno così gli impliciti xD
-  private implicit def numberFrom(component: JTextField): Int = component.getText toInt
-
-  private implicit def numberFrom[T](component: JComboBox[T]): Int = component.getSelectedItem.toString toInt
-   */
 }

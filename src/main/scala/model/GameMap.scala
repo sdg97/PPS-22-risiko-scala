@@ -11,7 +11,7 @@ class GameMap extends Graph:
   override type Node = State
   private var edgesSet = Set[(String,String)]()
   private var nodeSet = Set[State]()
-  override def nodes: Set[State] = nodes
+  override def nodes: Set[State] = nodeSet
   override def edges: Set[(String,String)] = edgesSet
   override def addEdge(state1: String, state2: String): Unit = edgesSet += ((state1,state2))
   override def addNode(state: State): Unit = nodeSet += state
