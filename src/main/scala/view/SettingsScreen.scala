@@ -1,11 +1,8 @@
 package view
-<<<<<<< HEAD
-import controller.*
-import model.{ModelImpl, MyCustomException, Player}
-=======
-import controller.ControllerModule.*
-import model.Player
->>>>>>> 6cdba8b3314870f28c68a6a493681d1c9d77355c
+
+
+import controller.ControllerModule.Controller
+import model.MyCustomException
 
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D, RoundRectangle2D}
@@ -66,13 +63,10 @@ private[view] object SettingsScreen {
       setBorder(BorderFactory.createLineBorder(Color.BLACK, 10))
     }
 
-<<<<<<< HEAD
+
     val comboBoxMenu=new JComboBox[String](Array("3","4","5","6")){}
     comboBoxMenu.setBounds(200, 52, 80,18)
-=======
-    val comboBoxMenu = new JComboBox[String](Array("3", "4", "5", "6"))
-    comboBoxMenu.setBounds(200, 52, 80, 18)
->>>>>>> 6cdba8b3314870f28c68a6a493681d1c9d77355c
+
     comboBoxMenu.addActionListener((_: ActionEvent) => {
       panelInfo.removeAll()
 
@@ -132,21 +126,17 @@ private[view] object SettingsScreen {
       if (panelInfo.getComponentCount == 0) {
         labelError.setText("Choose the number of players")
       }
-
-      else{
-        val numberOfPlayer=comboBoxMenu.getSelectedItem().toString.toInt
-        var inputDataPlayer: Set[(String, String)]=Set()
-        var i=1;
+      else {
+        val numberOfPlayer = comboBoxMenu.getSelectedItem().toString.toInt
+        var inputDataPlayer: Set[(String, String)] = Set()
+        var i = 1;
         while (i <= numberOfPlayer) {
           inputDataPlayer = inputDataPlayer + ((panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer" + i)).get.getText,
             panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor" + i)).get.getSelectedItem.toString))
-          i+=1
+          i += 1
         }
         try {
-          if (inputDataPlayer.size.equals(3)) {
-
-            c.setGameSettings(inputDataPlayer)
-          }
+          c.setGameSettings(inputDataPlayer)
         } catch {
           case e: MyCustomException =>
             labelError.setText(e.getMessage)

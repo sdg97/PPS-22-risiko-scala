@@ -1,6 +1,7 @@
 package model
 
 import model.ModelModule.Model
+
 import java.io.File
 import scala.io.Source
 class ModelImpl extends Model:
@@ -40,7 +41,7 @@ class ModelImpl extends Model:
   override def getCurrentPlayer(): Player = player1
 
   private var setOfPlayer = Set[Player]()
-<<<<<<< HEAD
+
 
   override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
     if(inputDataPlayer.exists(_._1=="")){
@@ -61,7 +62,6 @@ class ModelImpl extends Model:
 
 
   override def deployTroops(): Unit = println("troop deployed")
-
 
 
   override def getSetOfPlayers(): Set[Player] = setOfPlayer
