@@ -57,6 +57,13 @@ class ModelImpl extends Model:
       inputDataPlayer.foreach(element =>
         setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
       )
+      import utils.Assign.assign
+      import utils.AssignableGivenInstances.given
+      val states : Seq[State] = gameMap.nodes.toSeq
+      val players : Seq[Player] = setOfPlayer.toSeq
+      assign(players, states).foreach { t => t._2.foreach { s => s.setPlayer(t._1) } }
+
+      gameMap.nodes.toSeq.map(s => s"${s.name} ${s.player.username}").foreach(println(_))
     }
   }
 

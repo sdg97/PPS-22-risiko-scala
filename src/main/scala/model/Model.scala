@@ -16,6 +16,7 @@ object ModelModule:
     def getPlayerStates(player: Player): Set[State]
 
     def getCurrentPlayer(): Player
+    
   }
 
   trait Provider:

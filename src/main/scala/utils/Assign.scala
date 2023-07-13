@@ -1,5 +1,7 @@
 package utils
 
+import model.{Player, State}
+
 import scala.util.Random
 
 trait Assign[A, B, C]:
@@ -36,7 +38,7 @@ object AssignableGivenInstances:
     override def assign(accountables: Seq[X], assignable: Seq[Y]): Seq[(X, Seq[Y])] = fairAssign(accountables, assignable)
 
   given seqAssignString : Assign[Seq[String], Seq[String], Seq[(String,Seq[String])]] = new SeqAssign[String, String]()
-
+  given seqAssignPlayerState : Assign[Seq[Player], Seq[State], Seq[(Player,Seq[State])]] = new SeqAssign[Player, State]()
 object M extends App:
   import Assign.*
   import AssignableGivenInstances.seqAssignString

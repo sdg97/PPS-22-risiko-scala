@@ -6,6 +6,8 @@ trait State {
   def player: Player
   def addWagon(numberOfWagonsToAdd: Int): Unit
   def removeWagon(numberOfWagonToRemove: Int): Unit
+  
+  def setPlayer(p: Player): Unit
 }
 
 object State:
