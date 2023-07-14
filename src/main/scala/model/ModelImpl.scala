@@ -1,5 +1,5 @@
 package model
-
+/*
 import model.ModelModule.Model
 
 import java.io.File
@@ -88,7 +88,7 @@ class ModelImpl extends Model:
       attackerState.removeWagon(wagonLost._2)
       
       if(defenderState.numberOfWagon==0){
-        defenderState.player=attackerState.player
+        //defenderState.player=attackerState.player
       }
 
     }
@@ -99,4 +99,10 @@ class ModelImpl extends Model:
 
   override def resultAttack(attackerDice: Seq[Int], defenderDie: Seq[Int]): (Int, Int) = ???
 
+  override def getAllStates: Set[State] = gameMap.nodes
+
+  override def updateView(): Unit = controller.updateView()
+
+
   override def getSetOfPlayers(): Set[Player] = setOfPlayer
+*/

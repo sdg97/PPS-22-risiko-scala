@@ -11,6 +11,10 @@ object ControllerModule:
     def getPlayerStates(player: Player): Set[State]
     def getCurrentPlayer(): Player
 
+    def getAllStates(): Set[State]
+
+    def updateView(): Unit
+
   trait Provider:
     val controller: Controller
 
@@ -38,6 +42,10 @@ object ControllerModule:
       def getPlayerStates(player: Player): Set[State] = model.getPlayerStates(player)
 
       def getCurrentPlayer(): Player = model.getCurrentPlayer()
+
+      override def getAllStates(): Set[State] = model.getAllStates
+
+      def updateView(): Unit = view.update()
 
   trait Interface extends Provider with Component:
     self: Requirements =>

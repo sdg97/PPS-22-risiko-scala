@@ -16,8 +16,6 @@ class StateImpl (_name: String, var _numberOfWagon: Int, var _player: Player) ex
   def this(_name:String)={
     this(_name,0,null)
   }
-  
-  
 
-
+  override def setPlayer(p: Player): Unit = _player = p
 }
