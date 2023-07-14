@@ -4,6 +4,7 @@ import model.ModelModule.Model
 
 import java.io.File
 import scala.io.Source
+import scala.util.Random
 class ModelImpl extends Model:
   val gameMap = new GameMap()
   val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
@@ -63,5 +64,39 @@ class ModelImpl extends Model:
 
   override def deployTroops(): Unit = println("troop deployed")
 
+  override def attackPhase(attackerState: State, defenderState: State): Unit = {
+    if(attackerState.numberOfWagon>1 && defenderState.numberOfWagon>0){
+      var numberOfDiceAttack: Int = 0;
+      if (attackerState.numberOfWagon>3) {
+        numberOfDiceAttack = 3;
+      } else {
+        numberOfDiceAttack = attackerState.numberOfWagon-1;
+      }
+
+      var numberOfDiceDefender: Int = 0;
+      if (defenderState.numberOfWagon >= 3) {
+        numberOfDiceDefender = 3;
+      } else {
+        numberOfDiceDefender = defenderState.numberOfWagon;
+      }
+
+      val resultAttacker = Seq.fill(numberOfDiceAttack)(Random.nextInt(6) + 1)
+      val resultDefender = Seq.fill(numberOfDiceDefender)(Random.nextInt(6) + 1)
+
+      val wagonLost = resultAttack(resultAttacker, resultDefender)
+      attackerState.removeWagon(wagonLost._1)
+      attackerState.removeWagon(wagonLost._2)
+      
+      if(defenderState.numberOfWagon==0){
+        defenderState.player=attackerState.player
+      }
+
+    }
+
+    
+
+  }
+
+  override def resultAttack(attackerDice: Seq[Int], defenderDie: Seq[Int]): (Int, Int) = ???
 
   override def getSetOfPlayers(): Set[Player] = setOfPlayer

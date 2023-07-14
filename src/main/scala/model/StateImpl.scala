@@ -1,6 +1,6 @@
 package model
 
-class StateImpl (_name: String, var _numberOfWagon: Int, _player: Player) extends State {
+class StateImpl (_name: String, var _numberOfWagon: Int, var _player: Player) extends State {
   override def name: String = _name
 
   override def numberOfWagon: Int = _numberOfWagon

@@ -16,6 +16,11 @@ object ModelModule:
     def getPlayerStates(player: Player): Set[State]
 
     def getCurrentPlayer(): Player
+
+    @throws(classOf[MyCustomException])
+    def attackPhase(attackerState: State, defenderState:State):Unit
+
+    def resultAttack(attackerDice: Seq[Int], defenderDie: Seq[Int]): (Int,Int)
   }
 
   trait Provider:
