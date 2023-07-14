@@ -86,6 +86,7 @@ object ModelModule:
           inputDataPlayer.foreach(element =>
             setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
           )
+          gameMap.assignStatesToPlayers(setOfPlayer)
         }
       }
 
