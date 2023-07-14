@@ -1,6 +1,7 @@
 package model
-
+/**
 import model.ModelModule.Model
+
 
 import java.io.File
 import scala.io.Source
@@ -67,3 +68,5 @@ class ModelImpl extends Model:
 
 
   override def getSetOfPlayers(): Set[Player] = setOfPlayer
+
+*/
