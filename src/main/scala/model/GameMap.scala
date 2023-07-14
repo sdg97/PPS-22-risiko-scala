@@ -6,6 +6,7 @@ trait Graph:
   def edges: Set[(String,String)]
   def addEdge(node1: String, node2: String): Unit
   def addNode(node: Node): Unit
+  def assignStatesToPlayers(players: Set[Player]): Unit
 
 class GameMap extends Graph:
   override type Node = State
@@ -26,6 +27,14 @@ class GameMap extends Graph:
   }
   def getStateByName(nameState: String): State = nodeSet.filter(s => s.name == nameState).head
   def getPlayerStates(player: Player): Set[State] = nodeSet.filter(s => s.player == player)
+  
+  override def assignStatesToPlayers(players: Set[Player]) =
+    import utils.Assign.assign
+    import utils.AssignableGivenInstances.given
+    val states: Seq[State] = nodeSet.toSeq
+    assign(players.toSeq, states).foreach { t => t._2.foreach { s => s.setPlayer(t._1) } }
+    
+    nodeSet.toSeq.map(s => s"${s.name} ${s.player.username}").foreach(println(_))
 
 /*
 object TryMap extends App:

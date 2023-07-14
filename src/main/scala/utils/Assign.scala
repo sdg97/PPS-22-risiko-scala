@@ -24,8 +24,6 @@ object AssignableGivenInstances:
       assignable.length match
         case 0 => Nil
         case _ =>
-          println(accountables)
-          println("sono qui " + i.toString + accountables(i))
           val ac = accountables(i)
           val as : Y = getRandomElement(assignable)
           val index = if i + 1 < accountables.length then i + 1 else 0
