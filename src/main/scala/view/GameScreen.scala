@@ -91,25 +91,34 @@ private class GameScreenImpl(c: Controller):
             }
           })
 
+        val isAttackPhase = false
+        val isPositionPhase = true
+
         btnState.addActionListener((_: ActionEvent) => {
-          if (btnState.isNeighbour) {
-            //TODO invoke attack method
-            println("attack")
-            resetButton()
-          }
-          else if (btnState.isSelected) {
-            resetButton()
-          }
-          else {
-            resetButton()
-            val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
-            neighbors.foreach(neighbor => {
-              val currentButton = buttonMap(neighbor)
-              currentButton.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
-              currentButton.setIsNeighbour(true)
-            })
-            btnState.setSelected(!btnState.isSelected)
-            btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+          if(isAttackPhase) {
+            if (btnState.isNeighbour) {
+              //TODO invoke attack method
+              println("attack")
+              resetButton()
+            }
+            else if (btnState.isSelected) {
+              resetButton()
+            }
+            else {
+              resetButton()
+              val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
+              neighbors.foreach(neighbor => {
+                val currentButton = buttonMap(neighbor)
+                currentButton.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
+                currentButton.setIsNeighbour(true)
+              })
+              btnState.setSelected(!btnState.isSelected)
+              btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+            }
+          } else if(isPositionPhase) {
+            c.addWagon(buttonMap.find((name, button) => {
+              button.equals(btnState)
+            }).get._1)
           }
         })
 

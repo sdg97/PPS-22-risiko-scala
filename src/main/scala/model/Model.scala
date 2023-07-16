@@ -22,6 +22,8 @@ object ModelModule:
     def getCurrentPlayer(): Player
 
     def updateView(): Unit
+
+    def addWagon(stateName: String): Unit
     
   }
 
@@ -106,6 +108,10 @@ object ModelModule:
       override def getAllStates: Set[State] = gameMap.nodes
 
       override def updateView(): Unit = controller.updateView()
+
+      override def addWagon(stateName: String): Unit =
+        gameMap.getStateByName(stateName).addWagon(1)
+        controller.updateView()
 
   trait Interface extends Provider with Component:
     self: Requirements =>
