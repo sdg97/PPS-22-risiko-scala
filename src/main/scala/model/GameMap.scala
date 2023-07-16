@@ -1,12 +1,6 @@
 package model
 
-trait Graph:
-  type Node
-  def nodes: Set[Node]
-  def edges: Set[(String,String)]
-  def addEdge(node1: String, node2: String): Unit
-  def addNode(node: Node): Unit
-  def assignStatesToPlayers(players: Set[Player]): Unit
+import utils.Graph
 
 class GameMap extends Graph:
   override type Node = State
@@ -28,7 +22,7 @@ class GameMap extends Graph:
   def getStateByName(nameState: String): State = nodeSet.filter(s => s.name == nameState).head
   def getPlayerStates(player: Player): Set[State] = nodeSet.filter(s => s.player == player)
   
-  override def assignStatesToPlayers(players: Set[Player]) =
+  def assignStatesToPlayers(players: Set[Player]) =
     import utils.Assign.assign
     import utils.AssignableGivenInstances.given
     val states: Seq[State] = nodeSet.toSeq
