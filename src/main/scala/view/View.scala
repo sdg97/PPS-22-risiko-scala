@@ -8,6 +8,7 @@ object ViewModule:
     def showSettingsView() : Unit
     def showDeploymentTroopsView() : Unit
     def showGameView() : Unit
+    def update(): Unit
 
   trait Provider:
     val view: View
@@ -24,6 +25,7 @@ object ViewModule:
       def showSettingsView() = gw.get changeScreen SettingsScreen(context.controller)
       def showDeploymentTroopsView() = gw.get changeScreen DeployTroopScreen(context.controller)
       def showGameView() = gw.get changeScreen GameScreen(context.controller)
+      def update() = GameScreen.update()
 
   trait Interface extends Provider with Component:
     self: Requirements =>

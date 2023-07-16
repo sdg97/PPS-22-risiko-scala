@@ -59,7 +59,7 @@ private class GameScreenImpl(c: Controller):
         val posX = parts(1).trim
         val posY = parts(2).trim
 
-        val btnState = new JButtonExtended("") {
+        val btnState = new JButtonExtended("", Color.YELLOW) {
           setBorder(BorderFactory.createEmptyBorder())
           setContentAreaFilled(false) // Rimuove lo sfondo del bottone
           setForeground(Color.BLACK) // Imposta il colore del testo
@@ -73,7 +73,7 @@ private class GameScreenImpl(c: Controller):
             val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
             val radius = Math.min(getWidth, getHeight) / 2.0f
             val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
-            g2d.setColor(Color.YELLOW) // Imposta il colore del cerchio
+            g2d.setColor(Color.GRAY) // Imposta il colore del cerchio
             g2d.fill(circle) // Disegna il cerchio
             super.paintComponent(g) // Disegna il testo del bottone
           }
@@ -137,6 +137,10 @@ private class GameScreenImpl(c: Controller):
       button.setSelected(false)
     })
 
-  def update() = ???
+  def update(): Unit =
+    c.getAllStates().foreach(state => {
+      buttonMap(state.name).setText(state.numberOfWagon.toString)
+    })
+
 
 
