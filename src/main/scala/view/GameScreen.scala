@@ -10,10 +10,9 @@ import java.io.{File, FileReader}
 import javax.swing.{BorderFactory, JButton, JFrame, JPanel}
 import scala.collection.mutable
 import scala.io.Source
-import scala.swing.{Dimension, Image}
+import scala.swing.{Color, Dimension, Image}
 import scala.collection.mutable.Map
 import javax.swing.UIManager
-import java.awt.Color
 
 object GameScreen:
   private var screen : Option[GameScreenImpl] = None
@@ -73,7 +72,7 @@ private class GameScreenImpl(c: Controller):
             val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
             val radius = Math.min(getWidth, getHeight) / 2.0f
             val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
-            g2d.setColor(Color.GRAY) // Imposta il colore del cerchio
+            g2d.setColor(this.color) // Imposta il colore del cerchio
             g2d.fill(circle) // Disegna il cerchio
             super.paintComponent(g) // Disegna il testo del bottone
           }
@@ -140,6 +139,7 @@ private class GameScreenImpl(c: Controller):
   def update(): Unit =
     c.getAllStates().foreach(state => {
       buttonMap(state.name).setText(state.numberOfWagon.toString)
+      buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
 
 
