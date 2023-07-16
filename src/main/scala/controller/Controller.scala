@@ -10,6 +10,9 @@ object ControllerModule:
     def getNeighbor(stateName: String, player: Player): Set[String]
     def getPlayerStates(player: Player): Set[State]
     def getCurrentPlayer(): Player
+    def getAllStates(): Set[State]
+    def updateView(): Unit
+    def addWagon(stateName: String): Unit
 
   trait Provider:
     val controller: Controller
@@ -32,12 +35,19 @@ object ControllerModule:
       def deployTroops() =
         model.deployTroops()
         context.view.showGameView()
+        view.update()
 
       def getNeighbor(stateName: String, player: Player): Set[String] = model.getNeighbor(stateName, player)
 
       def getPlayerStates(player: Player): Set[State] = model.getPlayerStates(player)
 
       def getCurrentPlayer(): Player = model.getCurrentPlayer()
+
+      override def getAllStates(): Set[State] = model.getAllStates
+
+      def updateView(): Unit = view.update()
+
+      override def addWagon(stateName: String): Unit = model.addWagon(stateName)
 
   trait Interface extends Provider with Component:
     self: Requirements =>

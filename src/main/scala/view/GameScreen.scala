@@ -10,10 +10,9 @@ import java.io.{File, FileReader}
 import javax.swing.{BorderFactory, JButton, JFrame, JPanel}
 import scala.collection.mutable
 import scala.io.Source
-import scala.swing.{Dimension, Image}
+import scala.swing.{Color, Dimension, Image}
 import scala.collection.mutable.Map
 import javax.swing.UIManager
-import java.awt.Color
 
 object GameScreen:
   private var screen : Option[GameScreenImpl] = None
@@ -67,13 +66,15 @@ private class GameScreenImpl(c: Controller):
           setText(name)
           setFont(new Font("Arial", 12, 10))
           setRolloverEnabled(true)
+          if(color.equals(Color.BLACK) || color.equals(Color.BLUE))
+            setForeground(Color.WHITE)
 
           override def paintComponent(g: Graphics): Unit = {
             val g2d = g.asInstanceOf[Graphics2D]
             val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
             val radius = Math.min(getWidth, getHeight) / 2.0f
             val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
-            g2d.setColor(Color.YELLOW) // Imposta il colore del cerchio
+            g2d.setColor(this.color) // Imposta il colore del cerchio
             g2d.fill(circle) // Disegna il cerchio
             super.paintComponent(g) // Disegna il testo del bottone
           }
@@ -92,25 +93,34 @@ private class GameScreenImpl(c: Controller):
             }
           })
 
+        val isAttackPhase = false
+        val isPositionPhase = true
+
         btnState.addActionListener((_: ActionEvent) => {
-          if (btnState.isNeighbour) {
-            //TODO invoke attack method
-            println("attack")
-            resetButton()
-          }
-          else if (btnState.isSelected) {
-            resetButton()
-          }
-          else {
-            resetButton()
-            val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
-            neighbors.foreach(neighbor => {
-              val currentButton = buttonMap(neighbor)
-              currentButton.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
-              currentButton.setIsNeighbour(true)
-            })
-            btnState.setSelected(!btnState.isSelected)
-            btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+          if(isAttackPhase) {
+            if (btnState.isNeighbour) {
+              //TODO invoke attack method
+              println("attack")
+              resetButton()
+            }
+            else if (btnState.isSelected) {
+              resetButton()
+            }
+            else {
+              resetButton()
+              val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
+              neighbors.foreach(neighbor => {
+                val currentButton = buttonMap(neighbor)
+                currentButton.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
+                currentButton.setIsNeighbour(true)
+              })
+              btnState.setSelected(!btnState.isSelected)
+              btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+            }
+          } else if(isPositionPhase) {
+            //println(c.getPlayerStates(c.getCurrentPlayer()))
+            if(c.getPlayerStates(c.getCurrentPlayer()).exists(s => s.name.equals(getStateNameFromButton(btnState))))
+              c.addWagon(getStateNameFromButton(btnState))
           }
         })
 
@@ -130,13 +140,22 @@ private class GameScreenImpl(c: Controller):
       })
   }
 
-  def resetButton(): Unit =
+  private def getStateNameFromButton(button: JButton): String =
+    buttonMap.find((n, b) => {
+      b.equals(button)
+    }).get._1
+
+
+  private def resetButton(): Unit =
     buttonMap.foreach((_, button) => {
       button.setBorder(BorderFactory.createEmptyBorder())
       button.setIsNeighbour(false)
       button.setSelected(false)
     })
 
-  def update() = ???
-
+  def update(): Unit =
+    c.getAllStates().foreach(state => {
+      buttonMap(state.name).setText(state.numberOfWagon.toString)
+      buttonMap(state.name).setColor(new Color(state.player.color.rgb))
+    })
 
