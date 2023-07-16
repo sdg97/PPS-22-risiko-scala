@@ -27,6 +27,10 @@ object ModelModule:
     def resultAttack(attackerDice: Seq[Int], defenderDie: Seq[Int]): (Int, Int)
 
     def attackPhase(attackerState: State, defenderState: State): Unit
+
+    def addWagon(stateName: String): Unit
+    
+
   }
 
   type Requirements = ControllerModule.Provider
@@ -156,6 +160,10 @@ object ModelModule:
         }
 
       override def updateView(): Unit = controller.updateView()
+
+      override def addWagon(stateName: String): Unit =
+        gameMap.getStateByName(stateName).addWagon(1)
+        controller.updateView()
 
   trait Interface extends Provider with Component:
     self: Requirements =>

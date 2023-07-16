@@ -14,6 +14,7 @@ object ControllerModule:
     def getAllStates(): Set[State]
 
     def updateView(): Unit
+    def addWagon(stateName: String): Unit
 
   trait Provider:
     val controller: Controller
@@ -45,6 +46,8 @@ object ControllerModule:
       override def getAllStates(): Set[State] = model.getAllStates
 
       def updateView(): Unit = view.update()
+
+      override def addWagon(stateName: String): Unit = model.addWagon(stateName)
 
   trait Interface extends Provider with Component:
     self: Requirements =>

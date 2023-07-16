@@ -92,28 +92,36 @@ private class GameScreenImpl(c: Controller):
             }
           })
 
-        btnState.addActionListener((_: ActionEvent) => {
-          if (btnState.isNeighbour) {
-            if(!btnState.color.equals(new Color(c.getCurrentPlayer().color.rgb))){
-              println("attack")
-              windowAttack()
-              //resetButton()
-            }
+        val isAttackPhase = true
+        val isPositionPhase = false
 
-          }
-          else if (btnState.isSelected) {
-            resetButton()
-          }
-          else {
-            resetButton()
-            val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
-            neighbors.foreach(neighbor => {
-              val currentButton = buttonMap(neighbor)
-              currentButton.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
-              currentButton.setIsNeighbour(true)
-            })
-            btnState.setSelected(!btnState.isSelected)
-            btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+        btnState.addActionListener((_: ActionEvent) => {
+          if(isAttackPhase) {
+            if (btnState.isNeighbour) {
+              if (!btnState.color.equals(new Color(c.getCurrentPlayer().color.rgb))) {
+                println("attack")
+                windowAttack()
+                //resetButton()
+              }
+            }
+            else if (btnState.isSelected) {
+              resetButton()
+            }
+            else {
+              resetButton()
+              val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
+              neighbors.foreach(neighbor => {
+                val currentButton = buttonMap(neighbor)
+                currentButton.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
+                currentButton.setIsNeighbour(true)
+              })
+              btnState.setSelected(!btnState.isSelected)
+              btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+            }
+          } else if(isPositionPhase) {
+            c.addWagon(buttonMap.find((name, button) => {
+              button.equals(btnState)
+            }).get._1)
           }
         })
 
