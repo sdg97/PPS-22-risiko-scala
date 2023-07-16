@@ -35,6 +35,7 @@ object ControllerModule:
       def deployTroops() =
         model.deployTroops()
         context.view.showGameView()
+        view.update()
 
       def getNeighbor(stateName: String, player: Player): Set[String] = model.getNeighbor(stateName, player)
 

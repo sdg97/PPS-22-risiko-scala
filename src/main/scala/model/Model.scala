@@ -74,7 +74,6 @@ object ModelModule:
       override def getNeighbor(stateName: String, player: Player): Set[String] = gameMap.getNeighborStates(stateName, player)
 
       override def getPlayerStates(player: Player): Set[State] =
-        controller.updateView()
         gameMap.getPlayerStates(player)
 
       override def getCurrentPlayer(): Player = player1

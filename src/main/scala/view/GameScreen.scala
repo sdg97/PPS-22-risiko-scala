@@ -58,7 +58,7 @@ private class GameScreenImpl(c: Controller):
         val posX = parts(1).trim
         val posY = parts(2).trim
 
-        val btnState = new JButtonExtended("", Color.YELLOW) {
+        val btnState = new JButtonExtended("") {
           setBorder(BorderFactory.createEmptyBorder())
           setContentAreaFilled(false) // Rimuove lo sfondo del bottone
           setForeground(Color.BLACK) // Imposta il colore del testo
@@ -66,6 +66,8 @@ private class GameScreenImpl(c: Controller):
           setText(name)
           setFont(new Font("Arial", 12, 10))
           setRolloverEnabled(true)
+          if(color.equals(Color.BLACK) || color.equals(Color.BLUE))
+            setForeground(Color.WHITE)
 
           override def paintComponent(g: Graphics): Unit = {
             val g2d = g.asInstanceOf[Graphics2D]
@@ -116,9 +118,9 @@ private class GameScreenImpl(c: Controller):
               btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
             }
           } else if(isPositionPhase) {
-            c.addWagon(buttonMap.find((name, button) => {
-              button.equals(btnState)
-            }).get._1)
+            //println(c.getPlayerStates(c.getCurrentPlayer()))
+            if(c.getPlayerStates(c.getCurrentPlayer()).exists(s => s.name.equals(getStateNameFromButton(btnState))))
+              c.addWagon(getStateNameFromButton(btnState))
           }
         })
 
@@ -138,7 +140,13 @@ private class GameScreenImpl(c: Controller):
       })
   }
 
-  def resetButton(): Unit =
+  private def getStateNameFromButton(button: JButton): String =
+    buttonMap.find((n, b) => {
+      b.equals(button)
+    }).get._1
+
+
+  private def resetButton(): Unit =
     buttonMap.foreach((_, button) => {
       button.setBorder(BorderFactory.createEmptyBorder())
       button.setIsNeighbour(false)
@@ -150,6 +158,4 @@ private class GameScreenImpl(c: Controller):
       buttonMap(state.name).setText(state.numberOfWagon.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
-
-
 
