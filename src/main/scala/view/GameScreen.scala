@@ -10,10 +10,9 @@ import java.io.{File, FileReader}
 import javax.swing.{BorderFactory, JButton, JFrame, JPanel}
 import scala.collection.mutable
 import scala.io.Source
-import scala.swing.{Dimension, Image}
+import scala.swing.{Color, Dimension, Image}
 import scala.collection.mutable.Map
 import javax.swing.UIManager
-import java.awt.Color
 
 
 object GameScreen:
@@ -95,9 +94,12 @@ private class GameScreenImpl(c: Controller):
 
         btnState.addActionListener((_: ActionEvent) => {
           if (btnState.isNeighbour) {
-            //TODO invoke attack method
-            println("attack")
-            resetButton()
+            if(!btnState.color.equals(new Color(c.getCurrentPlayer().color.rgb))){
+              println("attack")
+              windowAttack()
+              //resetButton()
+            }
+
           }
           else if (btnState.isSelected) {
             resetButton()
@@ -142,4 +144,20 @@ private class GameScreenImpl(c: Controller):
     c.getAllStates().foreach(state => {
       buttonMap(state.name).setText(state.numberOfWagon.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
+
     })
+
+  def windowAttack():Unit={
+    val panel = new JPanel(null) {
+      setBounds(300, 80, 400, 500)
+      setBackground(Color.gray)
+      setBorder(BorderFactory.createLineBorder(Color.gray, 30))
+    };
+    screen.add(panel)
+    //screen.getParent.add(panel)
+    println(screen.getParent.getParent.toString)
+  }
+
+
+
+

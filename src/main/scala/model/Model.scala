@@ -109,7 +109,16 @@ object ModelModule:
 
       override def getAllStates: Set[State] = gameMap.nodes
 
-      override def resultAttack(attackerDice: Seq[Int], defenderDie: Seq[Int]): (Int, Int) = ???
+      override def resultAttack(attackerDice: Seq[Int], defenderDie: Seq[Int]): (Int, Int) =
+        var wagonlostAttacker: Int = 0;
+        var wagonlostDefender: Int = 0;
+        attackerDice.sorted.reverse.zip(defenderDie.sorted.reverse).map { case (elem1, elem2) =>
+          if (elem1 > elem2)
+            wagonlostDefender = wagonlostDefender + 1
+          else if (elem1 <= elem2)
+            wagonlostAttacker = wagonlostAttacker + 1
+        }
+        (wagonlostAttacker, wagonlostDefender)
 
       override def attackPhase(attackerState: State, defenderState: State): Unit =
         if (attackerState.numberOfWagon > 1 && defenderState.numberOfWagon > 0) {
@@ -135,9 +144,15 @@ object ModelModule:
           attackerState.removeWagon(wagonLost._2)
 
           if (defenderState.numberOfWagon == 0) {
-            //defenderState.player=attackerState.player
+            defenderState.setPlayer(attackerState.player)
           }
 
+        }
+        else if(attackerState.numberOfWagon > 1 && defenderState.numberOfWagon == 0){
+          throw new MyCustomException("Great, you conquered "+defenderState.name)
+        }
+        else if(attackerState.numberOfWagon==1){
+          throw new MyCustomException("Sorry, but you can't attack because you have only one wagon in "+defenderState.name)
         }
 
       override def updateView(): Unit = controller.updateView()
