@@ -10,7 +10,7 @@ object ModelModule:
     @throws(classOf[MyCustomException])
     def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit
 
-    def getSetOfPlayers(): Set[Player]
+    def getPlayers(): Set[Player]
 
     def deployTroops(): Unit
 
@@ -24,7 +24,7 @@ object ModelModule:
     def updateView(): Unit
 
     def addWagon(stateName: String): Unit
-    
+
   }
 
   type Requirements = ControllerModule.Provider
@@ -39,13 +39,10 @@ object ModelModule:
     import scala.io.Source
 
     class ModelImpl extends Model:
-      val gameMap = new GameMap()
-      val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
-      val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
-      val player3 = new PlayerImpl("simo", PlayerColor.RED)
-
-      val stateFile = new File("src/main/resources/config/states.txt")
-      val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
+      private val gameMap = new GameMap()
+      private var turnManager : Option[TurnManager[Player]] = None
+      private val stateFile = new File("src/main/resources/config/states.txt")
+      private val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
 
       stateFileLines.foreach { line =>
         val parts = line.split(",")
@@ -53,10 +50,7 @@ object ModelModule:
           val name = parts(0).trim
           parts(1).trim
           parts(2).trim
-          if(name.equals("alaska"))
-            gameMap.addNode(new StateImpl(name, 4, player1))
-          else
-            gameMap.addNode(new StateImpl(name))
+          gameMap.addNode(new StateImpl(name))
         }
       }
 
@@ -76,10 +70,7 @@ object ModelModule:
       override def getPlayerStates(player: Player): Set[State] =
         gameMap.getPlayerStates(player)
 
-      override def getCurrentPlayer(): Player = player1
-
-      private var setOfPlayer = Set[Player]()
-
+      override def getCurrentPlayer(): Player = turnManager.get.current()
 
       override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
         if (inputDataPlayer.exists(_._1 == "")) {
@@ -92,17 +83,18 @@ object ModelModule:
           throw new MyCustomException("A username must be assigned at only one player")
         }
         else {
-          inputDataPlayer.foreach(element =>
-            setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
-          )
-          gameMap.assignStatesToPlayers(setOfPlayer)
+          turnManager = Some(TurnManager(inputDataPlayer.map(element =>
+            new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
+          )))
+          turnManager.get.next()
+          gameMap.assignStatesToPlayers(turnManager.get.getAll())
         }
       }
 
 
       override def deployTroops(): Unit = println("troop deployed")
 
-      override def getSetOfPlayers(): Set[Player] = setOfPlayer
+      override def getPlayers(): Set[Player] = turnManager.get.getAll()
 
       override def getAllStates: Set[State] = gameMap.nodes
 

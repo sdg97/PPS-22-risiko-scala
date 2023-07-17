@@ -1,17 +1,5 @@
 package view
 
-import model.Player
+class SelectPhaseComponent {
 
-import javax.swing.{JLabel, JPanel}
-
-private[view] class SelectPhaseComponent:
-  private val panel = new JPanel()
-  private val LABEL_PREFIX = "Player"
-  def get(p: Player) =
-    panel add JLabel(s"${LABEL_PREFIX} ${p.username}")
-    panel
-
-  def update(p: Player) = 
-    panel.removeAll()
-    panel add JLabel(s"${LABEL_PREFIX} ${p.username}")
-    
+}

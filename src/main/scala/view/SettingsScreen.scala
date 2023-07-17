@@ -3,7 +3,7 @@ package view
 
 import controller.ControllerModule.Controller
 import model.MyCustomException
-
+import utils.shiftLeft
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D, RoundRectangle2D}
 import java.awt.{Color, Component, Graphics, GridLayout, RenderingHints}
@@ -73,6 +73,7 @@ private[view] object SettingsScreen {
       val numberOfPlayer = comboBoxMenu.getSelectedItem().toString.toInt
       panelInfo.setLayout(new GridLayout(numberOfPlayer, numberOfPlayer))
       var i = 1
+      var colors = Array("RED", "GREEN", "YELLOW", "PURPLE", "BLUE", "BLACK")
       while (i <= numberOfPlayer) {
 
         panelInfo.add(new JLabel() {
@@ -80,10 +81,16 @@ private[view] object SettingsScreen {
           setText("Player " + i + ": ")
           setFont(new Font("Arial", 12, 13))
         })
-        panelInfo.add(new JTextField() {
+
+        val jtf = new JTextField() {
           setName("txtFieldPlayer" + i)
-        })
-        val comboBoxColor = new JComboBox[String](Array("RED", "GREEN", "YELLOW", "PURPLE", "BLUE", "BLACK")) {
+        }
+        jtf.setText(s"Player${i}")
+
+        panelInfo.add(jtf)
+
+        colors = shiftLeft(colors).toArray
+        val comboBoxColor = new JComboBox[String](colors.toArray) {
           setName("cmbColor" + i)
           setRenderer(new DefaultListCellRenderer {
             override def getListCellRendererComponent(list: JList[_], value: Any, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component = {

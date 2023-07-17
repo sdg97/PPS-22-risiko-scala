@@ -26,7 +26,7 @@ object GameScreen:
 
 private class GameScreenImpl(c: Controller):
   private val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
-  private var selectPhaseComponent = new SelectPhaseComponent()
+  private var selectPhaseComponent = new CurrentPlayerComponent()
   // Carica l'immagine di sfondo
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
 

@@ -29,7 +29,7 @@ object ControllerModule:
       def setGameSettings(inputDataPlayer: Set[(String, String)]) =
         context.model.setGameSettings(inputDataPlayer)
         //context.model.setGameSettings(inputDataPlayer: Set[(String, String)])
-        context.model.getSetOfPlayers().foreach(player => println(player.username + ", " + player.color.toString))
+        context.model.getPlayers().foreach(player => println(player.username + ", " + player.color.toString))
         context.view.showDeploymentTroopsView()
 
       def deployTroops() =
