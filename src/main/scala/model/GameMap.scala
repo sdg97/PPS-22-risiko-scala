@@ -20,7 +20,7 @@ class GameMap extends Graph:
     case (state2, `state`) if getStateByName(state2).player == player => state2
   }
   def getStateByName(nameState: String): State = nodeSet.filter(s => s.name == nameState).head
-  def getPlayerStates(player: Player): Set[State] = nodeSet.filter(s => s.player == player)
+  def getPlayerStates(player: Player): Set[State] = nodeSet.filter(s => s.player.username.equals(player.username))
   
   def assignStatesToPlayers(players: Set[Player]) =
     import utils.Assign.assign

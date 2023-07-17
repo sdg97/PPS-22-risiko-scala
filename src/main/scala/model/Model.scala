@@ -17,8 +17,13 @@ object ModelModule:
     def getNeighbor(stateName: String, player: Player): Set[String]
 
     def getPlayerStates(player: Player): Set[State]
+    def getAllStates: Set[State]
 
     def getCurrentPlayer(): Player
+
+    def updateView(): Unit
+
+    def addWagon(stateName: String): Unit
     
   }
 
@@ -48,7 +53,10 @@ object ModelModule:
           val name = parts(0).trim
           parts(1).trim
           parts(2).trim
-          gameMap.addNode(new StateImpl(name))
+          if(name.equals("alaska"))
+            gameMap.addNode(new StateImpl(name, 4, player1))
+          else
+            gameMap.addNode(new StateImpl(name))
         }
       }
 
@@ -65,7 +73,8 @@ object ModelModule:
 
       override def getNeighbor(stateName: String, player: Player): Set[String] = gameMap.getNeighborStates(stateName, player)
 
-      override def getPlayerStates(player: Player): Set[State] = gameMap.getPlayerStates(player)
+      override def getPlayerStates(player: Player): Set[State] =
+        gameMap.getPlayerStates(player)
 
       override def getCurrentPlayer(): Player = player1
 
@@ -93,8 +102,15 @@ object ModelModule:
 
       override def deployTroops(): Unit = println("troop deployed")
 
-
       override def getSetOfPlayers(): Set[Player] = setOfPlayer
+
+      override def getAllStates: Set[State] = gameMap.nodes
+
+      override def updateView(): Unit = controller.updateView()
+
+      override def addWagon(stateName: String): Unit =
+        gameMap.getStateByName(stateName).addWagon(1)
+        controller.updateView()
 
   trait Interface extends Provider with Component:
     self: Requirements =>
