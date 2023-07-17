@@ -7,12 +7,11 @@ import java.awt.{BorderLayout, Color, Font, Graphics, Graphics2D}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.io.{File, FileReader}
-import javax.swing.{BorderFactory, JButton, JFrame, JPanel}
+import javax.swing.{BorderFactory, JButton, JFrame, JLabel, JPanel, UIManager}
 import scala.collection.mutable
 import scala.io.Source
 import scala.swing.{Color, Dimension, Image}
 import scala.collection.mutable.Map
-import javax.swing.UIManager
 
 
 object GameScreen:
@@ -50,6 +49,14 @@ private class GameScreenImpl(c: Controller):
 
   val file = new File("src/main/resources/config/states.txt")
   val lines = Source.fromFile(file).getLines().toList
+
+  val panelAttackPhase = new JPanel(null) {
+    setBounds(300, 80, 400, 500)
+    setBackground(Color.gray)
+    setBorder(BorderFactory.createLineBorder(Color.gray, 30))
+    setVisible(false)
+  };
+  screen.add(panelAttackPhase)
 
   lines.foreach {
     line =>
@@ -139,7 +146,10 @@ private class GameScreenImpl(c: Controller):
         println(buttonMap.size)
         c.getPlayerStates(c.getCurrentPlayer()).foreach(state => buttonMap(state.name).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2)))
       })
+
+
   }
+
 
   def resetButton(): Unit =
     buttonMap.foreach((_, button) => {
@@ -155,15 +165,14 @@ private class GameScreenImpl(c: Controller):
 
     })
 
-  def windowAttack():Unit={
-    val panel = new JPanel(null) {
-      setBounds(300, 80, 400, 500)
-      setBackground(Color.gray)
-      setBorder(BorderFactory.createLineBorder(Color.gray, 30))
-    };
-    screen.add(panel)
-    //screen.getParent.add(panel)
-    println(screen.getParent.getParent.toString)
+  def windowAttack(): Unit = {
+    panelAttackPhase.setVisible(true)
+    val labelAttackState = new JLabel() {
+      setForeground(Color.BLACK) // Imposta il colore del testo
+      setText("Number of players: ")
+      setFont(new Font("Arial", 12, 13))
+    }
+    labelAttackState.setBounds(70, 40, 120, 40)
   }
 
 
