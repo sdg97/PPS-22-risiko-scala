@@ -1,7 +1,7 @@
 package view
 
 import controller.ControllerModule.*
-import model.{PlayerColor, PlayerImpl}
+import model.{Player, PlayerColor, PlayerImpl}
 
 import java.awt.{BorderLayout, Color, Font, Graphics, Graphics2D}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
@@ -17,6 +17,7 @@ import java.awt.Color
 
 object GameScreen:
   private var screen : Option[GameScreenImpl] = None
+  
   def apply(c: Controller) =
     screen = Some(new GameScreenImpl(c))
     screen.get.screen
@@ -25,8 +26,8 @@ object GameScreen:
     screen.get.update()
 
 private class GameScreenImpl(c: Controller):
-  val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
-
+  private val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
+  private var selectPhaseComponent = new SelectPhaseComponent()
   // Carica l'immagine di sfondo
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
 
@@ -128,6 +129,8 @@ private class GameScreenImpl(c: Controller):
         println(buttonMap.size)
         c.getPlayerStates(c.getCurrentPlayer()).foreach(state => buttonMap(state.name).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2)))
       })
+      
+      screen.add(selectPhaseComponent.get(c.getCurrentPlayer()))
   }
 
   def resetButton(): Unit =
@@ -137,6 +140,7 @@ private class GameScreenImpl(c: Controller):
       button.setSelected(false)
     })
 
-  def update() = ???
+  def update() =
+    selectPhaseComponent.update(c.getCurrentPlayer())
 
 

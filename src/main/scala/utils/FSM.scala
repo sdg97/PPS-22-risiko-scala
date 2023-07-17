@@ -3,37 +3,6 @@ package utils
 import utils.RisikoAction.{AttackRequest, EndTurn, MoveRequest, StartAttack, StartMove}
 import utils.RisikoPhase.{Attack, StartTurn}
 
-
-/**
- * trait FSM:
- * type Phase
-  *type Action
-  *def ::(p1: Phase, a: Action, p2: Phase) : FSM
-  *def plus(p1: Phase, a: Action, p2: Phase) : FSM
-  *def trigger(a: Action): Phase
-  *def currentPhase: Phase
- *
- *def phases(): Iterable[Phase]
- *
- *trait FSMImpl() extends FSM:
-  *override def ::(p1: Phase, a: Action, p2: Phase): FSM = ???
-  *override def trigger(a: Action): Phase = ???
-  *override def currentPhase: Phase = ???
-  *override def phases() = ???
-  *override def plus(p1: Phase, a: Action, p2: Phase) : FSM = ???
-*object TryFSM extends App:
-  *enum RisikoPhase:
-    *case StartTurn
-    *case Attack
-    *case Move
- *
- *enum RisikoAction:
-    *case StartAttack
-    *case StartMove
-    *case AttackRequest
-    *case MoveRequest
-*/
-
 trait FSM:
   type Phase   // Node and Edge are abstract types, member of Graph
   type Action
@@ -43,6 +12,8 @@ trait FSM:
   def trigger(a: Action): Phase
 
   def currentPhase: Phase
+
+  def next(): Iterable[Phase]
 
 trait FSMImpl() extends FSM:
   private val g = new GraphWithEdgeImpl with TraversableGraph:
@@ -56,8 +27,11 @@ trait FSMImpl() extends FSM:
     g.crossEdge(a)
     g.getCurrentNode().get
 
-  def currentPhase: Phase =
+  override def currentPhase: Phase =
     g.getCurrentNode().get
+
+  override def next(): Iterable[Phase] =
+    g.getNeighbours(g.getCurrentNode().get)
 
 enum RisikoPhase:
   case StartTurn;
@@ -108,4 +82,10 @@ object TryFSM extends App:
   println(f.trigger(MoveRequest)) //Move
   println(f.trigger(MoveRequest)) //Move
   println(f.trigger(EndTurn)) //StartTurn
+
+  println(f.next()) //Move Attack StartTurn
+  f.trigger(StartAttack)
+  println(f.next()) //Attack Move StartTurn
+  f.trigger(StartMove)
+  println(f.next()) //Move StartTurn
 

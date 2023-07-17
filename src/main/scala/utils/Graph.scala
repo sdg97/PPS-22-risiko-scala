@@ -17,6 +17,7 @@ trait GraphWithEdge:
   def outEdges(n: Node): Set[Edge]
   def inEdges(n: Node): Set[Edge]
   def getNeighbours(n: Node, e: Edge): Set[Node]
+  def getNeighbours(n: Node): Set[Node]
 
 trait GraphWithEdgeImpl() extends GraphWithEdge:
   private var data = Set[(Node,Edge,Node)]()
@@ -25,6 +26,7 @@ trait GraphWithEdgeImpl() extends GraphWithEdge:
   override def outEdges(n: Node) = data collect { case (`n`,e,_) => e }
   override def inEdges(n: Node) = data collect { case (_,e,`n`) => e }
   override def getNeighbours(n: Node, e: Edge): Set[Node] = data collect {case(`n`,`e`, n) => n}
+  override def getNeighbours(n: Node): Set[Node] = data collect {case(`n`,_, n) => n}
 
 
 trait TraversableGraph extends GraphWithEdge:
