@@ -15,6 +15,7 @@ object ControllerModule:
     def updateView(): Unit
     def addWagon(stateName: String): Unit
     def switchTurnPhaseActionAvailable :  Set[RisikoAction]
+    def switchPhase(a: RisikoSwitchPhaseAction): Unit
 
 
 
@@ -45,6 +46,9 @@ object ControllerModule:
       override def addWagon(stateName: String): Unit = model.addWagon(stateName)
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] =
         model.switchTurnPhaseActionAvailable
+      override def switchPhase(a: RisikoSwitchPhaseAction): Unit =
+        model.switchPhase(a)
+        updateView()
 
   trait Interface extends Provider with Component:
     self: Requirements =>

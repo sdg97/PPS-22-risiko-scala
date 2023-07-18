@@ -3,7 +3,6 @@ package model
 import controller.ControllerModule
 import view.ViewModule.Requirements
 
-
 object ModelModule:
   trait Model {
 
@@ -11,22 +10,15 @@ object ModelModule:
     def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit
 
     def getPlayers(): Set[Player]
-
     def deployTroops(): Unit
-
     def getNeighbor(stateName: String, player: Player): Set[String]
-
     def getPlayerStates(player: Player): Set[State]
     def getAllStates: Set[State]
-
     def getCurrentPlayer(): Player
-
     def updateView(): Unit
-
     def addWagon(stateName: String): Unit
-
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
-
+    def switchPhase(a: RisikoSwitchPhaseAction): Unit
   }
 
   type Requirements = ControllerModule.Provider
@@ -39,6 +31,7 @@ object ModelModule:
 
     import java.io.File
     import scala.io.Source
+    import RisikoSwitchPhaseAction.*
 
     class ModelImpl extends Model:
       private val gameMap = new GameMap()
@@ -106,7 +99,11 @@ object ModelModule:
         gameMap.getStateByName(stateName).addWagon(1)
         controller.updateView()
 
-      def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
+      override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
+
+      override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match
+        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next()
+        case _ => turnPhasesManager.trigger(a)
 
   trait Interface extends Provider with Component:
     self: Requirements =>
