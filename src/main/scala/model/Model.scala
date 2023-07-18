@@ -25,6 +25,9 @@ object ModelModule:
 
     def addWagon(stateName: String): Unit
 
+    def turnPhases : Set[RisikoPhase]
+    def nextPhases: Set[RisikoPhase]
+
   }
 
   type Requirements = ControllerModule.Provider
@@ -41,6 +44,7 @@ object ModelModule:
     class ModelImpl extends Model:
       private val gameMap = new GameMap()
       private var turnManager : Option[TurnManager[Player]] = None
+      private val turnPhasesManager = TurnPhasesManager()
       private val stateFile = new File("src/main/resources/config/states.txt")
       private val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
 
@@ -91,7 +95,6 @@ object ModelModule:
         }
       }
 
-
       override def deployTroops(): Unit = println("troop deployed")
 
       override def getPlayers(): Set[Player] = turnManager.get.getAll()
@@ -103,6 +106,12 @@ object ModelModule:
       override def addWagon(stateName: String): Unit =
         gameMap.getStateByName(stateName).addWagon(1)
         controller.updateView()
+
+      override def turnPhases: Set[RisikoPhase] = turnPhasesManager.phases
+
+      override def nextPhases: Set[RisikoPhase] = turnPhasesManager.next
+
+
 
   trait Interface extends Provider with Component:
     self: Requirements =>

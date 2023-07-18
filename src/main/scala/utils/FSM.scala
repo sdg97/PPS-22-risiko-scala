@@ -1,10 +1,7 @@
 package utils
 
-import utils.RisikoAction.{AttackRequest, EndTurn, MoveRequest, StartAttack, StartMove}
-import utils.RisikoPhase.{Attack, StartTurn}
-
 trait FSM:
-  type Phase   // Node and Edge are abstract types, member of Graph
+  type Phase
   type Action
 
   def + (p1: Phase, a: Action, p2: Phase): Unit
@@ -13,7 +10,9 @@ trait FSM:
 
   def currentPhase: Phase
 
-  def next(): Iterable[Phase]
+  def phases: Set[Phase]
+
+  def next: Set[Phase]
 
 trait FSMImpl() extends FSM:
   private val g = new GraphWithEdgeImpl with TraversableGraph:
@@ -30,62 +29,10 @@ trait FSMImpl() extends FSM:
   override def currentPhase: Phase =
     g.getCurrentNode().get
 
-  override def next(): Iterable[Phase] =
+  override def next: Set[Phase] =
     g.getNeighbours(g.getCurrentNode().get)
 
-enum RisikoPhase:
-  case StartTurn;
-  case Attack;
-  case Move
+  override def phases: Set[Phase] = g.nodes
 
-enum RisikoAction:
-  case StartMove
-  case StartAttack
-  case AttackRequest
-  case MoveRequest
-  case EndTurn
 
-object RisikoFSM:
-  def apply() =
-    val f = new FSMImpl:
-      override type Phase = RisikoPhase
-      override type Action = RisikoAction
-    f + (StartTurn, StartAttack, Attack)
-    f + (Attack, AttackRequest, Attack)
-    f + (Attack, StartMove, RisikoPhase.Move)
-    f + (StartTurn, RisikoAction.StartMove, RisikoPhase.Move)
-    f + (RisikoPhase.Move, MoveRequest, RisikoPhase.Move)
-    f + (StartTurn, EndTurn, StartTurn)
-    f + (RisikoPhase.Move, EndTurn, StartTurn)
-    f + (Attack, EndTurn, StartTurn)
-
-    f
-
-object TryFSM extends App:
-
-  import RisikoAction.*
-  import RisikoPhase.*
-
-  val f = RisikoFSM()
-
-  println(f.currentPhase) //StartTurn
-  println(f.trigger(StartMove)) //Move
-  println(f.trigger(EndTurn)) //StartTurn
-
-  println()
-
-  println(f.currentPhase) //StartTurn
-  println(f.trigger(StartAttack)) //Attack
-  println(f.trigger(AttackRequest)) //Attack
-  println(f.trigger(AttackRequest)) //Attack
-  println(f.trigger(StartMove)) //Move
-  println(f.trigger(MoveRequest)) //Move
-  println(f.trigger(MoveRequest)) //Move
-  println(f.trigger(EndTurn)) //StartTurn
-
-  println(f.next()) //Move Attack StartTurn
-  f.trigger(StartAttack)
-  println(f.next()) //Attack Move StartTurn
-  f.trigger(StartMove)
-  println(f.next()) //Move StartTurn
 

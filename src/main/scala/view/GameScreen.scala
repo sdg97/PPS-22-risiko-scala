@@ -26,7 +26,9 @@ object GameScreen:
 
 private class GameScreenImpl(c: Controller):
   private val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
-  private var selectPhaseComponent = new CurrentPlayerComponent()
+  private val currentPlayerComponent = new CurrentPlayerComponent()
+  private val selectPhaseComponent = new SelectPhaseComponent(c)
+
   // Carica l'immagine di sfondo
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
 
@@ -139,8 +141,10 @@ private class GameScreenImpl(c: Controller):
         println(buttonMap.size)
         c.getPlayerStates(c.getCurrentPlayer()).foreach(state => buttonMap(state.name).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2)))
       })
-      
-      screen.add(selectPhaseComponent.get(c.getCurrentPlayer()))
+
+
+      screen.add(currentPlayerComponent.get(c.getCurrentPlayer()))
+      screen.add(selectPhaseComponent.get())
   }
 
   private def getStateNameFromButton(button: JButton): String =
@@ -157,7 +161,8 @@ private class GameScreenImpl(c: Controller):
     })
   
   def update(): Unit =
-    selectPhaseComponent.update(c.getCurrentPlayer())
+    currentPlayerComponent.update(c.getCurrentPlayer())
+    selectPhaseComponent.update()
     c.getAllStates().foreach(state => {
       buttonMap(state.name).setText(state.numberOfWagon.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
