@@ -2,6 +2,8 @@ package view
 
 import controller.ControllerModule.*
 import model.{Player, PlayerColor, PlayerImpl}
+import view.component.{CurrentPlayerComponent, SelectPhaseComponent}
+
 import java.awt.{BorderLayout, Color, Font, Graphics, Graphics2D}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
 import java.awt.geom.{Ellipse2D, Point2D}

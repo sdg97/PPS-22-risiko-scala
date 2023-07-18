@@ -25,8 +25,7 @@ object ModelModule:
 
     def addWagon(stateName: String): Unit
 
-    def turnPhases : Set[RisikoPhase]
-    def nextPhases: Set[RisikoPhase]
+    def switchTurnPhaseActionAvailable : Set[RisikoAction]
 
   }
 
@@ -107,11 +106,7 @@ object ModelModule:
         gameMap.getStateByName(stateName).addWagon(1)
         controller.updateView()
 
-      override def turnPhases: Set[RisikoPhase] = turnPhasesManager.phases
-
-      override def nextPhases: Set[RisikoPhase] = turnPhasesManager.next
-
-
+      def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
 
   trait Interface extends Provider with Component:
     self: Requirements =>

@@ -7,17 +7,21 @@ enum RisikoPhase:
   case Attack;
   case Move
 
-private[model] enum RisikoAction:
+trait RisikoAction
+enum RisikoSwitchPhaseAction extends RisikoAction:
   case StartMove
   case StartAttack
+  case EndTurn
+  
+enum RisikoRequest extends RisikoAction:
   case AttackRequest
   case MoveRequest
-  case EndTurn
 
 object TurnPhasesManager:
 
   import RisikoPhase.*
-  import RisikoAction.*
+  import RisikoRequest.*
+  import RisikoSwitchPhaseAction.*
   def apply() =
     val f = new FSMImpl:
       override type Phase = RisikoPhase
@@ -30,14 +34,14 @@ object TurnPhasesManager:
     f + (Move, MoveRequest, Move)
     f + (Move, EndTurn, StartTurn)
     f + (Attack, EndTurn, StartTurn)
-
     f
 
 object TryFSM extends App:
 
-  import RisikoAction.*
   import RisikoPhase.*
-
+  import RisikoRequest.*
+  import RisikoSwitchPhaseAction.*
+  
   val f = TurnPhasesManager()
 
   println(f.currentPhase) //StartTurn

@@ -1,4 +1,4 @@
-package view
+package view.component
 
 import controller.ControllerModule.Controller
 import model.Player

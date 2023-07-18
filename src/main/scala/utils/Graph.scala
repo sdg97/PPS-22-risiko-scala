@@ -46,6 +46,7 @@ trait TraversableGraph extends GraphWithEdge:
   def crossEdge(toCross: Edge) =
     val t = Some(getNeighbours(currentNode.get, toCross).head)
     currentNode = if !t.isEmpty then t else currentNode
+  
 
 object TryGraph extends App:
   val g = new GraphWithEdgeImpl with TraversableGraph:
