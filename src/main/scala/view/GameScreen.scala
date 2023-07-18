@@ -118,6 +118,7 @@ private class GameScreenImpl(c: Controller):
                 }).get._1
                 panelAttackPhase.removeAll()
                 panelAttackPhase.setVisible(true)
+
                 val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, c.getAllStates().find((state)=>{state.name.equals(stateAttack)}).get,c.getAllStates().find((state)=>{state.name.equals(stateDefender)}).get)
                 gameWindowAttack.show()
                 //resetButton()
@@ -130,6 +131,7 @@ private class GameScreenImpl(c: Controller):
               stateAttack = buttonMap.find((name, button) => {
                 button.equals(btnState)
               }).get._1
+              println(c.getAllStates().find((state)=>{state.name.equals(stateAttack)}).get.numberOfWagon)
               resetButton()
               val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
               neighbors.foreach(neighbor => {

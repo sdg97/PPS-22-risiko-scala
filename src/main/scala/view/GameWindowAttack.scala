@@ -21,7 +21,7 @@ class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, con
       setText(stateDefender.name)
       setFont(new Font("Arial", 12, 17))
     }
-    labelDefenderState.setBounds(280, 40, 160, 40)
+    labelDefenderState.setBounds(230, 40, 160, 40)
 
     val arrowComponent = new JComponent {
       override def paintComponent(g: Graphics): Unit = {
