@@ -7,7 +7,7 @@ enum RisikoPhase:
   case Attack;
   case Move
 
-enum RisikoAction:
+private[model] enum RisikoAction:
   case StartMove
   case StartAttack
   case AttackRequest
@@ -26,8 +26,8 @@ object TurnPhasesManager:
     f + (Attack, AttackRequest, Attack)
     f + (Attack, StartMove, Move)
     f + (StartTurn, StartMove, Move)
-    f + (Move, MoveRequest, Move)
     f + (StartTurn, EndTurn, StartTurn)
+    f + (Move, MoveRequest, Move)
     f + (Move, EndTurn, StartTurn)
     f + (Attack, EndTurn, StartTurn)
 

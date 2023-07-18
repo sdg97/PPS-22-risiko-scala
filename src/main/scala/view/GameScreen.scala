@@ -2,7 +2,6 @@ package view
 
 import controller.ControllerModule.*
 import model.{Player, PlayerColor, PlayerImpl}
-
 import java.awt.{BorderLayout, Color, Font, Graphics, Graphics2D}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
 import java.awt.geom.{Ellipse2D, Point2D}
@@ -26,7 +25,7 @@ object GameScreen:
 
 private class GameScreenImpl(c: Controller):
   private val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
-  private val currentPlayerComponent = new CurrentPlayerComponent()
+  private val currentPlayerComponent = new CurrentPlayerComponent(c)
   private val selectPhaseComponent = new SelectPhaseComponent(c)
 
   // Carica l'immagine di sfondo
@@ -141,17 +140,18 @@ private class GameScreenImpl(c: Controller):
         println(buttonMap.size)
         c.getPlayerStates(c.getCurrentPlayer()).foreach(state => buttonMap(state.name).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2)))
       })
-
-
-      screen.add(currentPlayerComponent.get(c.getCurrentPlayer()))
-      screen.add(selectPhaseComponent.get())
   }
+
+  val turnPanel = new JPanel()
+  turnPanel.add(currentPlayerComponent.get())
+  turnPanel.add(selectPhaseComponent.get())
+  turnPanel.setSize(turnPanel.getPreferredSize())
+  screen.add(turnPanel)
 
   private def getStateNameFromButton(button: JButton): String =
     buttonMap.find((n, b) => {
       b.equals(button)
     }).get._1
-
 
   private def resetButton(): Unit =
     buttonMap.foreach((_, button) => {
@@ -161,7 +161,8 @@ private class GameScreenImpl(c: Controller):
     })
   
   def update(): Unit =
-    currentPlayerComponent.update(c.getCurrentPlayer())
+    println("UPDATE LA GAME SCREEN")
+    currentPlayerComponent.update()
     selectPhaseComponent.update()
     c.getAllStates().foreach(state => {
       buttonMap(state.name).setText(state.numberOfWagon.toString)

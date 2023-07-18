@@ -1,19 +1,19 @@
 package view
 
+import controller.ControllerModule.Controller
 import model.Player
 
 import javax.swing.{JLabel, JPanel}
 
-private[view] class CurrentPlayerComponent:
+private[view] class CurrentPlayerComponent(c: Controller):
   private val panel = new JPanel()
   private val LABEL_PREFIX = "Player"
-  def get(p: Player) =
-    panel add JLabel(s"${LABEL_PREFIX} ${p.username}")
-    panel.setSize(panel.getPreferredSize())
+  def get() =
+    update()
     panel
 
-  def update(p: Player) = 
+  def update() =
     panel.removeAll()
-    panel add JLabel(s"${LABEL_PREFIX} ${p.username}")
+    panel add JLabel(s"${LABEL_PREFIX} ${c.getCurrentPlayer().username}")
     panel.setSize(panel.getPreferredSize())
     
