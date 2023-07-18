@@ -3,11 +3,12 @@ package view
 import controller.ControllerModule.*
 import model.{PlayerColor, PlayerImpl}
 
-import java.awt.{BorderLayout, Color, Font, Graphics, Graphics2D}
+import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.io.{File, FileReader}
-import javax.swing.{BorderFactory, JButton, JFrame, JLabel, JPanel, UIManager}
+import java.util.Random
+import javax.swing.{BorderFactory, JButton, JComponent, JFrame, JLabel, JPanel, SwingConstants, UIManager}
 import scala.collection.mutable
 import scala.io.Source
 import scala.swing.{Color, Dimension, Image}
@@ -25,6 +26,7 @@ object GameScreen:
 
 private class GameScreenImpl(c: Controller):
   val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
+
 
   // Carica l'immagine di sfondo
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
@@ -46,6 +48,9 @@ private class GameScreenImpl(c: Controller):
     }
   }
   screen.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
+
+  var stateAttack: String = ""
+  var stateDefender: String = ""
 
   val file = new File("src/main/resources/config/states.txt")
   val lines = Source.fromFile(file).getLines().toList
@@ -102,12 +107,19 @@ private class GameScreenImpl(c: Controller):
         val isAttackPhase = true
         val isPositionPhase = false
 
+
+
         btnState.addActionListener((_: ActionEvent) => {
           if(isAttackPhase) {
             if (btnState.isNeighbour) {
               if (!btnState.color.equals(new Color(c.getCurrentPlayer().color.rgb))) {
-                println("attack")
-                windowAttack()
+                stateDefender=buttonMap.find((name, button)=>{
+                  button.equals(btnState)
+                }).get._1
+                panelAttackPhase.removeAll()
+                panelAttackPhase.setVisible(true)
+                val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, c.getAllStates().find((state)=>{state.name.equals(stateAttack)}).get,c.getAllStates().find((state)=>{state.name.equals(stateDefender)}).get)
+                gameWindowAttack.show()
                 //resetButton()
               }
             }
@@ -115,6 +127,9 @@ private class GameScreenImpl(c: Controller):
               resetButton()
             }
             else {
+              stateAttack = buttonMap.find((name, button) => {
+                button.equals(btnState)
+              }).get._1
               resetButton()
               val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
               neighbors.foreach(neighbor => {
@@ -165,15 +180,6 @@ private class GameScreenImpl(c: Controller):
 
     })
 
-  def windowAttack(): Unit = {
-    panelAttackPhase.setVisible(true)
-    val labelAttackState = new JLabel() {
-      setForeground(Color.BLACK) // Imposta il colore del testo
-      setText("Number of players: ")
-      setFont(new Font("Arial", 12, 13))
-    }
-    labelAttackState.setBounds(70, 40, 120, 40)
-  }
 
 
 

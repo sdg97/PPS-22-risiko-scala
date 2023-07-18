@@ -2,11 +2,11 @@ package view
 
 import controller.ControllerModule.Controller
 
-import java.awt.{BasicStroke, BorderLayout, Color, Font, Graphics, Graphics2D, Polygon}
+import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.io.{File, FileReader}
-import javax.swing.{BorderFactory, JButton, JComponent, JFrame, JLabel, JPanel, UIManager}
+import javax.swing.{BorderFactory, JButton, JComponent, JFrame, JLabel, JPanel, SwingConstants, UIManager}
 import scala.collection.mutable
 import scala.io.Source
 import scala.swing.{Color, Dimension, Font, Image}
@@ -197,7 +197,7 @@ private class GameMapGuiImpl(c: Controller):
     setBackground(Color.gray)
     setBorder(BorderFactory.createLineBorder(Color.gray, 30))
   };
-  screen.add(panelAttackPhase)
+
 
   def update(): Unit =
     c.getAllStates().foreach(state => {
@@ -253,16 +253,27 @@ private class GameMapGuiImpl(c: Controller):
   }
   arrowComponent.setBounds(180, 40, 80, 40)
 
-  val panelDadoAttack = new JPanel(){
+  val panelDadoAttack = new JPanel(null){
+    setLayout(new FlowLayout(FlowLayout.CENTER,0, 13))
     setBounds(20, 100, 160, 100)
     setBackground(Color.gray)
     setBorder(BorderFactory.createLineBorder(Color.black, 5))
   }
 
   val panelDadoDefender = new JPanel() {
+    setLayout(new FlowLayout(FlowLayout.CENTER,0, 13))
     setBounds(220, 100, 160, 100)
     setBackground(Color.gray)
     setBorder(BorderFactory.createLineBorder(Color.black, 5))
+  }
+
+  val buttonClose = new JButton() {
+    setForeground(Color.BLACK)
+    setBackground(Color.WHITE)
+    setText("CLOSE")
+    setFont(new Font("Arial", 12, 13))
+    setBounds(140, 350, 120, 50)
+    setEnabled(false)
   }
 
   val buttonAttack=new JButton(){
@@ -282,49 +293,65 @@ private class GameMapGuiImpl(c: Controller):
     setEnabled(false)
   }
 
-  buttonAttack.addActionListener((_: ActionEvent) => {
-    var i: Int = 1
-    while (i <= 3) {
-      val dadoAttack = new DadoComponent("attacker")
-      val newValue = Random.nextInt(6) + 1
-      dadoAttack.setValue(newValue)
-      if (i == 1) {
-        dadoAttack.setBounds(20, 120, 50, 50)
-      }
-      else if (i == 2) {
-        dadoAttack.setBounds(70, 120, 50, 50)
-      }
-      else {
-        dadoAttack.setBounds(120, 120, 50, 50)
-      }
-      panelAttackPhase.add(dadoAttack)
-      i = i + 1
+  val random = new Random()
+  for (_ <- 1 to 3) {
+    val dadoComponentAttack = new DadoComponent("attacker")
+    dadoComponentAttack.setPreferredSize(new Dimension(50, 50))
+    dadoComponentAttack.setValue(1)
+    panelDadoAttack.add(dadoComponentAttack)
+
+    val dadoComponentDefence = new DadoComponent("defender")
+    dadoComponentDefence.setPreferredSize(new Dimension(50, 50))
+    dadoComponentDefence.setValue(1)
+    panelDadoDefender.add(dadoComponentDefence)
+  }
+
+  buttonAttack.addActionListener(_=>{
+    panelDadoAttack.getComponents.foreach {
+      case dadoComponent: DadoComponent =>
+        dadoComponent.setValue(random.nextInt(6) + 1)
+      case _ =>
     }
     buttonDefence.setEnabled(true)
     buttonAttack.setEnabled(false)
+    buttonClose.setEnabled(false)
   })
-
 
 
   buttonDefence.addActionListener((_: ActionEvent) => {
-    var j: Int = 1
-    while (j <= 3) {
-      val dadoDefender = new DadoComponent("defender")
-      val newValue = Random.nextInt(6) + 1
-      dadoDefender.setValue(newValue)
-      if (j == 1) {
-        dadoDefender.setBounds(220, 120, 50, 50)
-      }
-      else if (j == 2) {
-        dadoDefender.setBounds(270, 120, 50, 50)
-      }
-      else {
-        dadoDefender.setBounds(320, 120, 50, 50)
-      }
-      panelAttackPhase.add(dadoDefender)
-      j = j + 1
+    panelDadoDefender.getComponents.foreach {
+      case dadoComponent: DadoComponent =>
+        dadoComponent.setValue(random.nextInt(6) + 1)
+      case _ =>
     }
+    buttonDefence.setEnabled(false)
+    buttonAttack.setEnabled(true)
+    buttonClose.setEnabled(true)
   })
+
+  val labelWagonAttackState = new JLabel() {
+    setForeground(Color.BLACK) // Imposta il colore del testo
+    setText("12")
+    setFont(new Font("Arial", 12, 24))
+  }
+  labelWagonAttackState.setBounds(85, 300, 80, 40)
+
+  val labelWagonDefenderState = new JLabel() {
+    setForeground(Color.BLACK) // Imposta il colore del testo
+    setText("10")
+    setFont(new Font("Arial", 12, 24))
+  }
+  labelWagonDefenderState.setBounds(285, 300, 80, 40)
+
+  val labelPlayerMessage = new JLabel() {
+    setForeground(Color.BLACK) // Imposta il colore del testo
+    setText("Congrats you conquared Argentina")
+    setFont(new Font("Arial", 12, 17))
+    setHorizontalAlignment(SwingConstants.CENTER)
+  }
+  labelPlayerMessage.setBounds(20, 410, 300, 80)
+
+
 
   panelAttackPhase.add(labelAttackState)
   panelAttackPhase.add(arrowComponent)
@@ -333,6 +360,12 @@ private class GameMapGuiImpl(c: Controller):
   panelAttackPhase.add(panelDadoDefender)
   panelAttackPhase.add(buttonAttack)
   panelAttackPhase.add(buttonDefence)
+  panelAttackPhase.add(labelWagonAttackState)
+  panelAttackPhase.add(labelWagonDefenderState)
+  panelAttackPhase.add(buttonClose)
+  panelAttackPhase.add(labelPlayerMessage)
+  screen.add(panelAttackPhase)
+
 
 
 
