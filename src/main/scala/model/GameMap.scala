@@ -31,35 +31,3 @@ class GameMap extends Graph:
     nodeSet.toSeq.map(s => s"${s.name} ${s.player.username}").foreach(println(_))
 
   def wagonToPlace(player: Player): Int = getPlayerStates(player).size/3
-/*
-object TryMap extends App:
-  val map = new GameMap()
-  val player1 = new PlayerImpl("pie", PlayerColor.Yellow)
-  val player2 = new PlayerImpl("martin", PlayerColor.Blue)
-
-  val italy = new StateImpl("italy", 3, player1)
-  val france = new StateImpl("france", 3, player2)
-  val swisse = new StateImpl("swisse", 5, player2)
-  val austria = new StateImpl("austria", 5, player1)
-
-  map.addNode(italy)
-  map.addNode(france)
-  map.addNode(swisse)
-  map.addNode(austria)
-
-  map.addEdge("italy","france")
-  map.addEdge("italy","austria")
-  map.addEdge("swisse","italy")
-
-  val state = map.getStateByName("italy")
-  println("Info stato: "+ state.name + " "+ state.player + " " + state.numberOfWagon)
-
-  println("NeighborStates: ")
-  map.getNeighborStates("italy", player1).foreach(s => println(s))
-
-  println("Player NeighborStates: ")
-  map.getNeighborStatesOfPlayer("italy", player1).foreach(s => println(s))
-
-  println("PlayerStates: ")
-  map.getPlayerStates(player1).foreach(s => println(s.name))
-*/

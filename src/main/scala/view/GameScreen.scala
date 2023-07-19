@@ -32,7 +32,6 @@ private class GameScreenImpl(c: Controller):
   // Carica l'immagine di sfondo
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
 
-
   // Crea il pannello per contenere gli elementi della GUI
   val screen = new JPanel(null) {
     override def paintComponent(g: Graphics): Unit = {
@@ -50,68 +49,10 @@ private class GameScreenImpl(c: Controller):
   }
   screen.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
-  private val file = new File("src/main/resources/config/states.txt")
-  private val lines = Source.fromFile(file).getLines().toList
   private var wagonToPlace = 0
-
-  lines.foreach {
-    line =>
-      val parts = line.split(",")
-      if (parts.length >= 3) {
-        val name = parts(0).trim
-        val posX = parts(1).trim
-        val posY = parts(2).trim
-
-        val btnState = new JButtonExtended("") {
-          setBorder(BorderFactory.createEmptyBorder())
-          setContentAreaFilled(false) // Rimuove lo sfondo del bottone
-          setForeground(Color.BLACK) // Imposta il colore del testo
-          setFocusPainted(false) // Rimuove l'effetto di focuss
-          setText(name)
-          setFont(new Font("Arial", 12, 10))
-          setRolloverEnabled(true)
-          if(color.equals(Color.BLACK) || color.equals(Color.BLUE))
-            setForeground(Color.WHITE)
-
-          override def paintComponent(g: Graphics): Unit = {
-            val g2d = g.asInstanceOf[Graphics2D]
-            val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
-            val radius = Math.min(getWidth, getHeight) / 2.0f
-            val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
-            g2d.setColor(this.color) // Imposta il colore del cerchio
-            g2d.fill(circle) // Disegna il cerchio
-            super.paintComponent(g) // Disegna il testo del bottone
-          }
-        }
-
-        val isAttackPhase = false
-        val isPositionPhase = true
-        wagonToPlace = c.wagonToPlace(c.getCurrentPlayer())
-
-        btnState.addActionListener((_: ActionEvent) => {
-          if(isPositionPhase) {
-            if(c.getPlayerStates(c.getCurrentPlayer()).exists(s => s.name.equals(getStateNameFromButton(btnState))) && wagonToPlace>0)
-              c.addWagon(getStateNameFromButton(btnState))
-              wagonToPlace-=1
-              wagonToPlaceLabel.setText("Wagon to be placed: " + wagonToPlace.toString)
-          }
-        })
-
-        btnState.setBounds(posX.toInt, posY.toInt, 40, 40)
-        screen.add(btnState)
-        buttonMap += (name -> btnState)
-      }
-
-      val btnShowMyStates = new JButton() {
-        setText("Show my States")
-      }
-      btnShowMyStates.setBounds(400, 500, 200, 50)
-      screen.add(btnShowMyStates)
-      btnShowMyStates.addActionListener((_: ActionEvent) => {
-        println(buttonMap.size)
-        c.getPlayerStates(c.getCurrentPlayer()).foreach(state => buttonMap(state.name).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2)))
-      })
-  }
+  val isAttackPhase = false
+  val isPositionPhase = true
+  wagonToPlace = c.wagonToPlace(c.getCurrentPlayer())
 
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
@@ -124,6 +65,7 @@ private class GameScreenImpl(c: Controller):
   private val wagonToPlaceLabel = new JLabel("Wagon to be placed: " + wagonToPlace.toString)
   wagonPanel.add(wagonToPlaceLabel)
   screen.add(wagonPanel)
+  setupButtons()
 
 
 
@@ -131,6 +73,43 @@ private class GameScreenImpl(c: Controller):
     buttonMap.find((n, b) => {
       b.equals(button)
     }).get._1
+
+  private def setupButtons(): Unit =
+    c.getAllStates().foreach(state => {
+      val btnState = new JButtonExtended("") {
+        setBorder(BorderFactory.createEmptyBorder())
+        setContentAreaFilled(false) // Rimuove lo sfondo del bottone
+        setForeground(Color.BLACK) // Imposta il colore del testo
+        setFocusPainted(false) // Rimuove l'effetto di focuss
+        setFont(new Font("Arial", 12, 10))
+        setRolloverEnabled(true)
+        if (color.equals(Color.BLACK) || color.equals(Color.BLUE))
+          setForeground(Color.WHITE)
+
+        override def paintComponent(g: Graphics): Unit = {
+          val g2d = g.asInstanceOf[Graphics2D]
+          val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
+          val radius = Math.min(getWidth, getHeight) / 2.0f
+          val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
+          g2d.setColor(this.color) // Imposta il colore del cerchio
+          g2d.fill(circle) // Disegna il cerchio
+          super.paintComponent(g) // Disegna il testo del bottone
+        }
+      }
+
+      btnState.addActionListener((_: ActionEvent) => {
+        if (isPositionPhase) {
+          if (c.getPlayerStates(c.getCurrentPlayer()).exists(s => s.name.equals(getStateNameFromButton(btnState))) && wagonToPlace > 0)
+            c.addWagon(getStateNameFromButton(btnState))
+            wagonToPlace -= 1
+            wagonToPlaceLabel.setText("Wagon to be placed: " + wagonToPlace.toString)
+        }
+      })
+
+      btnState.setBounds(state.posX, state.posY, 40, 40)
+      screen.add(btnState)
+      buttonMap += (state.name -> btnState)
+    })
 
   private def resetButton(): Unit =
     buttonMap.foreach((_, button) => {

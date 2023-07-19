@@ -45,9 +45,9 @@ object ModelModule:
         val parts = line.split(",")
         if (parts.length >= 3) {
           val name = parts(0).trim
-          parts(1).trim
-          parts(2).trim
-          gameMap.addNode(new StateImpl(name))
+          val posX = parts(1).trim
+          val posY = parts(2).trim
+          gameMap.addNode(new StateImpl(name, 0, null, posX.toInt, posY.toInt))
         }
       }
 
