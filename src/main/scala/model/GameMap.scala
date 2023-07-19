@@ -30,6 +30,7 @@ class GameMap extends Graph:
     
     nodeSet.toSeq.map(s => s"${s.name} ${s.player.username}").foreach(println(_))
 
+  def wagonToPlace(player: Player): Int = getPlayerStates(player).size/3
 /*
 object TryMap extends App:
   val map = new GameMap()

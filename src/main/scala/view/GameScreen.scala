@@ -53,6 +53,7 @@ private class GameScreenImpl(c: Controller):
 
   val file = new File("src/main/resources/config/states.txt")
   val lines = Source.fromFile(file).getLines().toList
+  var wagonToPlace = 0
 
   lines.foreach {
     line =>
@@ -84,21 +85,9 @@ private class GameScreenImpl(c: Controller):
           }
         }
 
-        btnState.addMouseListener(
-          new MouseAdapter() {
-            override def mouseEntered(evt: MouseEvent): Unit = {
-              if (!btnState.isSelected && !btnState.isNeighbour)
-                btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
-            }
-
-            override def mouseExited(evt: MouseEvent): Unit = {
-              if (!btnState.isSelected && !btnState.isNeighbour)
-                btnState.setBorder(BorderFactory.createEmptyBorder())
-            }
-          })
-
         val isAttackPhase = false
         val isPositionPhase = true
+        wagonToPlace = c.wagonToPlace(c.getCurrentPlayer())
 
         btnState.addActionListener((_: ActionEvent) => {
           if(isAttackPhase) {
@@ -122,9 +111,10 @@ private class GameScreenImpl(c: Controller):
               btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
             }
           } else if(isPositionPhase) {
-            //println(c.getPlayerStates(c.getCurrentPlayer()))
-            if(c.getPlayerStates(c.getCurrentPlayer()).exists(s => s.name.equals(getStateNameFromButton(btnState))))
+            if(c.getPlayerStates(c.getCurrentPlayer()).exists(s => s.name.equals(getStateNameFromButton(btnState))) && wagonToPlace>0)
               c.addWagon(getStateNameFromButton(btnState))
+              wagonToPlace-=1
+              println(wagonToPlace)
           }
         })
 
@@ -170,5 +160,6 @@ private class GameScreenImpl(c: Controller):
       buttonMap(state.name).setText(state.numberOfWagon.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
+
 
 
