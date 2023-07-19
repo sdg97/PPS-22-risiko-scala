@@ -8,12 +8,11 @@ import java.awt.{BorderLayout, Color, Font, Graphics, Graphics2D}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.io.{File, FileReader}
-import javax.swing.{BorderFactory, JButton, JFrame, JPanel}
+import javax.swing.{BorderFactory, JButton, JFrame, JLabel, JPanel, UIManager}
 import scala.collection.mutable
 import scala.io.Source
 import scala.swing.{Color, Dimension, Image}
 import scala.collection.mutable.Map
-import javax.swing.UIManager
 
 object GameScreen:
   private var screen : Option[GameScreenImpl] = None
@@ -51,9 +50,9 @@ private class GameScreenImpl(c: Controller):
   }
   screen.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
-  val file = new File("src/main/resources/config/states.txt")
-  val lines = Source.fromFile(file).getLines().toList
-  var wagonToPlace = 0
+  private val file = new File("src/main/resources/config/states.txt")
+  private val lines = Source.fromFile(file).getLines().toList
+  private var wagonToPlace = 0
 
   lines.foreach {
     line =>
@@ -90,31 +89,11 @@ private class GameScreenImpl(c: Controller):
         wagonToPlace = c.wagonToPlace(c.getCurrentPlayer())
 
         btnState.addActionListener((_: ActionEvent) => {
-          if(isAttackPhase) {
-            if (btnState.isNeighbour) {
-              //TODO invoke attack method
-              println("attack")
-              resetButton()
-            }
-            else if (btnState.isSelected) {
-              resetButton()
-            }
-            else {
-              resetButton()
-              val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
-              neighbors.foreach(neighbor => {
-                val currentButton = buttonMap(neighbor)
-                currentButton.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
-                currentButton.setIsNeighbour(true)
-              })
-              btnState.setSelected(!btnState.isSelected)
-              btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
-            }
-          } else if(isPositionPhase) {
+          if(isPositionPhase) {
             if(c.getPlayerStates(c.getCurrentPlayer()).exists(s => s.name.equals(getStateNameFromButton(btnState))) && wagonToPlace>0)
               c.addWagon(getStateNameFromButton(btnState))
               wagonToPlace-=1
-              println(wagonToPlace)
+              wagonToPlaceLabel.setText("Wagon to be placed: " + wagonToPlace.toString)
           }
         })
 
@@ -139,6 +118,14 @@ private class GameScreenImpl(c: Controller):
   turnPanel.add(selectPhaseComponent.get())
   turnPanel.setSize(turnPanel.getPreferredSize())
   screen.add(turnPanel)
+
+  private val wagonPanel = new JPanel()
+  wagonPanel.setBounds(400,0,200,40)
+  private val wagonToPlaceLabel = new JLabel("Wagon to be placed: " + wagonToPlace.toString)
+  wagonPanel.add(wagonToPlaceLabel)
+  screen.add(wagonPanel)
+
+
 
   private def getStateNameFromButton(button: JButton): String =
     buttonMap.find((n, b) => {
