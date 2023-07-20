@@ -10,9 +10,9 @@ class GameMapTest extends AnyFunSuite with Matchers:
   val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
   val player3 = new PlayerImpl("simo", PlayerColor.BLUE)
 
-  val italy = new StateImpl("italy", 3, player1)
-  val france = new StateImpl("france", 3, player2)
-  val brazil = new StateImpl("brazil", 5, player1)
+  val italy = new StateImpl("italy", 3, player1,0,0)
+  val france = new StateImpl("france", 3, player2,0,0)
+  val brazil = new StateImpl("brazil", 5, player1,0,0)
 
   test("Test add Node"){
     map.addNode(italy)

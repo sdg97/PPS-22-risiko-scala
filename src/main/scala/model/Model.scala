@@ -17,6 +17,7 @@ object ModelModule:
     def getCurrentPlayer(): Player
     def updateView(): Unit
     def addWagon(stateName: String): Unit
+    def wagonToPlace(): Int
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
   }
@@ -44,9 +45,9 @@ object ModelModule:
         val parts = line.split(",")
         if (parts.length >= 3) {
           val name = parts(0).trim
-          parts(1).trim
-          parts(2).trim
-          gameMap.addNode(new StateImpl(name))
+          val posX = parts(1).trim
+          val posY = parts(2).trim
+          gameMap.addNode(new StateImpl(name, 0, null, posX.toInt, posY.toInt))
         }
       }
 
@@ -84,6 +85,7 @@ object ModelModule:
           )))
           turnManager.get.next()
           gameMap.assignStatesToPlayers(turnManager.get.getAll())
+          gameMap.calcWagonToPlace(getCurrentPlayer())
         }
       }
 
@@ -96,13 +98,17 @@ object ModelModule:
       override def updateView(): Unit = controller.updateView()
 
       override def addWagon(stateName: String): Unit =
-        gameMap.getStateByName(stateName).addWagon(1)
-        controller.updateView()
+        val currentPlayer = getCurrentPlayer()
+        if(currentPlayer.equals(gameMap.getStateByName(stateName).player) && currentPlayer.wagonToPlace > 0)
+          gameMap.getStateByName(stateName).addWagon(1)
+          currentPlayer.setWagonToPlace(currentPlayer.wagonToPlace-1)
+          controller.updateView()
 
+      override def wagonToPlace(): Int = getCurrentPlayer().wagonToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
 
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match
-        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next()
+        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcWagonToPlace(getCurrentPlayer())
         case _ => turnPhasesManager.trigger(a)
 
   trait Interface extends Provider with Component:
