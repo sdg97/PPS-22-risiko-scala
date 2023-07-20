@@ -1,11 +1,16 @@
 package model
 
-class StateImpl (_name: String, var _numberOfWagon: Int, var _player: Player) extends State {
+
+class StateImpl (_name: String, var _numberOfWagon: Int, var _player: Player, _posX: Int, _posY:Int) extends State {
   override def name: String = _name
 
   override def numberOfWagon: Int = _numberOfWagon
 
   override def player: Player = _player
+  override def posX: Int = _posX
+  override def posY: Int = _posY
+  override def setPlayer(p: Player): Unit =
+    _player = p
 
   override def addWagon(numberOfWagonsToAdd: Int): Unit =
     _numberOfWagon = _numberOfWagon+numberOfWagonsToAdd
@@ -14,8 +19,7 @@ class StateImpl (_name: String, var _numberOfWagon: Int, var _player: Player) ex
     _numberOfWagon= _numberOfWagon-numberOfWagonToRemove
 
   def this(_name:String)={
-    this(_name,0,null)
+    this(_name,0,null,0,0)
   }
-
-  override def setPlayer(p: Player): Unit = _player = p
+  
 }

@@ -2,24 +2,32 @@ package model
 
 import model.PlayerColor.{BLACK, BLUE, YELLOW}
 
-trait TurnManager[+T]:
+trait TurnManager[T]:
+  def getAll(): Set[T]
+  def current(): T
   def next(): T
 
 object TurnManager:
+  def apply[T](elems: Set[T]): TurnManager[T] = TurnManagerImpl(elems)
 
-  def apply[T](elems: T*): TurnManager[T] = TurnManagerImpl(elems)
-
-  private case class TurnManagerImpl[+T](private val iterable: Iterable[T])
+  private case class TurnManagerImpl[T](private val toManage: Set[T])
     extends TurnManager[T]:
-    private val iterator: Iterator[T] = LazyList.continually(iterable.toList).flatten.iterator
-
+    private val iterator: Iterator[T] = LazyList.continually(toManage.toList).flatten.iterator
+    private var curr :Option[T] = None
     override def next(): T=
-      iterator.next()
+      curr = Some(iterator.next())
+      curr.get
+      
+    override def current(): T =
+      curr.get
+      
+    override def getAll(): Set[T] =
+      toManage.toSet
 
 object TurnManagerTest extends App:
-  val turnManager : TurnManager[Player] = TurnManager(Player("simone", BLUE),
+  val turnManager : TurnManager[Player] = TurnManager(Set(Player("simone", BLUE),
     Player("Martin", BLACK),
-    Player("Pietro", YELLOW))
+    Player("Pietro", YELLOW)))
 
   println(turnManager.next().username)
   println(turnManager.next().username)

@@ -4,36 +4,30 @@ import view.ViewModule.Requirements
 
 import scala.util.Random
 
+import controller.ControllerModule
+import view.ViewModule.Requirements
 
 object ModelModule:
   trait Model {
 
     @throws(classOf[MyCustomException])
     def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit
-
-    def getSetOfPlayers(): Set[Player]
-
+    def getPlayers(): Set[Player]
     def deployTroops(): Unit
-
     def getNeighbor(stateName: String, player: Player): Set[String]
-
     def getPlayerStates(player: Player): Set[State]
     def getAllStates: Set[State]
-
-    def getCurrentPlayer(): Player
-
-    def updateView(): Unit
-
     def resultAttack(attackerState: State, defenderState: State): Unit
     @throws(classOf[MyCustomException])
     def attackPhase(attackerState: State, defenderState: State): Unit
-
-    def addWagon(stateName: String): Unit
-
     def rollDice(typeOfPlayer:String, state:State): Seq[Int]
-
     def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
-    
+    def getCurrentPlayer(): Player
+    def updateView(): Unit
+    def addWagon(stateName: String): Unit
+    def wagonToPlace(): Int
+    def switchTurnPhaseActionAvailable : Set[RisikoAction]
+    def switchPhase(a: RisikoSwitchPhaseAction): Unit
 
   }
 
@@ -47,26 +41,22 @@ object ModelModule:
 
     import java.io.File
     import scala.io.Source
+    import RisikoSwitchPhaseAction.*
 
     class ModelImpl extends Model:
-      val gameMap = new GameMap()
-      val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
-      val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
-      val player3 = new PlayerImpl("simo", PlayerColor.RED)
-
-      val stateFile = new File("src/main/resources/config/states.txt")
-      val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
-
+      private val gameMap = new GameMap()
+      private var turnManager : Option[TurnManager[Player]] = None
+      private val turnPhasesManager = TurnPhasesManager()
+      private val stateFile = new File("src/main/resources/config/states.txt")
+      private val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
+      
       stateFileLines.foreach { line =>
         val parts = line.split(",")
         if (parts.length >= 3) {
           val name = parts(0).trim
-          parts(1).trim
-          parts(2).trim
-          if(name.equals("alaska"))
-            gameMap.addNode(new StateImpl(name, 4, player1))
-          else
-            gameMap.addNode(new StateImpl(name,2,player2))
+          val posX = parts(1).trim
+          val posY = parts(2).trim
+          gameMap.addNode(new StateImpl(name, 0, null, posX.toInt, posY.toInt))
         }
       }
 
@@ -84,12 +74,10 @@ object ModelModule:
       override def getNeighbor(stateName: String, player: Player): Set[String] = gameMap.getNeighborStates(stateName, player)
 
       override def getPlayerStates(player: Player): Set[State] =
-        controller.updateView()
         gameMap.getPlayerStates(player)
 
-      override def getCurrentPlayer(): Player = player1
+      override def getCurrentPlayer(): Player = turnManager.get.current()
 
-      private var setOfPlayer = Set[Player]()
       override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
         if (inputDataPlayer.exists(_._1 == "")) {
           throw new MyCustomException("All username field must be completed")
@@ -101,17 +89,37 @@ object ModelModule:
           throw new MyCustomException("A username must be assigned at only one player")
         }
         else {
-          inputDataPlayer.foreach(element =>
-            setOfPlayer = setOfPlayer + new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
-          )
-          gameMap.assignStatesToPlayers(setOfPlayer)
+          turnManager = Some(TurnManager(inputDataPlayer.map(element =>
+            new PlayerImpl(element._1, PlayerColor.valueOf(element._2))
+          )))
+          turnManager.get.next()
+          gameMap.assignStatesToPlayers(turnManager.get.getAll())
+          gameMap.calcWagonToPlace(getCurrentPlayer())
         }
       }
+
       override def deployTroops(): Unit = println("troop deployed")
 
-      override def getSetOfPlayers(): Set[Player] = setOfPlayer
+      override def getPlayers(): Set[Player] = turnManager.get.getAll()
 
       override def getAllStates: Set[State] = gameMap.nodes
+
+      override def updateView(): Unit = controller.updateView()
+
+      override def addWagon(stateName: String): Unit =
+        val currentPlayer = getCurrentPlayer()
+        if(currentPlayer.equals(gameMap.getStateByName(stateName).player) && currentPlayer.wagonToPlace > 0)
+          gameMap.getStateByName(stateName).addWagon(1)
+          currentPlayer.setWagonToPlace(currentPlayer.wagonToPlace-1)
+          controller.updateView()
+
+      override def wagonToPlace(): Int = getCurrentPlayer().wagonToPlace
+      override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
+
+      override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match
+        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcWagonToPlace(getCurrentPlayer())
+        case _ => turnPhasesManager.trigger(a)
+
 
       override def resultAttack(attackerState: State, defenderState: State): Unit =
         var wagonlostAttacker: Int = 0;
@@ -131,27 +139,26 @@ object ModelModule:
           throw new MyCustomException("""<html>Great, you conquered <br>""" + defenderState.name)
         }
         else if (attackerState.numberOfWagon == 1) {
-          throw new MyCustomException("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + defenderState.name+"""</html>""".stripMargin)
+          throw new MyCustomException("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + defenderState.name + """</html>""".stripMargin)
         }
       }
 
-      override def updateView(): Unit = controller.updateView()
+      private var rollDiceAttack = Seq[Int]()
+      private var rollDiceDefender = Seq[Int]()
 
-      private var rollDiceAttack=Seq[Int]()
-      private var rollDiceDefender=Seq[Int]()
       override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = {
         var numberOfDice: Int = 0;
-        var resultRollDice=Seq[Int]()
-        if(typeOfPlayer.equals("attack")){
+        var resultRollDice = Seq[Int]()
+        if (typeOfPlayer.equals("attack")) {
           if (state.numberOfWagon > 3) {
             numberOfDice = 3;
           } else {
             numberOfDice = state.numberOfWagon - 1;
           }
-          resultRollDice=Seq.fill(numberOfDice)(Random.nextInt(6) + 1).sorted.reverse
-          rollDiceAttack=resultRollDice
+          resultRollDice = Seq.fill(numberOfDice)(Random.nextInt(6) + 1).sorted.reverse
+          rollDiceAttack = resultRollDice
         }
-        else{
+        else {
           if (state.numberOfWagon >= 3) {
             numberOfDice = 3;
           } else {
@@ -164,8 +171,8 @@ object ModelModule:
       }
 
       override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = {
-        var numberOfDiceAttack=0
-        var numberOfDiceDefender=0
+        var numberOfDiceAttack = 0
+        var numberOfDiceDefender = 0
         if (attackerState.numberOfWagon > 3) {
           numberOfDiceAttack = 3;
         } else {
@@ -177,12 +184,8 @@ object ModelModule:
         } else {
           numberOfDiceDefender = defenderState.numberOfWagon;
         }
-        (numberOfDiceAttack,numberOfDiceDefender)
+        (numberOfDiceAttack, numberOfDiceDefender)
       }
-
-      override def addWagon(stateName: String): Unit =
-        gameMap.getStateByName(stateName).addWagon(1)
-        controller.updateView()
 
   trait Interface extends Provider with Component:
     self: Requirements =>
