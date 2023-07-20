@@ -141,13 +141,13 @@ class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, con
           labelPlayerMessage.setText(e.getMessage)
       }
 
-      if(labelPlayerMessage.getText.equals("Great, you conquered " + stateDefender.name)){
+      if(labelPlayerMessage.getText.equals("""<html>Great, you conquered <br>""" + stateDefender.name)){
         controller.updateView()
         buttonDefence.setEnabled(false)
         buttonAttack.setEnabled(false)
         buttonClose.setEnabled(true)
       }
-      else if(labelPlayerMessage.getText.equals("Sorry, but you can't attack because you have only one wagon in " + stateDefender.name)){
+      else if(labelPlayerMessage.getText.equals("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + stateDefender.name+"""</html>""".stripMargin)){
         controller.updateView()
         buttonDefence.setEnabled(false)
         buttonAttack.setEnabled(false)

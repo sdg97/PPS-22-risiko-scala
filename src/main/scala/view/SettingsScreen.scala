@@ -81,12 +81,11 @@ private[view] object SettingsScreen {
     })
 
     lazy val buttonStart = new JButton() {
-      setContentAreaFilled(false) // Rimuove lo sfondo del bottone
-      setForeground(Color.WHITE) // Imposta il colore del testo
+      setForeground(Color.BLACK) // Imposta il colore del testo
       setFocusPainted(false) // Rimuove l'effetto di focuss
       setText("START")
       setFont(new Font("Arial", 12, 10))
-      setBackground(Color.BLACK)
+      setBackground(Color.white)
     }
     buttonStart.setBounds(130, 370, 140, 40)
 
