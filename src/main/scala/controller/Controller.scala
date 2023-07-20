@@ -14,11 +14,9 @@ object ControllerModule:
     def getAllStates(): Set[State]
     def updateView(): Unit
     def addWagon(stateName: String): Unit
+    def wagonToPlace(): Int
     def switchTurnPhaseActionAvailable :  Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
-    def wagonToPlace(player: Player): Int
-
-
 
   trait Provider:
     val controller: Controller
@@ -45,12 +43,13 @@ object ControllerModule:
       override def getAllStates(): Set[State] = model.getAllStates
       def updateView(): Unit = view.update()
       override def addWagon(stateName: String): Unit = model.addWagon(stateName)
+
+      override def wagonToPlace(): Int = model.wagonToPlace()
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] =
         model.switchTurnPhaseActionAvailable
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit =
         model.switchPhase(a)
         updateView()
-      override def wagonToPlace(player: Player): Int = model.wagonToPlace(player)
 
   trait Interface extends Provider with Component:
     self: Requirements =>

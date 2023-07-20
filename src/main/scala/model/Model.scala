@@ -17,9 +17,9 @@ object ModelModule:
     def getCurrentPlayer(): Player
     def updateView(): Unit
     def addWagon(stateName: String): Unit
+    def wagonToPlace(): Int
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
-    def wagonToPlace(player: Player): Int
   }
 
   type Requirements = ControllerModule.Provider
@@ -85,6 +85,7 @@ object ModelModule:
           )))
           turnManager.get.next()
           gameMap.assignStatesToPlayers(turnManager.get.getAll())
+          gameMap.calcWagonToPlace(getCurrentPlayer())
         }
       }
 
@@ -97,16 +98,18 @@ object ModelModule:
       override def updateView(): Unit = controller.updateView()
 
       override def addWagon(stateName: String): Unit =
-        gameMap.getStateByName(stateName).addWagon(1)
-        controller.updateView()
+        val currentPlayer = getCurrentPlayer()
+        if(currentPlayer.equals(gameMap.getStateByName(stateName).player) && currentPlayer.wagonToPlace > 0)
+          gameMap.getStateByName(stateName).addWagon(1)
+          currentPlayer.setWagonToPlace(currentPlayer.wagonToPlace-1)
+          controller.updateView()
 
+      override def wagonToPlace(): Int = getCurrentPlayer().wagonToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
 
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match
-        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next()
+        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcWagonToPlace(getCurrentPlayer())
         case _ => turnPhasesManager.trigger(a)
-
-      override def wagonToPlace(player: Player): Int = gameMap.wagonToPlace(player)
 
   trait Interface extends Provider with Component:
     self: Requirements =>

@@ -49,10 +49,8 @@ private class GameScreenImpl(c: Controller):
   }
   screen.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
-  private var wagonToPlace = 0
   val isAttackPhase = false
   val isPositionPhase = true
-  wagonToPlace = c.wagonToPlace(c.getCurrentPlayer())
 
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
@@ -62,7 +60,7 @@ private class GameScreenImpl(c: Controller):
 
   private val wagonPanel = new JPanel()
   wagonPanel.setBounds(400,0,200,40)
-  private val wagonToPlaceLabel = new JLabel("Wagon to be placed: " + wagonToPlace.toString)
+  private val wagonToPlaceLabel = new JLabel("Wagon to be placed: " + c.wagonToPlace().toString())
   wagonPanel.add(wagonToPlaceLabel)
   screen.add(wagonPanel)
   setupButtons()
@@ -98,12 +96,9 @@ private class GameScreenImpl(c: Controller):
       }
 
       btnState.addActionListener((_: ActionEvent) => {
-        if (isPositionPhase) {
-          if (c.getPlayerStates(c.getCurrentPlayer()).exists(s => s.name.equals(getStateNameFromButton(btnState))) && wagonToPlace > 0)
-            c.addWagon(getStateNameFromButton(btnState))
-            wagonToPlace -= 1
-            wagonToPlaceLabel.setText("Wagon to be placed: " + wagonToPlace.toString)
-        }
+        if (isPositionPhase)
+          c.addWagon(getStateNameFromButton(btnState))
+          wagonToPlaceLabel.setText("Wagon to be placed: " + c.wagonToPlace().toString())
       })
 
       btnState.setBounds(state.posX, state.posY, 40, 40)

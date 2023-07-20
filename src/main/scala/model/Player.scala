@@ -3,6 +3,8 @@ package model
 trait Player {
   def username: String
   def color: PlayerColor
+  def wagonToPlace: Int
+  def setWagonToPlace(numWagon: Int): Unit
 }
 
 object Player:
