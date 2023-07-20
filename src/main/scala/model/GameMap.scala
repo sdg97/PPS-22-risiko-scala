@@ -25,9 +25,13 @@ class GameMap extends Graph:
   def assignStatesToPlayers(players: Set[Player]) =
     import utils.Assign.assign
     import utils.AssignableGivenInstances.given
+    import utils.AssignExtensionGivenInstances.given
     val states: Seq[State] = nodeSet.toSeq
     assign(players.toSeq, states).foreach { t => t._2.foreach { s => s.setPlayer(t._1) } }
-    
-    nodeSet.toSeq.map(s => s"${s.name} ${s.player.username}").foreach(println(_))
+    players.foreach(p =>
+      val playerStates = getPlayerStates(p)
+      playerStates.toSeq.assign(players.START_TANK_NUMBER)
+    )
+    nodeSet.toSeq.map(s => s"${s.name} ${s.player.username} ${s.numberOfWagon}").foreach(println(_))
 
   def calcWagonToPlace(player: Player): Unit = player.setWagonToPlace(getPlayerStates(player).size/3)

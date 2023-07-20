@@ -15,6 +15,7 @@ object AssignExtensionGivenInstances:
   given AssignExtension[Seq[State], Int] with
       extension (accountables: Seq[State]) def assign(assignable: Int): Seq[State] =
         val assigment: Map[State, Int] = Assign.assign(accountables, assignable)
+        println(assigment)
         accountables.foreach{s => s.addWagon(assigment(s))}
         accountables
 
