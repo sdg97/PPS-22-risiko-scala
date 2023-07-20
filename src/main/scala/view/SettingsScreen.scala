@@ -19,6 +19,9 @@ import scala.swing.{Dimension, Font, Graphics2D, Image, Insets, Menu, MenuBar, M
  */
 private[view] object SettingsScreen {
   def apply(c: Controller) =
+
+
+
     val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
     val panel = new JPanel(null) {
       override def paintComponent(g: Graphics): Unit = {
@@ -57,55 +60,27 @@ private[view] object SettingsScreen {
     }
     labelNumberOfPlayers.setBounds(70, 40, 120, 40)
 
-    val panelInfo = new JPanel() {
+     val panelInfo = new JPanel() {
       setBounds(30, 90, 350, 250)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.BLACK, 10))
     }
 
 
+
     val comboBoxMenu=new JComboBox[String](Array("3","4","5","6")){}
     comboBoxMenu.setBounds(200, 52, 80,18)
+    setPanelInfo(3,panelInfo)
 
     comboBoxMenu.addActionListener((_: ActionEvent) => {
       panelInfo.removeAll()
 
       val numberOfPlayer = comboBoxMenu.getSelectedItem().toString.toInt
-      panelInfo.setLayout(new GridLayout(numberOfPlayer, numberOfPlayer))
-      var i = 1
-      while (i <= numberOfPlayer) {
+      setPanelInfo(numberOfPlayer,panelInfo)
 
-        panelInfo.add(new JLabel() {
-          setForeground(Color.BLACK) // Imposta il colore del testo
-          setText("Player " + i + ": ")
-          setFont(new Font("Arial", 12, 13))
-        })
-        panelInfo.add(new JTextField() {
-          setName("txtFieldPlayer" + i)
-        })
-        val comboBoxColor = new JComboBox[String](Array("RED", "GREEN", "YELLOW", "PURPLE", "BLUE", "BLACK")) {
-          setName("cmbColor" + i)
-          setRenderer(new DefaultListCellRenderer {
-            override def getListCellRendererComponent(list: JList[_], value: Any, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component = {
-              val comp = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus)
-              comp.setBackground(Color.BLACK)
-              value match {
-                case "RED" => comp.setBackground(Color.RED)
-                case "GREEN" => comp.setBackground(Color.GREEN)
-                case "BLUE" => comp.setBackground(Color.BLUE)
-                case "PURPLE" => comp.setBackground(Color.PINK)
-                case "BLACK" => comp.setBackground(Color.BLACK)
-                case "YELLOW" => comp.setBackground(Color.YELLOW)
-              }
-              comp
-          }})
-        }
-        panelInfo.add(comboBoxColor)
-        i = i + 1
-      }
     })
 
-    val buttonStart = new JButton() {
+    lazy val buttonStart = new JButton() {
       setContentAreaFilled(false) // Rimuove lo sfondo del bottone
       setForeground(Color.WHITE) // Imposta il colore del testo
       setFocusPainted(false) // Rimuove l'effetto di focuss
@@ -115,7 +90,7 @@ private[view] object SettingsScreen {
     }
     buttonStart.setBounds(130, 370, 140, 40)
 
-    val labelError = new JLabel() {
+    lazy val labelError = new JLabel() {
       setForeground(Color.BLACK) // Imposta il colore del testo
       setText("")
       setFont(new Font("Arial", 12, 13))
@@ -145,7 +120,7 @@ private[view] object SettingsScreen {
       }
     })
 
-    val restartButton = new JButton() {
+    lazy val restartButton = new JButton() {
 
       setContentAreaFilled(false) // Rimuove lo sfondo del bottone
       setForeground(Color.BLACK) // Imposta il colore del testo
@@ -164,6 +139,42 @@ private[view] object SettingsScreen {
       }
     }
 
+    def setPanelInfo(numberOfPlayer: Int, panelInfo: JPanel): Unit = {
+      panelInfo.setLayout(new GridLayout(numberOfPlayer, numberOfPlayer))
+      var i = 1
+      while (i <= numberOfPlayer) {
+
+        panelInfo.add(new JLabel() {
+          setForeground(Color.BLACK) // Imposta il colore del testo
+          setText("Player " + i + ": ")
+          setFont(new Font("Arial", 12, 13))
+        })
+        panelInfo.add(new JTextField() {
+          setName("txtFieldPlayer" + i)
+        })
+        val comboBoxColor = new JComboBox[String](Array("RED", "GREEN", "YELLOW", "PURPLE", "BLUE", "BLACK")) {
+          setName("cmbColor" + i)
+          setRenderer(new DefaultListCellRenderer {
+            override def getListCellRendererComponent(list: JList[_], value: Any, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component = {
+              val comp = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus)
+              value match {
+                case "RED" => comp.setBackground(Color.RED)
+                case "GREEN" => comp.setBackground(Color.GREEN)
+                case "BLUE" => comp.setBackground(Color.BLUE)
+                case "PURPLE" => comp.setBackground(new Color(0X8A2BE2))
+                case "BLACK" => comp.setBackground(Color.BLACK)
+                case "YELLOW" => comp.setBackground(Color.YELLOW)
+              }
+              setForeground(Color.white)
+              comp
+            }
+          })
+        }
+        panelInfo.add(comboBoxColor)
+        i = i + 1
+      }
+    }
+
 
     panelInfoPlayer.add(labelNumberOfPlayers)
     panelInfoPlayer.add(comboBoxMenu)
@@ -174,4 +185,6 @@ private[view] object SettingsScreen {
 
 
     panel
+
+
 }

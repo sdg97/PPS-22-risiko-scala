@@ -118,7 +118,7 @@ private class GameScreenImpl(c: Controller):
                 }).get._1
                 panelAttackPhase.removeAll()
                 panelAttackPhase.setVisible(true)
-
+                
                 val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, c.getAllStates().find((state)=>{state.name.equals(stateAttack)}).get,c.getAllStates().find((state)=>{state.name.equals(stateDefender)}).get)
                 gameWindowAttack.show()
                 //resetButton()

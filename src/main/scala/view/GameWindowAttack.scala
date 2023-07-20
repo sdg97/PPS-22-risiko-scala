@@ -1,7 +1,7 @@
 package view
 
 import controller.ControllerModule.Controller
-import model.State
+import model.{MyCustomException, Player, State}
 
 import java.awt.{BasicStroke, Color, FlowLayout, Font, Graphics, Polygon}
 import java.util.Random
@@ -98,25 +98,21 @@ class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, con
       setEnabled(false)
     }
 
-    val random = new Random()
-    for (_ <- 1 to 3) {
-      val dadoComponentAttack = new DadoComponent("attacker")
-      dadoComponentAttack.setPreferredSize(new Dimension(50, 50))
-      dadoComponentAttack.setValue(1)
-      panelDadoAttack.add(dadoComponentAttack)
+    showAttackPlayerDice(panelDadoAttack)
+    showDefenderPlayerDice(panelDadoDefender)
 
-      val dadoComponentDefence = new DadoComponent("defender")
-      dadoComponentDefence.setPreferredSize(new Dimension(50, 50))
-      dadoComponentDefence.setValue(1)
-      panelDadoDefender.add(dadoComponentDefence)
-    }
 
     buttonAttack.addActionListener(_ => {
-      panelDadoAttack.getComponents.foreach {
-        case dadoComponent: DadoComponent =>
-          dadoComponent.setValue(random.nextInt(6) + 1)
-        case _ =>
+      val rollDiceAttack=controller.rollDice("attack", stateAttack)
+      showAttackPlayerDice(panelDadoAttack)
+
+      for(i<-0 to rollDiceAttack.size-1){
+        val component=panelDadoAttack.getComponent(i).asInstanceOf[DadoComponent]
+        component.setValue(rollDiceAttack(i))
+
       }
+      panelDadoAttack.revalidate()
+      panelDadoAttack.repaint()
       buttonDefence.setEnabled(true)
       buttonAttack.setEnabled(false)
       buttonClose.setEnabled(false)
@@ -124,37 +120,75 @@ class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, con
 
 
     buttonDefence.addActionListener(_=> {
-      panelDadoDefender.getComponents.foreach {
-        case dadoComponent: DadoComponent =>
-          dadoComponent.setValue(random.nextInt(6) + 1)
-        case _ =>
+      val rollDiceDefender = controller.rollDice("defender", stateDefender)
+
+      showDefenderPlayerDice(panelDadoDefender)
+      for (i <- 0 to rollDiceDefender.size - 1) {
+        val component = panelDadoDefender.getComponent(i).asInstanceOf[DadoComponent]
+        component.setValue(rollDiceDefender(i))
       }
-      buttonDefence.setEnabled(false)
-      buttonAttack.setEnabled(true)
-      buttonClose.setEnabled(true)
+      panelDadoDefender.revalidate()
+      panelDadoDefender.repaint()
+
+      controller.resultAttack(stateAttack,stateDefender)
+      labelWagonAttackState.setText(stateAttack.numberOfWagon.toString)
+      labelWagonDefenderState.setText(stateDefender.numberOfWagon.toString)
+
+      try {
+        controller.attackPhase(stateAttack,stateDefender)
+      } catch {
+        case e: MyCustomException =>
+          labelPlayerMessage.setText(e.getMessage)
+      }
+
+      if(labelPlayerMessage.getText.equals("Great, you conquered " + stateDefender.name)){
+        controller.updateView()
+        buttonDefence.setEnabled(false)
+        buttonAttack.setEnabled(false)
+        buttonClose.setEnabled(true)
+      }
+      else if(labelPlayerMessage.getText.equals("Sorry, but you can't attack because you have only one wagon in " + stateDefender.name)){
+        controller.updateView()
+        buttonDefence.setEnabled(false)
+        buttonAttack.setEnabled(false)
+        buttonClose.setEnabled(true)
+      }
+      else{
+        buttonDefence.setEnabled(false)
+        buttonAttack.setEnabled(true)
+        buttonClose.setEnabled(true)
+      }
+
     })
 
-    val labelWagonAttackState = new JLabel() {
+    buttonClose.addActionListener(_ => {
+      val parent=panelAttackPhase.getParent
+      parent.remove(panelAttackPhase)
+      parent.revalidate()
+      parent.repaint()
+    })
+
+    lazy val labelWagonAttackState = new JLabel() {
       setForeground(Color.BLACK) // Imposta il colore del testo
-      setText("12")
+      setText(stateAttack.numberOfWagon.toString)
       setFont(new Font("Arial", 12, 24))
     }
     labelWagonAttackState.setBounds(85, 300, 80, 40)
 
-    val labelWagonDefenderState = new JLabel() {
+    lazy val labelWagonDefenderState = new JLabel() {
       setForeground(Color.BLACK) // Imposta il colore del testo
-      setText("10")
+      setText(stateDefender.numberOfWagon.toString)
       setFont(new Font("Arial", 12, 24))
     }
     labelWagonDefenderState.setBounds(285, 300, 80, 40)
 
-    val labelPlayerMessage = new JLabel() {
+    lazy val labelPlayerMessage = new JLabel() {
       setForeground(Color.BLACK) // Imposta il colore del testo
-      setText("Congrats you conquared Argentina")
+      setText("")
       setFont(new Font("Arial", 12, 17))
       setHorizontalAlignment(SwingConstants.CENTER)
     }
-    labelPlayerMessage.setBounds(20, 410, 300, 80)
+    labelPlayerMessage.setBounds(40, 410, 300, 80)
 
 
     panelAttackPhase.add(labelAttackState)
@@ -169,5 +203,35 @@ class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, con
     panelAttackPhase.add(buttonClose)
     panelAttackPhase.add(labelPlayerMessage)
   }
+
+  def showAttackPlayerDice(panelDadoAttack:JPanel):Unit={
+    panelDadoAttack.removeAll()
+    panelDadoAttack.revalidate()
+    panelDadoAttack.repaint()
+    val numberOfDice = controller.numberOfDiceForPlayers(stateAttack, stateDefender)
+    for (_ <- 1 to numberOfDice._1) {
+      val dadoComponentAttack = new DadoComponent("attacker")
+      dadoComponentAttack.setPreferredSize(new Dimension(50, 50))
+      dadoComponentAttack.setValue(1)
+      panelDadoAttack.add(dadoComponentAttack)
+    }
+
+
+  }
+
+  def showDefenderPlayerDice(panelDadoDefender:JPanel):Unit={
+    panelDadoDefender.removeAll()
+    panelDadoDefender.revalidate()
+    panelDadoDefender.repaint()
+    val numberOfDice = controller.numberOfDiceForPlayers(stateAttack, stateDefender)
+    for (_ <- 1 to numberOfDice._2) {
+      val dadoComponentDefence = new DadoComponent("defender")
+      dadoComponentDefence.setPreferredSize(new Dimension(50, 50))
+      dadoComponentDefence.setValue(1)
+      panelDadoDefender.add(dadoComponentDefence)
+    }
+  }
+
+
 
 }

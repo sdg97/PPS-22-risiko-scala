@@ -24,11 +24,15 @@ object ModelModule:
 
     def updateView(): Unit
 
-    def resultAttack(attackerDice: Seq[Int], defenderDie: Seq[Int]): (Int, Int)
-
+    def resultAttack(attackerState: State, defenderState: State): Unit
+    @throws(classOf[MyCustomException])
     def attackPhase(attackerState: State, defenderState: State): Unit
 
     def addWagon(stateName: String): Unit
+
+    def rollDice(typeOfPlayer:String, state:State): Seq[Int]
+
+    def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
     
 
   }
@@ -62,7 +66,7 @@ object ModelModule:
           if(name.equals("alaska"))
             gameMap.addNode(new StateImpl(name, 4, player1))
           else
-            gameMap.addNode(new StateImpl(name))
+            gameMap.addNode(new StateImpl(name,2,player2))
         }
       }
 
@@ -86,8 +90,6 @@ object ModelModule:
       override def getCurrentPlayer(): Player = player1
 
       private var setOfPlayer = Set[Player]()
-
-
       override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
         if (inputDataPlayer.exists(_._1 == "")) {
           throw new MyCustomException("All username field must be completed")
@@ -105,61 +107,78 @@ object ModelModule:
           gameMap.assignStatesToPlayers(setOfPlayer)
         }
       }
-
-
       override def deployTroops(): Unit = println("troop deployed")
 
       override def getSetOfPlayers(): Set[Player] = setOfPlayer
 
       override def getAllStates: Set[State] = gameMap.nodes
 
-      override def resultAttack(attackerDice: Seq[Int], defenderDie: Seq[Int]): (Int, Int) =
+      override def resultAttack(attackerState: State, defenderState: State): Unit =
         var wagonlostAttacker: Int = 0;
         var wagonlostDefender: Int = 0;
-        attackerDice.sorted.reverse.zip(defenderDie.sorted.reverse).map { case (elem1, elem2) =>
+        rollDiceAttack.zip(rollDiceDefender).map { case (elem1, elem2) =>
           if (elem1 > elem2)
             wagonlostDefender = wagonlostDefender + 1
           else if (elem1 <= elem2)
             wagonlostAttacker = wagonlostAttacker + 1
         }
-        (wagonlostAttacker, wagonlostDefender)
+        attackerState.removeWagon(wagonlostAttacker)
+        defenderState.removeWagon(wagonlostDefender)
 
-      override def attackPhase(attackerState: State, defenderState: State): Unit =
-        if (attackerState.numberOfWagon > 1 && defenderState.numberOfWagon > 0) {
-          var numberOfDiceAttack: Int = 0;
-          if (attackerState.numberOfWagon > 3) {
-            numberOfDiceAttack = 3;
-          } else {
-            numberOfDiceAttack = attackerState.numberOfWagon - 1;
-          }
-
-          var numberOfDiceDefender: Int = 0;
-          if (defenderState.numberOfWagon >= 3) {
-            numberOfDiceDefender = 3;
-          } else {
-            numberOfDiceDefender = defenderState.numberOfWagon;
-          }
-
-          val resultAttacker = Seq.fill(numberOfDiceAttack)(Random.nextInt(6) + 1)
-          val resultDefender = Seq.fill(numberOfDiceDefender)(Random.nextInt(6) + 1)
-
-          val wagonLost = resultAttack(resultAttacker, resultDefender)
-          attackerState.removeWagon(wagonLost._1)
-          attackerState.removeWagon(wagonLost._2)
-
-          if (defenderState.numberOfWagon == 0) {
-            defenderState.setPlayer(attackerState.player)
-          }
-
+      override def attackPhase(attackerState: State, defenderState: State): Unit = {
+        if (attackerState.numberOfWagon > 1 && defenderState.numberOfWagon == 0) {
+          defenderState.setPlayer(attackerState.player)
+          throw new MyCustomException("""<html>Great, you conquered <br>""" + defenderState.name)
         }
-        else if(attackerState.numberOfWagon > 1 && defenderState.numberOfWagon == 0){
-          throw new MyCustomException("Great, you conquered "+defenderState.name)
+        else if (attackerState.numberOfWagon == 1) {
+          throw new MyCustomException("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + defenderState.name+"""</html>""".stripMargin)
         }
-        else if(attackerState.numberOfWagon==1){
-          throw new MyCustomException("Sorry, but you can't attack because you have only one wagon in "+defenderState.name)
-        }
+      }
 
       override def updateView(): Unit = controller.updateView()
+
+      private var rollDiceAttack=Seq[Int]()
+      private var rollDiceDefender=Seq[Int]()
+      override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = {
+        var numberOfDice: Int = 0;
+        var resultRollDice=Seq[Int]()
+        if(typeOfPlayer.equals("attack")){
+          if (state.numberOfWagon > 3) {
+            numberOfDice = 3;
+          } else {
+            numberOfDice = state.numberOfWagon - 1;
+          }
+          resultRollDice=Seq.fill(numberOfDice)(Random.nextInt(6) + 1).sorted.reverse
+          rollDiceAttack=resultRollDice
+        }
+        else{
+          if (state.numberOfWagon >= 3) {
+            numberOfDice = 3;
+          } else {
+            numberOfDice = state.numberOfWagon;
+          }
+          resultRollDice = Seq.fill(numberOfDice)(Random.nextInt(6) + 1).sorted.reverse
+          rollDiceDefender = resultRollDice
+        }
+        resultRollDice
+      }
+
+      override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = {
+        var numberOfDiceAttack=0
+        var numberOfDiceDefender=0
+        if (attackerState.numberOfWagon > 3) {
+          numberOfDiceAttack = 3;
+        } else {
+          numberOfDiceAttack = attackerState.numberOfWagon - 1;
+        }
+
+        if (defenderState.numberOfWagon >= 3) {
+          numberOfDiceDefender = 3;
+        } else {
+          numberOfDiceDefender = defenderState.numberOfWagon;
+        }
+        (numberOfDiceAttack,numberOfDiceDefender)
+      }
 
       override def addWagon(stateName: String): Unit =
         gameMap.getStateByName(stateName).addWagon(1)

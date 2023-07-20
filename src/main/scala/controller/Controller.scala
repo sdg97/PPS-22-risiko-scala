@@ -15,6 +15,10 @@ object ControllerModule:
 
     def updateView(): Unit
     def addWagon(stateName: String): Unit
+    def rollDice(typeOfPlayer:String, state:State): Seq[Int]
+    def resultAttack(attackerState: State, defenderState: State): Unit
+    def attackPhase(attackerState: State, defenderState: State): Unit
+    def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
 
   trait Provider:
     val controller: Controller
@@ -46,6 +50,14 @@ object ControllerModule:
       override def getAllStates(): Set[State] = model.getAllStates
 
       def updateView(): Unit = view.update()
+
+      override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = model.rollDice(typeOfPlayer,state)
+
+      override def resultAttack(attackerState: State, defenderState: State): Unit = model.resultAttack(attackerState, defenderState)
+
+      override def attackPhase(attackerState: State, defenderState: State): Unit = model.attackPhase(attackerState,defenderState)
+
+      override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = model.numberOfDiceForPlayers(attackerState,defenderState)
 
       override def addWagon(stateName: String): Unit = model.addWagon(stateName)
 
