@@ -39,7 +39,7 @@ object ModelModule:
       private val turnPhasesManager = TurnPhasesManager()
       private val stateFile = new File("src/main/resources/config/states.txt")
       private val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
-
+      
       stateFileLines.foreach { line =>
         val parts = line.split(",")
         if (parts.length >= 3) {

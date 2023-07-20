@@ -31,7 +31,7 @@ object TurnPhasesManager:
     f + (Attack, StartMove, Move)
     f + (StartTurn, StartMove, Move)
     f + (StartTurn, EndTurn, StartTurn)
-    f + (Move, MoveRequest, Move)
+    f + (Move, MoveRequest, StartTurn)
     f + (Move, EndTurn, StartTurn)
     f + (Attack, EndTurn, StartTurn)
     f
