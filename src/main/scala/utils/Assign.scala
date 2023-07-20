@@ -11,7 +11,6 @@ type Troop = Int
 
 trait Assign[A, B, C]:
   def assign(accountables: A, assignable: B): C
-
 object Assign:
   def assign[A, B, C](accountables: A, assignable: B)(using a: Assign[A, B, C]) =
     a.assign(accountables, assignable)
