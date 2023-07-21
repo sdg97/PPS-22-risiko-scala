@@ -1,7 +1,7 @@
 package view
 
 import controller.ControllerModule.*
-import model.{Player, PlayerColor, PlayerImpl}
+import model.{Player, PlayerColor, PlayerImpl, State}
 import view.component.{CurrentPlayerComponent, SelectPhaseComponent}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
@@ -75,13 +75,6 @@ private class GameScreenImpl(c: Controller):
   wagonPanel.add(wagonToPlaceLabel)
   screen.add(wagonPanel)
   setupButtons()
-  c.getAllStates().foreach(state => {
-    buttonMap(state.name).setText(state.numberOfWagon.toString)
-    buttonMap(state.name).setColor(new Color(state.player.color.rgb))
-  })
-
-  var stateAttack: String = ""
-  var stateDefender: String = ""
 
   private def getStateNameFromButton(button: JButton): String =
     buttonMap.find((n, b) => {
@@ -112,80 +105,40 @@ private class GameScreenImpl(c: Controller):
       }
 
       btnState.addActionListener((_: ActionEvent) => {
-        if(isAttackPhase){
-          stateDefender = buttonMap.find((name, button) => {
-            button.equals(btnState)
-          }).get._1
-          panelAttackPhase.removeAll()
-          panelAttackPhase.setVisible(true)
-
-          val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, c.getAllStates().find((state) => {
-            state.name.equals(stateAttack)
-          }).get, c.getAllStates().find((state) => {
-            state.name.equals(stateDefender)
-          }).get)
-          gameWindowAttack.show()
-//          if (btnState.isNeighbour) {
-//            if (!btnState.color.equals(new Color(c.getCurrentPlayer().color.rgb))) {
-//              stateDefender = buttonMap.find((name, button) => {
-//                button.equals(btnState)
-//              }).get._1
-//              panelAttackPhase.removeAll()
-//              panelAttackPhase.setVisible(true)
-//
-//              val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, c.getAllStates().find((state) => {
-//                state.name.equals(stateAttack)
-//              }).get, c.getAllStates().find((state) => {
-//                state.name.equals(stateDefender)
-//              }).get)
-//              gameWindowAttack.show()
-//              //resetButton()
-////              stateDefender = buttonMap.find((name, button) => {
-////                button.equals(btnState)
-////              }).get._1
-////              panelAttackPhase.removeAll()
-////              panelAttackPhase.setVisible(true)
-////
-////              val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, c.getAllStates().find((state) => {
-////                state.name.equals(stateAttack)
-////              }).get, c.getAllStates().find((state) => {
-////                state.name.equals(stateDefender)
-////              }).get)
-////              gameWindowAttack.show()
-////              //resetButton()
-//
-//            }
-          }
-//          else if (btnState.isSelected) {
-//            resetButton()
-//          }
-          else {
-            stateAttack = buttonMap.find((name, button) => {
-              button.equals(btnState)
-            }).get._1
-            println(c.getAllStates().find((state) => {
-              state.name.equals(stateAttack)
-            }).get.numberOfWagon)
+        if (isAttackPhase) {
+          if (btnState.isNeighbour) {
+            println("isNeighbour")
+            //se clicco su un confinante faccio l'attacco
+            panelAttackPhase.removeAll()
+            panelAttackPhase.setVisible(true)
+            val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, getStateSelected, c.getState(getStateNameFromButton(btnState)))
+            gameWindowAttack.show()
             resetButton()
-            val neighbors: Set[String] = c.getNeighbor(name, c.getCurrentPlayer())
-            neighbors.foreach(neighbor => {
-              val currentButton = buttonMap(neighbor)
-              currentButton.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
-              currentButton.setIsNeighbour(true)
-            })
-            btnState.setSelected(!btnState.isSelected)
-            btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
-          }
-       // }
-        else if (isPositionPhase)
-          c.addWagon(getStateNameFromButton(btnState))
-          wagonToPlaceLabel.setText("Wagon to be placed: " + c.wagonToPlace().toString())
-      })
+          } else if (!btnState.isSelected && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()))
+            resetButton()
+            println("isSelected")
 
+            //se clicco su un bottone che non è selezionato lo setto come selezionato
+            btnState.setSelected(true)
+            //setto tutti i confinanti degli altri giocatori come confinanti
+            c.getNeighbor(getStateNameFromButton(btnState), c.getCurrentPlayer()).foreach(stateName => {
+              buttonMap(stateName).setIsNeighbour(true)
+              buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
+            })
+        }
+        else if (isPositionPhase) {
+          resetButton()
+          c.addWagon(getStateNameFromButton(btnState))
+          wagonToPlaceLabel.setText("Wagon to be placed: " + c.wagonToPlace().toString)
+        }
+      })
       btnState.setBounds(state.posX, state.posY, 40, 40)
       screen.add(btnState)
       buttonMap += (state.name -> btnState)
+      buttonMap(state.name).setText(state.numberOfWagon.toString)
+      buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
+
 
   private def resetButton(): Unit =
     buttonMap.foreach((_, button) => {
@@ -194,9 +147,13 @@ private class GameScreenImpl(c: Controller):
       button.setSelected(false)
     })
 
-  
+  private def getStateSelected: State =
+    c.getState(buttonMap.find((_, button) => button.isSelected).get._1)
+
+
   def update(): Unit =
     println("UPDATE LA GAME SCREEN")
+
     currentPlayerComponent.update()
     selectPhaseComponent.update()
     c.getAllStates().foreach(state => {
