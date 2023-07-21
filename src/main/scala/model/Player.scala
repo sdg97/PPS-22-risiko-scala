@@ -1,5 +1,7 @@
 package model
 
+import model.PlayerColor.BLACK
+
 trait Player {
   def username: String
   def color: PlayerColor
@@ -11,6 +13,9 @@ trait Player {
 object Player:
   def apply(username: String, color: PlayerColor): Player =
     new PlayerImpl(username, color)
+
+  def apply(username: String): Player =
+    new PlayerImpl(username, BLACK)
   extension (players: Set[Player])
     def START_TANK_NUMBER = players.size match
       case 3 => 35

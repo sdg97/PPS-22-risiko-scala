@@ -12,22 +12,19 @@ trait AssignExtension[A, B]:
 object AssignExtensionGivenInstances:
   import Assign.*
   import AssignableGivenInstances.given
-  given AssignExtension[Seq[State], Int] with
-      extension (accountables: Seq[State]) def assign(assignable: Int): Seq[State] =
-        val assigment: Map[State, Int] = Assign.assign(accountables, assignable)
+  given AssignExtension[Set[State], Int] with
+      extension (accountables: Set[State]) def assign(assignable: Int): Set[State] =
+        val assigment: Map[State, Int] = Assign.assign(accountables.toSeq, assignable)
         println(assigment)
         accountables.foreach{s => s.addWagon(assigment(s))}
         accountables
 
-object M2 extends App:
-  import AssignExtensionGivenInstances.given
+  given AssignExtension[Set[Player], Set[State]] with
+    extension (accountables: Set[Player]) def assign(assignable: Set[State]): Set[Player] =
+      val players: Seq[Player] = accountables.toSeq
+      val states: Seq[State] = assignable.toSeq
+      Assign.assign(players, states).foreach { t => t._2.foreach { s => s.setPlayer(t._1) } }
+      accountables
 
-  val ac3 : Seq[State] = State("brasile", 0, Player("simone", BLUE), 0, 0)
-    :: State("polonia", 0, Player("simone", BLUE), 0, 0)
-    :: State("russia", 0, Player("simone", BLUE), 0, 0)
-    :: Nil
-
-  ac3 assign 12
-  ac3.foreach{s => println(s.numberOfWagon) }
 
 

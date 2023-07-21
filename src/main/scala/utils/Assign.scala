@@ -55,7 +55,6 @@ object AssignableGivenInstances:
   private class SeqIntAssign[X] extends Assign[Seq[X], Int, Map[X, Int]]:
     override def assign(accountables: Seq[X], assignable: Int): Map[X, Int] = fairAssign(accountables, assignable)
 
-  given seqAssignString : Assign[Seq[String], Seq[String], Seq[(String,Seq[String])]] = new SeqAssign[String, String]()
   given seqAssignPlayerState : Assign[Seq[Player], Seq[State], Seq[(Player,Seq[State])]] = new SeqAssign[Player, State]()
   given assignPlayerTroop : Assign[Seq[Player], Troop, Map[Player,Troop]] = new SeqIntAssign[Player]()
   given assignStateTroop: Assign[Seq[State], Troop, Map[State, Troop]] = new SeqIntAssign[State]()

@@ -15,3 +15,6 @@ object State:
   def apply(name: String, numberOfWagon: Int, player: Player, posX: Int, posY: Int): State =
     new StateImpl(name, numberOfWagon, player, posX, posY)
 
+  def apply(name: String) : State =
+    new StateImpl(name, 0, Player("mock"), 0, 0)
+
