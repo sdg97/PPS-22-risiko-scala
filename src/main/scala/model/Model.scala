@@ -15,6 +15,7 @@ object ModelModule:
     def getPlayers(): Set[Player]
     def deployTroops(): Unit
     def getNeighbor(stateName: String, player: Player): Set[String]
+    def getNeighborStatesOfPlayer(state: String, player: Player): Set[String]
     def getPlayerStates(player: Player): Set[State]
     def getAllStates: Set[State]
     def resultAttack(attackerState: State, defenderState: State): Unit
@@ -23,11 +24,13 @@ object ModelModule:
     def rollDice(typeOfPlayer:String, state:State): Seq[Int]
     def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
     def getCurrentPlayer(): Player
+    def getState(stateName: String): State
     def updateView(): Unit
     def addWagon(stateName: String): Unit
     def wagonToPlace(): Int
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
+    def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
 
   }
 
@@ -72,11 +75,14 @@ object ModelModule:
       }
 
       override def getNeighbor(stateName: String, player: Player): Set[String] = gameMap.getNeighborStates(stateName, player)
+      override def getNeighborStatesOfPlayer(state: String, player: Player): Set[String] = gameMap.getNeighborStatesOfPlayer(state, player)
 
       override def getPlayerStates(player: Player): Set[State] =
         gameMap.getPlayerStates(player)
 
       override def getCurrentPlayer(): Player = turnManager.get.current()
+
+      override def getState(stateName: String): State = gameMap.getStateByName(stateName)
 
       override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
         if (inputDataPlayer.exists(_._1 == "")) {
@@ -103,6 +109,7 @@ object ModelModule:
       override def getPlayers(): Set[Player] = turnManager.get.getAll()
 
       override def getAllStates: Set[State] = gameMap.nodes
+
 
       override def updateView(): Unit = controller.updateView()
 
@@ -186,6 +193,9 @@ object ModelModule:
         }
         (numberOfDiceAttack, numberOfDiceDefender)
       }
+      override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
+        gameMap.shiftWagon(fromStateName, toStateName, numberOfWagon)
+        controller.updateView()
 
   trait Interface extends Provider with Component:
     self: Requirements =>

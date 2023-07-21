@@ -60,8 +60,9 @@ private class GameScreenImpl(c: Controller):
   screen.add(panelAttackPhase)
 
 
-  val isAttackPhase = true
+  val isAttackPhase = false
   val isPositionPhase = false
+  val isShiftPhase = true
 
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
@@ -130,6 +131,18 @@ private class GameScreenImpl(c: Controller):
           resetButton()
           c.addWagon(getStateNameFromButton(btnState))
           wagonToPlaceLabel.setText("Wagon to be placed: " + c.wagonToPlace().toString)
+        }
+        else if (isShiftPhase) {
+          if(btnState.isNeighbour)
+            c.shiftWagon(getStateSelected.name, getStateNameFromButton(btnState), 1)
+            resetButton()
+          else if(!btnState.isSelected && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()))
+            resetButton()
+            btnState.setSelected(true)
+            c.getNeighborStatesOfPlayer(getStateNameFromButton(btnState),c.getCurrentPlayer()).foreach(stateName => {
+              buttonMap(stateName).setIsNeighbour(true)
+              buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+            })
         }
       })
       btnState.setBounds(state.posX, state.posY, 40, 40)

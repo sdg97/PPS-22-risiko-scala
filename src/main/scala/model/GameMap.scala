@@ -34,4 +34,8 @@ class GameMap extends Graph:
     )
     nodeSet.toSeq.map(s => s"${s.name} ${s.player.username} ${s.numberOfWagon}").foreach(println(_))
   def calcWagonToPlace(player: Player): Unit = player.setWagonToPlace(getPlayerStates(player).size/3)
+  def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
+    getStateByName(fromStateName).removeWagon(numberOfWagon)
+    getStateByName(toStateName).addWagon(numberOfWagon)
+
 
