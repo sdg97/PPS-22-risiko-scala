@@ -8,7 +8,7 @@ import java.util.Random
 import javax.swing.{BorderFactory, JButton, JComponent, JLabel, JPanel, SwingConstants}
 import scala.swing.{Dimension, Graphics2D}
 
-class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, controller: Controller, stateAttack: State, stateDefender:State) {
+class GameWindowAttack( panelAttackPhase:JPanel, controller: Controller, stateAttack: State, stateDefender:State) {
   def show():Unit={
     val labelAttackState = new JLabel() {
       setForeground(Color.BLACK) // Imposta il colore del testo
@@ -157,13 +157,15 @@ class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, con
         buttonDefence.setEnabled(false)
         buttonAttack.setEnabled(true)
         buttonClose.setEnabled(true)
+        controller.updateView()
       }
 
     })
 
     buttonClose.addActionListener(_ => {
       val parent=panelAttackPhase.getParent
-      parent.remove(panelAttackPhase)
+      //parent.remove(panelAttackPhase)
+      panelAttackPhase.setVisible(false)
       parent.revalidate()
       parent.repaint()
     })

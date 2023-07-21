@@ -60,9 +60,9 @@ private class GameScreenImpl(c: Controller):
   screen.add(panelAttackPhase)
 
 
-  val isAttackPhase = false
+  val isAttackPhase = true
   val isPositionPhase = false
-  val isShiftPhase = true
+  val isShiftPhase = false
 
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
@@ -111,11 +111,13 @@ private class GameScreenImpl(c: Controller):
             println("isNeighbour")
             //se clicco su un confinante faccio l'attacco
             panelAttackPhase.removeAll()
+            panelAttackPhase.revalidate()
+            panelAttackPhase.repaint()
             panelAttackPhase.setVisible(true)
-            val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, getStateSelected, c.getState(getStateNameFromButton(btnState)))
+            val gameWindowAttack = new GameWindowAttack(panelAttackPhase, c, getStateSelected, c.getState(getStateNameFromButton(btnState)))
             gameWindowAttack.show()
             resetButton()
-          } else if (!btnState.isSelected && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()))
+          } else if (!btnState.isSelected && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()) && c.getState(getStateNameFromButton(btnState)).numberOfWagon>1)
             resetButton()
             println("isSelected")
 
