@@ -25,7 +25,7 @@ object ControllerModule:
     def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
     def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
     def getNumberOfRollDiceAttack:Int
-    
+    def currentTurnPhase: RisikoPhase
 
   trait Provider:
     val controller: Controller
@@ -74,5 +74,6 @@ object ControllerModule:
 
       override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit = model.shiftWagon(fromStateName, toStateName, numberOfWagon)
 
+      override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:
     self: Requirements =>

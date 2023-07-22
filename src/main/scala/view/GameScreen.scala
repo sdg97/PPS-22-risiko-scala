@@ -2,7 +2,7 @@ package view
 
 import controller.ControllerModule.*
 import model.{Player, PlayerColor, PlayerImpl, State}
-import view.component.{CurrentPlayerComponent, JButtonExtended, JPanelScreen, SelectPhaseComponent, ShiftPhasePanel}
+import view.component.{CurrentPhaseComponent, CurrentPlayerComponent, JButtonExtended, JPanelScreen, SelectPhaseComponent, ShiftPhasePanel}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
@@ -30,6 +30,7 @@ private class GameScreenImpl(c: Controller):
   private val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
   private val currentPlayerComponent = new CurrentPlayerComponent(c)
   private val selectPhaseComponent = new SelectPhaseComponent(c)
+  private val currentPhaseComponent = new CurrentPhaseComponent(c)
 
   // Carica l'immagine di sfondo
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
@@ -52,6 +53,7 @@ private class GameScreenImpl(c: Controller):
 
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
+  turnPanel.add(currentPhaseComponent.get())
   turnPanel.add(selectPhaseComponent.get())
   turnPanel.setSize(turnPanel.getPreferredSize())
   screen.add(turnPanel)
