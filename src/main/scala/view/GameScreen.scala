@@ -2,7 +2,7 @@ package view
 
 import controller.ControllerModule.*
 import model.{Player, PlayerColor, PlayerImpl, State}
-import view.component.{CurrentPlayerComponent, SelectPhaseComponent}
+import view.component.{CurrentPlayerComponent, SelectPhaseComponent, ShiftPhasePanel}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
@@ -74,8 +74,8 @@ private class GameScreenImpl(c: Controller):
   wagonPanel.setBounds(400,0,200,40)
   private val wagonToPlaceLabel = new JLabel("Wagon to be placed: " + c.wagonToPlace().toString())
   wagonPanel.add(wagonToPlaceLabel)
-  screen.add(wagonPanel)
   setupButtons()
+
 
   private def getStateNameFromButton(button: JButton): String =
     buttonMap.find((n, b) => {
@@ -83,6 +83,9 @@ private class GameScreenImpl(c: Controller):
     }).get._1
 
   private def setupButtons(): Unit =
+    if(isPositionPhase)
+      screen.add(wagonPanel)
+
     c.getAllStates().foreach(state => {
       val btnState = new JButtonExtended("") {
         setBorder(BorderFactory.createEmptyBorder())
@@ -135,8 +138,10 @@ private class GameScreenImpl(c: Controller):
           wagonToPlaceLabel.setText("Wagon to be placed: " + c.wagonToPlace().toString)
         }
         else if (isShiftPhase) {
-          if(btnState.isNeighbour)
-            c.shiftWagon(getStateSelected.name, getStateNameFromButton(btnState), 1)
+          if(btnState.isSelected)
+            resetButton()
+          else if(btnState.isNeighbour)
+            val shiftPanel = new ShiftPhasePanel(c, getStateSelected.name, getStateNameFromButton(btnState))
             resetButton()
           else if(!btnState.isSelected && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()))
             resetButton()
