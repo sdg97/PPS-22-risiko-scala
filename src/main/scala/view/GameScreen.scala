@@ -2,7 +2,7 @@ package view
 
 import controller.ControllerModule.*
 import model.{Player, PlayerColor, PlayerImpl, State}
-import view.component.{CurrentPlayerComponent, SelectPhaseComponent, ShiftPhasePanel}
+import view.component.{CurrentPlayerComponent, JPanelScreen, SelectPhaseComponent, ShiftPhasePanel}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
@@ -87,30 +87,12 @@ private class GameScreenImpl(c: Controller):
       screen.add(wagonPanel)
 
     c.getAllStates().foreach(state => {
-      val btnState = new JButtonExtended("") {
-        setBorder(BorderFactory.createEmptyBorder())
-        setContentAreaFilled(false) // Rimuove lo sfondo del bottone
-        setForeground(Color.BLACK) // Imposta il colore del testo
-        setFocusPainted(false) // Rimuove l'effetto di focuss
-        setFont(new Font("Arial", 12, 10))
-        setRolloverEnabled(true)
-        if (color.equals(Color.BLACK) || color.equals(Color.BLUE))
-          setForeground(Color.WHITE)
-
-        override def paintComponent(g: Graphics): Unit = {
-          val g2d = g.asInstanceOf[Graphics2D]
-          val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
-          val radius = Math.min(getWidth, getHeight) / 2.0f
-          val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
-          g2d.setColor(this.color) // Imposta il colore del cerchio
-          g2d.fill(circle) // Disegna il cerchio
-          super.paintComponent(g) // Disegna il testo del bottone
-        }
-      }
-
+      val btnState = new JButtonExtended(state.posX, state.posY)
       btnState.addActionListener((_: ActionEvent) => {
         if (isAttackPhase) {
-          if (btnState.isNeighbour) {
+          if (btnState.isSelected)
+            resetButton()
+          else if (btnState.isNeighbour) {
             println("isNeighbour")
             //se clicco su un confinante faccio l'attacco
             panelAttackPhase.removeAll()
@@ -152,7 +134,6 @@ private class GameScreenImpl(c: Controller):
             })
         }
       })
-      btnState.setBounds(state.posX, state.posY, 40, 40)
       screen.add(btnState)
       buttonMap += (state.name -> btnState)
       buttonMap(state.name).setText(state.numberOfWagon.toString)
