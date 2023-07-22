@@ -30,8 +30,8 @@ object ModelModule:
     def wagonToPlace(): Int
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
+    def currentPhase: RisikoPhase
     def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
-    
     def getNumberOfRollDiceAttack():Int
 
   }
@@ -201,6 +201,9 @@ object ModelModule:
       override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
         gameMap.shiftWagon(fromStateName, toStateName, numberOfWagon)
         controller.updateView()
+
+      override def currentPhase: RisikoPhase =
+        turnPhasesManager.currentPhase
 
   trait Interface extends Provider with Component:
     self: Requirements =>
