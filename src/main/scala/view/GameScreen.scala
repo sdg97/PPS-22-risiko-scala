@@ -2,7 +2,7 @@ package view
 
 import controller.ControllerModule.*
 import model.{Player, PlayerColor, PlayerImpl, State}
-import view.component.{CurrentPlayerComponent, JPanelScreen, SelectPhaseComponent, ShiftPhasePanel}
+import view.component.{CurrentPlayerComponent, JButtonExtended, JPanelScreen, SelectPhaseComponent, ShiftPhasePanel}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
@@ -35,22 +35,8 @@ private class GameScreenImpl(c: Controller):
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
 
   // Crea il pannello per contenere gli elementi della GUI
-  val screen = new JPanel(null) {
-    override def paintComponent(g: Graphics): Unit = {
-      super.paintComponent(g)
-      // Disegna l'immagine di sfondo
-      val widthRatio = getWidth.toDouble / backgroundImage.getWidth(null)
-      val heightRatio = getHeight.toDouble / backgroundImage.getHeight(null)
-      val scaleFactor = Math.max(widthRatio, heightRatio)
-      val scaledWidth = (backgroundImage.getWidth(null) * scaleFactor).toInt
-      val scaledHeight = (backgroundImage.getHeight(null) * scaleFactor).toInt
-      val x = (getWidth - scaledWidth) / 2
-      val y = (getHeight - scaledHeight) / 2
-      g.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight, null)
-    }
-  }
-  screen.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
-
+  val screen = new JPanelScreen(null)
+  
   val panelAttackPhase = new JPanel(null) {
     setBounds(300, 80, 400, 500)
     setBackground(Color.gray)
