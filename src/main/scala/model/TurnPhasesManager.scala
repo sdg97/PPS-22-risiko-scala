@@ -64,7 +64,6 @@ object TryFSM extends App:
   println(f.trigger(AttackRequest)) //Attack
   println(f.trigger(StartMove)) //Move
   println(f.trigger(MoveRequest)) //Move
-  println(f.trigger(MoveRequest)) //Move
   println(f.trigger(EndTurn)) //StartTurn
 
   println(f.next) //Move Attack StartTurn

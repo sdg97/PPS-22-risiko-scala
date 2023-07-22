@@ -20,14 +20,11 @@ private[view] class SelectPhaseComponent(private val c: Controller) {
     panel.revalidate()
     panel.repaint()
     Array(StartAttack, StartMove, EndTurn).foreach(p =>
-      val s : String  = p.string
-      val btnState = new JButton(s)
+      val btnState = new JButton(p.string)
       btnState.setEnabled(c.switchTurnPhaseActionAvailable.contains(p))
       btnState.setSize(btnState.getPreferredSize())
       btnState.addActionListener((_: ActionEvent) => {
         SwingUtilities.invokeLater(() => c.switchPhase(p))
-        c.switchPhase(p)
-        c.updateView()
       })
       panel.add(btnState)
     )
