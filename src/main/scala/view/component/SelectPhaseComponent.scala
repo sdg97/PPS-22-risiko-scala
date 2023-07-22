@@ -26,6 +26,7 @@ private[view] class SelectPhaseComponent(private val c: Controller) {
       btnState.addActionListener((_: ActionEvent) => {
         SwingUtilities.invokeLater(() => c.switchPhase(p))
       })
+      
       panel.add(btnState)
     )
     panel.setSize(panel.getPreferredSize())

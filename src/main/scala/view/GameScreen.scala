@@ -55,7 +55,8 @@ private class GameScreenImpl(c: Controller):
   turnPanel.add(currentPlayerComponent.get())
   turnPanel.add(currentPhaseComponent.get())
   turnPanel.add(selectPhaseComponent.get())
-  turnPanel.setSize(turnPanel.getPreferredSize())
+  turnPanel.setBounds(0,0,700,  40)
+
   screen.add(turnPanel)
 
   private val wagonPanel = new JPanel()
@@ -142,7 +143,7 @@ private class GameScreenImpl(c: Controller):
 
   def update(): Unit =
     println("UPDATE LA GAME SCREEN")
-
+    currentPhaseComponent.update()
     currentPlayerComponent.update()
     selectPhaseComponent.update()
     c.getAllStates().foreach(state => {

@@ -61,6 +61,7 @@ object ControllerModule:
         model.switchTurnPhaseActionAvailable
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit =
         model.switchPhase(a)
+        view.update()
 
       override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = model.rollDice(typeOfPlayer,state)
 
