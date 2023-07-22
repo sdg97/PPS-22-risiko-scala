@@ -31,6 +31,8 @@ object ModelModule:
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
     def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
+    
+    def getNumberOfRollDiceAttack():Int
 
   }
 
@@ -193,6 +195,9 @@ object ModelModule:
         }
         (numberOfDiceAttack, numberOfDiceDefender)
       }
+
+      override def getNumberOfRollDiceAttack(): Int = rollDiceAttack.size
+
       override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
         gameMap.shiftWagon(fromStateName, toStateName, numberOfWagon)
         controller.updateView()

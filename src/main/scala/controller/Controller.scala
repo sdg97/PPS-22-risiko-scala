@@ -24,6 +24,7 @@ object ControllerModule:
     def attackPhase(attackerState: State, defenderState: State): Unit
     def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
     def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
+    def getNumberOfRollDiceAttack:Int
     
 
   trait Provider:
@@ -68,6 +69,8 @@ object ControllerModule:
       override def attackPhase(attackerState: State, defenderState: State): Unit = model.attackPhase(attackerState,defenderState)
 
       override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = model.numberOfDiceForPlayers(attackerState,defenderState)
+
+      override def getNumberOfRollDiceAttack: Int = model.getNumberOfRollDiceAttack()
 
       override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit = model.shiftWagon(fromStateName, toStateName, numberOfWagon)
 
