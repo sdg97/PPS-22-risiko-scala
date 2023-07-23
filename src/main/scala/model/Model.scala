@@ -126,6 +126,8 @@ object ModelModule:
       override def attackPhase(attackerState: State, defenderState: State): Unit = {
         if (attackerState.numberOfWagon > 1 && defenderState.numberOfWagon == 0) {
           defenderState.setPlayer(attackerState.player)
+          if(checkWinner())
+            throw new MyCustomException("""<html>Great, you are the Winner <br>""")
           throw new MyCustomException("""<html>Great, you conquered <br>""" + defenderState.name)
         }
         else if (attackerState.numberOfWagon == 1) {
@@ -182,6 +184,9 @@ object ModelModule:
       override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
         gameMap.shiftWagon(fromStateName, toStateName, numberOfWagon)
         controller.updateView()
+
+      private def checkWinner(): Boolean =
+        getPlayerStates(getCurrentPlayer()).size >= 24
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase
