@@ -1,0 +1,6 @@
+oceania,indonesia,nuova guinea,australia occidentale,australia orientale
+sud america,venezuela,brasile,perù,argentina
+africa,africa del nord,egitto,congo,africa orientale,africa del sud,madagascar
+europa,europa meridionale,europa settentrionale,europa occidentale,ucraina,scandinavia,gran bretagna,islanda
+nord america,america centrale,stati uniti orientali,stati uniti occidentali,alberta,ontario,quebec,alaska,territori del nord ovest,groenlandia
+asia,medio oriente,afghanistan,india,siam,cina,mongolia,siberia,urali,cita,jacuzia,kamchatka,giappone

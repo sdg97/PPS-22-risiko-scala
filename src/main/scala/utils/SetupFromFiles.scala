@@ -1,6 +1,6 @@
 package utils
 
-import model.{GameMap, StateImpl}
+import model.{Continent, ContinentImpl, GameMap, StateImpl}
 
 import java.io.File
 import scala.io.Source
@@ -29,17 +29,17 @@ object SetupFromFiles {
         gameMap.addEdge(state1, state2)
       }
     }
-/*
-    val continentFile = new File("src/main/resources/config/continent.txt")
+
+    val continentFile = new File("src/main/resources/config/continents.txt")
     val continentFileLines: Seq[String] = Source.fromFile(continentFile).getLines().toList
-    borderFileLines.foreach { line =>
+    continentFileLines.foreach { line =>
       val parts = line.split(",")
       val continentName = parts(0).trim
-      var continentStates: Set[String]
-      val x = 1
-      for x <- parts.length {
-        continentStates+(parts(x).trim)
+      var continentStates: Set[String] = Set()
+      for (elem <- parts.tail) {
+        continentStates = continentStates + elem
       }
+      val continent = new ContinentImpl(continentName, continentStates)
+      gameMap.addContinent(continent)
     }
-*/
 }
