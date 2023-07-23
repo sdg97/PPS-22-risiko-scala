@@ -39,20 +39,19 @@ class GameMap extends Graph:
     nodeSet.toSeq.map(s => s"${s.name} ${s.player.username} ${s.numberOfWagon}").foreach(println(_))
 
   def calcWagonToPlace(player: Player): Unit =
-    var num = getPlayerStates(player).size / 3
+    var wagonToPlace = getPlayerStates(player).size / 3
     val allContinent = false
     val playerStatesName = getPlayerStates(player).map(_.name)
     continentSet.foreach(c => {
       if(c.states.subsetOf(playerStatesName))
         c.name match {
-          case "oceania" | "sud america" => num = num + 2
-          case "africa" => num = num + 3
-          case "europa" | "nord america" => num = num + 5
-          case "asia" => num = num + 7
+          case "oceania" | "sud america" => wagonToPlace = wagonToPlace + 2
+          case "africa" => wagonToPlace = wagonToPlace + 3
+          case "europa" | "nord america" => wagonToPlace = wagonToPlace + 5
+          case "asia" => wagonToPlace = wagonToPlace + 7
         }
     })
-    player.setWagonToPlace(num)
-
+    player.setWagonToPlace(wagonToPlace)
 
   def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
     getStateByName(fromStateName).removeWagon(numberOfWagon)
