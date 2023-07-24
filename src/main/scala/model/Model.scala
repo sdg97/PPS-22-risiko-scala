@@ -3,8 +3,8 @@ import controller.ControllerModule
 import view.ViewModule.Requirements
 
 import scala.util.Random
-
 import controller.ControllerModule
+import utils.SetupFromFiles
 import view.ViewModule.Requirements
 
 object ModelModule:
@@ -30,7 +30,9 @@ object ModelModule:
     def wagonToPlace(): Int
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
+    def currentPhase: RisikoPhase
     def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
+    def getNumberOfRollDiceAttack():Int
 
   }
 
@@ -52,27 +54,8 @@ object ModelModule:
       private val turnPhasesManager = TurnPhasesManager()
       private val stateFile = new File("src/main/resources/config/states.txt")
       private val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
-      
-      stateFileLines.foreach { line =>
-        val parts = line.split(",")
-        if (parts.length >= 3) {
-          val name = parts(0).trim
-          val posX = parts(1).trim
-          val posY = parts(2).trim
-          gameMap.addNode(new StateImpl(name, 0, null, posX.toInt, posY.toInt))
-        }
-      }
 
-      val borderFile = new File("src/main/resources/config/borders.txt")
-      val borderFileLines: Seq[String] = Source.fromFile(borderFile).getLines().toList
-      borderFileLines.foreach { line =>
-        val parts = line.split(",")
-        if (parts.length >= 2) {
-          val state1 = parts(0).trim
-          val state2 = parts(1).trim
-          gameMap.addEdge(state1, state2)
-        }
-      }
+      SetupFromFiles.setup(gameMap)
 
       override def getNeighbor(stateName: String, player: Player): Set[String] = gameMap.getNeighborStates(stateName, player)
       override def getNeighborStatesOfPlayer(state: String, player: Player): Set[String] = gameMap.getNeighborStatesOfPlayer(state, player)
@@ -143,6 +126,8 @@ object ModelModule:
       override def attackPhase(attackerState: State, defenderState: State): Unit = {
         if (attackerState.numberOfWagon > 1 && defenderState.numberOfWagon == 0) {
           defenderState.setPlayer(attackerState.player)
+          if(checkWinner())
+            throw new MyCustomException("""<html>Great, you are the Winner <br>""")
           throw new MyCustomException("""<html>Great, you conquered <br>""" + defenderState.name)
         }
         else if (attackerState.numberOfWagon == 1) {
@@ -193,9 +178,18 @@ object ModelModule:
         }
         (numberOfDiceAttack, numberOfDiceDefender)
       }
+
+      override def getNumberOfRollDiceAttack(): Int = rollDiceAttack.size
+
       override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
         gameMap.shiftWagon(fromStateName, toStateName, numberOfWagon)
         controller.updateView()
+
+      private def checkWinner(): Boolean =
+        getPlayerStates(getCurrentPlayer()).size >= 24
+
+      override def currentPhase: RisikoPhase =
+        turnPhasesManager.currentPhase
 
   trait Interface extends Provider with Component:
     self: Requirements =>

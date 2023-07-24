@@ -1,8 +1,8 @@
 package view
 
 import controller.ControllerModule.*
-import model.{Player, PlayerColor, PlayerImpl, State}
-import view.component.{CurrentPlayerComponent, SelectPhaseComponent}
+import model.{Player, PlayerColor, PlayerImpl, RisikoPhase, State}
+import view.component.{CurrentPhaseComponent, CurrentPlayerComponent, JButtonExtended, JPanelScreen, SelectPhaseComponent, ShiftPhasePanel}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
@@ -30,27 +30,14 @@ private class GameScreenImpl(c: Controller):
   private val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
   private val currentPlayerComponent = new CurrentPlayerComponent(c)
   private val selectPhaseComponent = new SelectPhaseComponent(c)
+  private val currentPhaseComponent = new CurrentPhaseComponent(c)
 
   // Carica l'immagine di sfondo
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
 
   // Crea il pannello per contenere gli elementi della GUI
-  val screen = new JPanel(null) {
-    override def paintComponent(g: Graphics): Unit = {
-      super.paintComponent(g)
-      // Disegna l'immagine di sfondo
-      val widthRatio = getWidth.toDouble / backgroundImage.getWidth(null)
-      val heightRatio = getHeight.toDouble / backgroundImage.getHeight(null)
-      val scaleFactor = Math.max(widthRatio, heightRatio)
-      val scaledWidth = (backgroundImage.getWidth(null) * scaleFactor).toInt
-      val scaledHeight = (backgroundImage.getHeight(null) * scaleFactor).toInt
-      val x = (getWidth - scaledWidth) / 2
-      val y = (getHeight - scaledHeight) / 2
-      g.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight, null)
-    }
-  }
-  screen.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
-
+  val screen = new JPanelScreen(null)
+  
   val panelAttackPhase = new JPanel(null) {
     setBounds(300, 80, 400, 500)
     setBackground(Color.gray)
@@ -59,22 +46,17 @@ private class GameScreenImpl(c: Controller):
   };
   screen.add(panelAttackPhase)
 
-
-  val isAttackPhase = false
-  val isPositionPhase = false
-  val isShiftPhase = true
-
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
+  turnPanel.add(currentPhaseComponent.get())
   turnPanel.add(selectPhaseComponent.get())
-  turnPanel.setSize(turnPanel.getPreferredSize())
+  turnPanel.setBounds(0,0,700,  40)
   screen.add(turnPanel)
 
   private val wagonPanel = new JPanel()
-  wagonPanel.setBounds(400,0,200,40)
+  wagonPanel.setBounds(800,0,200,40)
   private val wagonToPlaceLabel = new JLabel("Wagon to be placed: " + c.wagonToPlace().toString())
   wagonPanel.add(wagonToPlaceLabel)
-  screen.add(wagonPanel)
   setupButtons()
 
   private def getStateNameFromButton(button: JButton): String =
@@ -83,39 +65,30 @@ private class GameScreenImpl(c: Controller):
     }).get._1
 
   private def setupButtons(): Unit =
+    if(c.currentTurnPhase.equals(RisikoPhase.StartTurn))
+      screen.add(wagonPanel)
     c.getAllStates().foreach(state => {
-      val btnState = new JButtonExtended("") {
-        setBorder(BorderFactory.createEmptyBorder())
-        setContentAreaFilled(false) // Rimuove lo sfondo del bottone
-        setForeground(Color.BLACK) // Imposta il colore del testo
-        setFocusPainted(false) // Rimuove l'effetto di focuss
-        setFont(new Font("Arial", 12, 10))
-        setRolloverEnabled(true)
-        if (color.equals(Color.BLACK) || color.equals(Color.BLUE))
-          setForeground(Color.WHITE)
-
-        override def paintComponent(g: Graphics): Unit = {
-          val g2d = g.asInstanceOf[Graphics2D]
-          val center = new Point2D.Float(getWidth / 2.0f, getHeight / 2.0f)
-          val radius = Math.min(getWidth, getHeight) / 2.0f
-          val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
-          g2d.setColor(this.color) // Imposta il colore del cerchio
-          g2d.fill(circle) // Disegna il cerchio
-          super.paintComponent(g) // Disegna il testo del bottone
-        }
-      }
-
+      val btnState = new JButtonExtended(state.posX, state.posY)
       btnState.addActionListener((_: ActionEvent) => {
-        if (isAttackPhase) {
-          if (btnState.isNeighbour) {
+        if (c.currentTurnPhase.equals(RisikoPhase.StartTurn)) {
+          resetButton()
+          c.addWagon(getStateNameFromButton(btnState))
+          wagonToPlaceLabel.setText("Wagon to be placed: " + c.wagonToPlace().toString)
+        }
+        else if (c.currentTurnPhase.equals(RisikoPhase.Attack)) {
+          if (btnState.isSelected)
+            resetButton()
+          else if (btnState.isNeighbour) {
             println("isNeighbour")
             //se clicco su un confinante faccio l'attacco
             panelAttackPhase.removeAll()
+            panelAttackPhase.revalidate()
+            panelAttackPhase.repaint()
             panelAttackPhase.setVisible(true)
-            val gameWindowAttack = new GameWindowAttack(panelAttackPhase, this, c, getStateSelected, c.getState(getStateNameFromButton(btnState)))
+            val gameWindowAttack = new GameWindowAttack(panelAttackPhase, c, getStateSelected, c.getState(getStateNameFromButton(btnState)))
             gameWindowAttack.show()
             resetButton()
-          } else if (!btnState.isSelected && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()))
+          } else if (!btnState.isSelected && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()) && c.getState(getStateNameFromButton(btnState)).numberOfWagon>1)
             resetButton()
             println("isSelected")
 
@@ -127,14 +100,11 @@ private class GameScreenImpl(c: Controller):
               buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
             })
         }
-        else if (isPositionPhase) {
-          resetButton()
-          c.addWagon(getStateNameFromButton(btnState))
-          wagonToPlaceLabel.setText("Wagon to be placed: " + c.wagonToPlace().toString)
-        }
-        else if (isShiftPhase) {
-          if(btnState.isNeighbour)
-            c.shiftWagon(getStateSelected.name, getStateNameFromButton(btnState), 1)
+        else if (c.currentTurnPhase.equals(RisikoPhase.Move)) {
+          if(btnState.isSelected)
+            resetButton()
+          else if(btnState.isNeighbour)
+            val shiftPanel = new ShiftPhasePanel(c, getStateSelected.name, getStateNameFromButton(btnState))
             resetButton()
           else if(!btnState.isSelected && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()))
             resetButton()
@@ -145,7 +115,17 @@ private class GameScreenImpl(c: Controller):
             })
         }
       })
-      btnState.setBounds(state.posX, state.posY, 40, 40)
+      btnState.addMouseListener(new MouseAdapter() {
+        override def mouseEntered(evt: MouseEvent): Unit = {
+          if (!btnState.isSelected && !btnState.isNeighbour && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()))
+            btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+        }
+
+        override def mouseExited(evt: MouseEvent): Unit = {
+          if (!btnState.isSelected && !btnState.isNeighbour && c.getState(getStateNameFromButton(btnState)).player.equals(c.getCurrentPlayer()))
+            btnState.setBorder(BorderFactory.createEmptyBorder())
+        }
+      })
       screen.add(btnState)
       buttonMap += (state.name -> btnState)
       buttonMap(state.name).setText(state.numberOfWagon.toString)
@@ -153,23 +133,29 @@ private class GameScreenImpl(c: Controller):
     })
 
 
-  private def resetButton(): Unit =
+  def resetButton(): Unit =
     buttonMap.foreach((_, button) => {
       button.setBorder(BorderFactory.createEmptyBorder())
       button.setIsNeighbour(false)
       button.setSelected(false)
     })
-
+    if (c.currentTurnPhase.equals(RisikoPhase.StartTurn))
+      wagonToPlaceLabel.setText("Wagon to be placed: " + c.wagonToPlace().toString)
+      wagonPanel.setVisible(true)
+    else
+      wagonPanel.setVisible(false)
   private def getStateSelected: State =
     c.getState(buttonMap.find((_, button) => button.isSelected).get._1)
 
 
   def update(): Unit =
     println("UPDATE LA GAME SCREEN")
-
+    currentPhaseComponent.update()
     currentPlayerComponent.update()
     selectPhaseComponent.update()
     c.getAllStates().foreach(state => {
       buttonMap(state.name).setText(state.numberOfWagon.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
+    resetButton()
+

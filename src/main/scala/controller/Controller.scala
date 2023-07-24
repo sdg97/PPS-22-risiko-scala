@@ -24,7 +24,8 @@ object ControllerModule:
     def attackPhase(attackerState: State, defenderState: State): Unit
     def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
     def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
-    
+    def getNumberOfRollDiceAttack:Int
+    def currentTurnPhase: RisikoPhase
 
   trait Provider:
     val controller: Controller
@@ -60,6 +61,7 @@ object ControllerModule:
         model.switchTurnPhaseActionAvailable
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit =
         model.switchPhase(a)
+        view.update()
 
       override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = model.rollDice(typeOfPlayer,state)
 
@@ -69,7 +71,10 @@ object ControllerModule:
 
       override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = model.numberOfDiceForPlayers(attackerState,defenderState)
 
+      override def getNumberOfRollDiceAttack: Int = model.getNumberOfRollDiceAttack()
+
       override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit = model.shiftWagon(fromStateName, toStateName, numberOfWagon)
 
+      override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:
     self: Requirements =>

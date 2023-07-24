@@ -3,12 +3,14 @@ package view
 import controller.ControllerModule.Controller
 import model.{MyCustomException, Player, State}
 
+import java.awt.event.ActionEvent
 import java.awt.{BasicStroke, Color, FlowLayout, Font, Graphics, Polygon}
 import java.util.Random
-import javax.swing.{BorderFactory, JButton, JComponent, JLabel, JPanel, SwingConstants}
+import javax.swing.{BorderFactory, JButton, JComboBox, JComponent, JLabel, JPanel, SwingConstants}
+import scala.collection.mutable.ArrayBuffer
 import scala.swing.{Dimension, Graphics2D}
 
-class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, controller: Controller, stateAttack: State, stateDefender:State) {
+class GameWindowAttack( panelAttackPhase:JPanel, controller: Controller, stateAttack: State, stateDefender:State) {
   def show():Unit={
     val labelAttackState = new JLabel() {
       setForeground(Color.BLACK) // Imposta il colore del testo
@@ -143,27 +145,42 @@ class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, con
 
       if(labelPlayerMessage.getText.equals("""<html>Great, you conquered <br>""" + stateDefender.name)){
         controller.updateView()
-        buttonDefence.setEnabled(false)
-        buttonAttack.setEnabled(false)
-        buttonClose.setEnabled(true)
+        panelAttackPhase.remove(buttonAttack)
+        panelAttackPhase.remove(buttonDefence)
+        buttonClose.setBounds(140, 220, 120, 50)
+        labelPlayerMessage.setBounds(40, 340, 300, 80)
+        if(controller.getNumberOfRollDiceAttack==1){
+          controller.shiftWagon(stateAttack.name,stateDefender.name,controller.getNumberOfRollDiceAttack)
+          controller.updateView()
+          buttonClose.setEnabled(true)
+        }
+        else{
+          showNumberOfTanksToMove(panelAttackPhase, buttonClose, stateAttack.name, stateDefender.name)
+          controller.updateView()
+        }
+
+
       }
       else if(labelPlayerMessage.getText.equals("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + stateDefender.name+"""</html>""".stripMargin)){
         controller.updateView()
-        buttonDefence.setEnabled(false)
-        buttonAttack.setEnabled(false)
+        panelAttackPhase.remove(buttonAttack)
+        panelAttackPhase.remove(buttonDefence)
+        buttonClose.setBounds(140, 220, 120, 50)
+        labelPlayerMessage.setBounds(40, 340, 300, 80)
         buttonClose.setEnabled(true)
       }
       else{
         buttonDefence.setEnabled(false)
         buttonAttack.setEnabled(true)
         buttonClose.setEnabled(true)
+        controller.updateView()
       }
 
     })
 
     buttonClose.addActionListener(_ => {
       val parent=panelAttackPhase.getParent
-      parent.remove(panelAttackPhase)
+      panelAttackPhase.setVisible(false)
       parent.revalidate()
       parent.repaint()
     })
@@ -230,6 +247,36 @@ class GameWindowAttack( panelAttackPhase:JPanel, gameScreen: GameScreenImpl, con
       dadoComponentDefence.setValue(1)
       panelDadoDefender.add(dadoComponentDefence)
     }
+  }
+
+  def showNumberOfTanksToMove(panel: JPanel, buttonClose:JButton, stateAttack:String, stateDefender: String):Unit={
+    val labelNumberOfTanksToMove=new JLabel(){
+      setText("""<html>Select the number of tank to move, in the conquared state </html>""")
+      setFont(new Font("Arial", 12, 17))
+      setForeground(Color.BLACK)
+      setBounds(20, 410, 250, 80)
+    }
+
+    val arrayOfTankToMove: ArrayBuffer[String]= ArrayBuffer()
+    for(i<-1 to controller.getNumberOfRollDiceAttack){
+      arrayOfTankToMove+=i.toString
+    }
+
+    val comboBoxMenu=new JComboBox[String](arrayOfTankToMove.toArray){
+      setBounds(300, 430, 80,38)
+    }
+
+
+    comboBoxMenu.addActionListener((_: ActionEvent) => {
+      buttonClose.setEnabled(true)
+
+      val numberOfTank = comboBoxMenu.getSelectedItem().toString.toInt
+      controller.shiftWagon(stateAttack,stateDefender,numberOfTank)
+      comboBoxMenu.setEnabled(false)
+    })
+
+    panel.add(labelNumberOfTanksToMove)
+    panel.add(comboBoxMenu)
   }
 
 

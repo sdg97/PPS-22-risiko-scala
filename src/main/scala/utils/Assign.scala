@@ -66,7 +66,6 @@ object M extends App:
   val as: Seq[String] = "italia" :: "francia" :: "germania" :: "fillandia" :: "inghilterra" :: "brasile" :: "messico" :: "congo" :: Nil
 
   // println(assign(ac, as))
-
   val t :Troop = 50
   val ac2 : Seq[Player]= Player("simone", BLUE)
     :: Player("martin", BLACK)

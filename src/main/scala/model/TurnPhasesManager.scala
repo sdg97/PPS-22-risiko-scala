@@ -13,6 +13,14 @@ enum RisikoSwitchPhaseAction extends RisikoAction:
   case StartAttack
   case EndTurn
 
+object RisikoSwitchPhaseAction:
+  extension (a: RisikoSwitchPhaseAction)
+    def string : String = a match
+      case StartMove => "Move Phase"
+      case StartAttack => "Attack Phase"
+      case EndTurn => "Pass"
+
+
 enum RisikoRequest extends RisikoAction:
   case AttackRequest
   case MoveRequest
@@ -43,7 +51,7 @@ object TryFSM extends App:
   import RisikoSwitchPhaseAction.*
 
   val f = TurnPhasesManager()
-
+  println(s"current phase as string ${StartMove.string}")
   println(f.currentPhase) //StartTurn
   println(f.trigger(StartMove)) //Move
   println(f.trigger(EndTurn)) //StartTurn
@@ -55,7 +63,6 @@ object TryFSM extends App:
   println(f.trigger(AttackRequest)) //Attack
   println(f.trigger(AttackRequest)) //Attack
   println(f.trigger(StartMove)) //Move
-  println(f.trigger(MoveRequest)) //Move
   println(f.trigger(MoveRequest)) //Move
   println(f.trigger(EndTurn)) //StartTurn
 

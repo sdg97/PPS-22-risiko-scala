@@ -1,6 +1,7 @@
 package view
 
 import controller.ControllerModule.Controller
+import view.component.JButtonExtended
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
