@@ -31,23 +31,31 @@ trait GraphWithEdgeImpl() extends GraphWithEdge:
 
 trait TraversableGraph extends GraphWithEdge:
   g: GraphWithEdge =>
-  private var currentNode : Option[Node] = None
+  private var _currentNode : Option[Node] = None
   private var first = true
   abstract override def addEdge(n1: Node, n2: Node, e: Edge) =
-    currentNode = if first then Some(n1) else currentNode
+    val n1Neighbours = getNeighbours(n1,e)
+    if !n1Neighbours.isEmpty
+      then throw CantConnectTwoDifferentNodeWithTheSameEdge(n1,n1Neighbours.head, n2, e)
+    _currentNode = if first then Some(n1) else _currentNode
     first = false
     super.addEdge(n1,n2,e)
-  def setCurrentNode(n: Node) =
-    //lancia comunque un eccezione
-    currentNode = if g.nodes contains n then Some(n) else currentNode
-  def getCurrentNode() = currentNode
+  def currentNode(n: Node) =
+    if !g.nodes.contains(n) then
+      throw NodeNotFound(n)
+    _currentNode = Some(n)
+  def currentNode = _currentNode
 
-  //deve tirare un'eccezione quando non ci sono
   def crossEdge(toCross: Edge) =
-    val t = Some(getNeighbours(currentNode.get, toCross).head)
-    currentNode = if !t.isEmpty then t else currentNode
-  
+    val n = getNeighbours(_currentNode.get, toCross)
+    if !n.isEmpty then _currentNode = Some(n.head) else throw NoEdgeToCross("toCross")
 
+case class NoEdgeToCross[X](e:X)
+  extends Exception (s"No edge to cross from this node ${e}")
+case class CantConnectTwoDifferentNodeWithTheSameEdge[X,Y](source: X, n1: X, n2: X, edge: Y)
+  extends Exception(s"Can't connect ${n1} and ${n2} with ${source} using the same edge")
+case class NodeNotFound[X](n:X)
+  extends Exception(s"Node ${n} not found in the graph")
 object TryGraph extends App:
   val g = new GraphWithEdgeImpl with TraversableGraph:
     override type Node = String
@@ -55,7 +63,7 @@ object TryGraph extends App:
 
   g.addEdge("a", "b", 2)
   g.addEdge("b", "c", 3)
-  println(g.getCurrentNode())
+  println(g.currentNode)
   g.crossEdge(2)
-  println(g.getCurrentNode())
+  println(g.currentNode)
   g.crossEdge(3)
