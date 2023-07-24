@@ -149,7 +149,6 @@ private class GameScreenImpl(c: Controller):
 
 
   def update(): Unit =
-    println("UPDATE LA GAME SCREEN")
     currentPhaseComponent.update()
     currentPlayerComponent.update()
     selectPhaseComponent.update()

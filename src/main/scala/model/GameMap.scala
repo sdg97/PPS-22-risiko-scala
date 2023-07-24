@@ -32,8 +32,7 @@ class GameMap extends Graph:
     players.foreach(p =>
         getPlayerStates(p) assign players.START_TANK_NUMBER
     )
-    nodeSet.toSeq.map(s => s"${s.name} ${s.player.username} ${s.numberOfWagon}").foreach(println(_))
-
+    
   def calcWagonToPlace(player: Player): Unit =
     var wagonToPlace = getPlayerStates(player).size / 3
     val allContinent = false

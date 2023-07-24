@@ -46,7 +46,6 @@ object AssignGivenInstances:
   given Assign[Set[State], Int] with
       extension (accountables: Set[State]) def assign(assignable: Int): Set[State] =
         val assigment: Map[State, Int] = fairAssign(accountables.toSeq, assignable)
-        println(assigment)
         accountables.foreach{s => s.addWagon(assigment(s))}
         accountables
 

@@ -10,7 +10,6 @@ private[view] class SelectPhaseComponent(private val c: Controller) {
   private val panel = new JPanel()
 
   def get() =
-    println("CHIAMO LA GET")
     update()
     panel
 
