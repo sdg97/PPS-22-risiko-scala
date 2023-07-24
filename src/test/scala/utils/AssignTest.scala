@@ -5,7 +5,7 @@ import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
 class AssignTest extends AnyFunSpec with Matchers:
-  import AssignExtensionGivenInstances.given
+  import AssignGivenInstances.given
 
   describe("An assignment ") {
     describe(" of a States Set to a Players Set") {
