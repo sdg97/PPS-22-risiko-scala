@@ -14,6 +14,6 @@ private[view] class CurrentPlayerComponent(c: Controller):
 
   def update() =
     panel.removeAll()
-    panel add JLabel(s"${LABEL_PREFIX} ${c.getCurrentPlayer().username}")
+    panel add JLabel(s"${LABEL_PREFIX} ${c.currentPlayer.username}")
     panel.setSize(panel.getPreferredSize())
     

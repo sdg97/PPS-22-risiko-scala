@@ -17,5 +17,5 @@ class PlacementPhaseTest extends AnyFunSuite with Matchers:
 
   test("Test add wagon on my state"){
     italy.addWagon(1)
-    assert(map.getStateByName("italy").numberOfWagon == 4)
+    assert(map.stateByName("italy").numberOfWagon == 4)
   }

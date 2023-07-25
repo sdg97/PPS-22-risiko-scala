@@ -1,7 +1,6 @@
 package utils
 
 import model.{Continent, ContinentImpl, GameMap, StateImpl}
-
 import java.io.File
 import scala.io.Source
 
@@ -23,7 +22,7 @@ object SetupFromFiles {
     val borderFileLines: Seq[String] = Source.fromFile(borderFile).getLines().toList
     borderFileLines.foreach { line =>
       val parts = line.split(",")
-      if (parts.length >= 2) {
+      if (parts.length == 2) {
         val state1 = parts(0).trim
         val state2 = parts(1).trim
         gameMap.addEdge(state1, state2)
