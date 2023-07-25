@@ -16,6 +16,6 @@ class MovePhaseTest extends AnyFunSuite with Matchers:
 
   test("Test add wagon on my state"){
     map.shiftWagon(italy.name, france.name,3)
-    assert(map.getStateByName("italy").numberOfWagon == 5)
-    assert(map.getStateByName("france").numberOfWagon == 6)
+    assert(map.stateByName("italy").numberOfWagon == 5)
+    assert(map.stateByName("france").numberOfWagon == 6)
   }

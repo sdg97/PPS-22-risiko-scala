@@ -12,28 +12,27 @@ object ModelModule:
 
     @throws(classOf[MyCustomException])
     def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit
-    def getPlayers(): Set[Player]
+    def players: Set[Player]
     def deployTroops(): Unit
-    def getNeighbor(stateName: String, player: Player): Set[String]
-    def getNeighborStatesOfPlayer(state: String, player: Player): Set[String]
-    def getPlayerStates(player: Player): Set[State]
-    def getAllStates: Set[State]
+    def neighbors(stateName: String, player: Player): Set[String]
+    def neighborStatesOfPlayer(state: String, player: Player): Set[String]
+    def playerStates(player: Player): Set[State]
+    def allStates: Set[State]
     def resultAttack(attackerState: State, defenderState: State): Unit
     @throws(classOf[MyCustomException])
     def attackPhase(attackerState: State, defenderState: State): Unit
     def rollDice(typeOfPlayer:String, state:State): Seq[Int]
     def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
-    def getCurrentPlayer(): Player
-    def getState(stateName: String): State
+    def currentPlayer: Player
+    def stateByName(stateName: String): State
     def updateView(): Unit
     def addWagon(stateName: String): Unit
-    def wagonToPlace(): Int
+    def wagonToPlace: Int
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
     def currentPhase: RisikoPhase
     def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
     def getNumberOfRollDiceAttack():Int
-
   }
 
   type Requirements = ControllerModule.Provider
@@ -54,18 +53,17 @@ object ModelModule:
       private val turnPhasesManager = TurnPhasesManager()
       private val stateFile = new File("src/main/resources/config/states.txt")
       private val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
-
       SetupFromFiles.setup(gameMap)
 
-      override def getNeighbor(stateName: String, player: Player): Set[String] = gameMap.getNeighborStates(stateName, player)
-      override def getNeighborStatesOfPlayer(state: String, player: Player): Set[String] = gameMap.getNeighborStatesOfPlayer(state, player)
+      override def neighbors(stateName: String, player: Player): Set[String] = gameMap.neighborStates(stateName, player)
+      override def neighborStatesOfPlayer(state: String, player: Player): Set[String] = gameMap.neighborStatesOfPlayer(state, player)
 
-      override def getPlayerStates(player: Player): Set[State] =
-        gameMap.getPlayerStates(player)
+      override def playerStates(player: Player): Set[State] =
+        gameMap.playerStates(player)
 
-      override def getCurrentPlayer(): Player = turnManager.get.current()
+      override def currentPlayer: Player = turnManager.get.current()
 
-      override def getState(stateName: String): State = gameMap.getStateByName(stateName)
+      override def stateByName(stateName: String): State = gameMap.stateByName(stateName)
 
       override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
         if (inputDataPlayer.exists(_._1 == "")) {
@@ -83,33 +81,30 @@ object ModelModule:
           )))
           turnManager.get.next()
           gameMap.assignStatesToPlayers(turnManager.get.getAll())
-          gameMap.calcWagonToPlace(getCurrentPlayer())
+          gameMap.calcWagonToPlace(currentPlayer)
         }
       }
 
       override def deployTroops(): Unit = println("troop deployed")
 
-      override def getPlayers(): Set[Player] = turnManager.get.getAll()
+      override def players: Set[Player] = turnManager.get.getAll()
 
-      override def getAllStates: Set[State] = gameMap.nodes
-
+      override def allStates: Set[State] = gameMap.nodes
 
       override def updateView(): Unit = controller.updateView()
 
       override def addWagon(stateName: String): Unit =
-        val currentPlayer = getCurrentPlayer()
-        if(currentPlayer.equals(gameMap.getStateByName(stateName).player) && currentPlayer.wagonToPlace > 0)
-          gameMap.getStateByName(stateName).addWagon(1)
+        if(currentPlayer.equals(gameMap.stateByName(stateName).player) && currentPlayer.wagonToPlace > 0)
+          gameMap.stateByName(stateName).addWagon(1)
           currentPlayer.setWagonToPlace(currentPlayer.wagonToPlace-1)
           controller.updateView()
 
-      override def wagonToPlace(): Int = getCurrentPlayer().wagonToPlace
+      override def wagonToPlace: Int = currentPlayer.wagonToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
 
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match
-        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcWagonToPlace(getCurrentPlayer())
+        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcWagonToPlace(currentPlayer)
         case _ => turnPhasesManager.trigger(a)
-
 
       override def resultAttack(attackerState: State, defenderState: State): Unit =
         var wagonlostAttacker: Int = 0;
@@ -186,7 +181,7 @@ object ModelModule:
         controller.updateView()
 
       private def checkWinner(): Boolean =
-        getPlayerStates(getCurrentPlayer()).size >= 24
+        playerStates(currentPlayer).size >= 24
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase

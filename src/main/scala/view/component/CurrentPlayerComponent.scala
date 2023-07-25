@@ -14,10 +14,11 @@ private[view] class CurrentPlayerComponent(c: Controller):
     panel
 
   def update() =
-    val label = JLabel(s"${LABEL_PREFIX} ${c.getCurrentPlayer().username}")
-    label.setForeground(Color.decode(c.getCurrentPlayer().color.rgb.toString))
+    val label = JLabel(s"${LABEL_PREFIX} ${c.currentPlayer.username}")
+    label.setForeground(Color.decode(c.currentPlayer.color.rgb.toString))
     panel.removeAll()
     panel setOpaque false
     panel add label
     panel setOpaque false
     panel setSize panel.getPreferredSize()
+

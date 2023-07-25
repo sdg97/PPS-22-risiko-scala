@@ -16,19 +16,19 @@ class GameMapTest extends AnyFunSuite with Matchers:
 
   test("Test add Node"){
     map.addNode(italy)
-    assert(map.getStateByName("italy").equals(italy))
+    assert(map.stateByName("italy").equals(italy))
   }
 
   test("Test neighbour"){
     map.addNode(italy)
     map.addNode(france)
     map.addEdge("italy", "france")
-    assert(map.getNeighborStates("italy", player1).contains("france"))
+    assert(map.neighborStates("italy", player1).contains("france"))
   }
 
   test("Test player's states"){
     map.addNode(italy)
     map.addNode(brazil)
-    assert(map.getPlayerStates(player1).contains(italy))
-    assert(map.getPlayerStates(player1).contains(brazil))
+    assert(map.playerStates(player1).contains(italy))
+    assert(map.playerStates(player1).contains(brazil))
   }

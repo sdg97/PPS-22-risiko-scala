@@ -1,43 +1,42 @@
 package model
 import utils.Graph
 
-
 class GameMap extends Graph:
   override type Node = State
-  private var edgesSet = Set[(String,String)]()
-  private var nodeSet = Set[State]()
-  private var continentSet = Set[Continent]()
+  private var _edges = Set[(String,String)]()
+  private var _nodes = Set[State]()
+  private var _continents = Set[Continent]()
 
-  override def nodes: Set[State] = nodeSet
-  override def edges: Set[(String,String)] = edgesSet
-  override def addEdge(state1: String, state2: String): Unit = edgesSet += ((state1,state2))
-  override def addNode(state: State): Unit = nodeSet += state
-  def continents: Set[Continent] = continentSet
-  def addContinent(continent: Continent): Unit = continentSet += continent
+  override def nodes: Set[State] = _nodes
+  override def edges: Set[(String,String)] = _edges
+  override def addEdge(state1: String, state2: String): Unit = _edges += ((state1,state2))
+  override def addNode(state: State): Unit = _nodes += state
+  def continents: Set[Continent] = _continents
+  def addContinent(continent: Continent): Unit = _continents += continent
 
-  def getNeighborStates(state: String, player: Player): Set[String] = edgesSet collect {
-      case (`state`, state2) if getStateByName(state2).player != player => state2
-      case (state2, `state`) if getStateByName(state2).player != player => state2
+  def neighborStates(state: String, player: Player): Set[String] = _edges collect {
+      case (`state`, state2) if stateByName(state2).player != player => state2
+      case (state2, `state`) if stateByName(state2).player != player => state2
   }
-  def getNeighborStatesOfPlayer(state: String, player: Player): Set[String] = edgesSet collect {
-    case (`state`, state2) if getStateByName(state2).player == player => state2
-    case (state2, `state`) if getStateByName(state2).player == player => state2
+  def neighborStatesOfPlayer(state: String, player: Player): Set[String] = _edges collect {
+    case (`state`, state2) if stateByName(state2).player == player => state2
+    case (state2, `state`) if stateByName(state2).player == player => state2
   }
-  def getStateByName(nameState: String): State = nodeSet.filter(s => s.name == nameState).head
-  def getPlayerStates(player: Player): Set[State] = nodeSet.filter(s => s.player.username.equals(player.username))
+  def stateByName(nameState: String): State = _nodes.filter(s => s.name == nameState).head
+  def playerStates(player: Player): Set[State] = _nodes.filter(s => s.player.username.equals(player.username))
 
   def assignStatesToPlayers(players: Set[Player]) =
     import utils.AssignGivenInstances.given
-    players assign nodeSet
+    players assign nodes
     players.foreach(p =>
-        getPlayerStates(p) assign players.START_TANK_NUMBER
+      playerStates(p) assign players.START_TANK_NUMBER
     )
-    
+
   def calcWagonToPlace(player: Player): Unit =
-    var wagonToPlace = getPlayerStates(player).size / 3
+    var wagonToPlace = playerStates(player).size / 3
     val allContinent = false
-    val playerStatesName = getPlayerStates(player).map(_.name)
-    continentSet.foreach(c => {
+    val playerStatesName = playerStates(player).map(_.name)
+    _continents.foreach(c => {
       if(c.states.subsetOf(playerStatesName))
         c.name match {
           case "oceania" | "sud america" => wagonToPlace = wagonToPlace + 2
@@ -49,7 +48,7 @@ class GameMap extends Graph:
     player.setWagonToPlace(wagonToPlace)
 
   def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
-    getStateByName(fromStateName).removeWagon(numberOfWagon)
-    getStateByName(toStateName).addWagon(numberOfWagon)
+    stateByName(fromStateName).removeWagon(numberOfWagon)
+    stateByName(toStateName).addWagon(numberOfWagon)
 
 
