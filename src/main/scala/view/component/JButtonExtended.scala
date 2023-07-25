@@ -20,7 +20,6 @@ class JButtonExtended(posX: Int, posY: Int) extends JButton() {
 
   setBorder(BorderFactory.createEmptyBorder())
   setContentAreaFilled(false) // Rimuove lo sfondo del bottone
-  setForeground(Color.BLACK) // Imposta il colore del testo
   setFocusPainted(false) // Rimuove l'effetto di focuss
   setFont(new Font("Arial", 12, 10))
   setRolloverEnabled(true)
@@ -32,6 +31,13 @@ class JButtonExtended(posX: Int, posY: Int) extends JButton() {
     val circle = new Ellipse2D.Float(center.x - radius, center.y - radius, 2.0f * radius, 2.0f * radius)
     g2d.setColor(this.color) // Imposta il colore del cerchio
     g2d.fill(circle) // Disegna il cerchio
+
+    val bgColor = new Color(this.color.getRGB)
+    val luminance = (0.299 * bgColor.getRed + 0.587 * bgColor.getGreen + 0.114 * bgColor.getBlue) / 255.0
+    if (luminance > 0.5)
+      setForeground(Color.BLACK)
+    else
+      setForeground(Color.WHITE)
     super.paintComponent(g) // Disegna il testo del bottone
   }
   setBounds(posX, posY, 40, 40)
