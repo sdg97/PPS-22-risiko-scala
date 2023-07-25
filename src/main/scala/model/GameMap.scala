@@ -19,9 +19,9 @@ class GameMap extends Graph:
 
   def neighborStatesOfPlayer(stateName: String, player: Player): Set[String] = neighborStates(stateName) filter(s => isPlayerState(s, player))
 
-  def stateByName(nameState: String): State = _nodes.filter(s => s.name.equals(nameState)).head
+  def stateByName(nameState: String): State = _nodes.filter(_.name == nameState).head
 
-  def playerStates(player: Player): Set[State] = _nodes.filter(s => isPlayerState(s.name, player))
+  def playerStates(player: Player): Set[State] = _nodes.filter(_.player == player)
 
   def assignStatesToPlayers(players: Set[Player]) =
     import utils.AssignGivenInstances.given
@@ -31,19 +31,15 @@ class GameMap extends Graph:
     )
 
   def calcWagonToPlace(player: Player): Unit =
-    var wagonToPlace = playerStates(player).size / 3
-    val playerStatesName = playerStates(player).map(_.name)
-    _continents.foreach(continent => {
-      if(continent.states.subsetOf(playerStatesName))
-        wagonToPlace = wagonToPlace + continent.bonus
-    })
-    player.setTanksToPlace(wagonToPlace)
+    val playerStatesSet = playerStates(player)
+    val continentBonus = _continents.filter(continent => continent.states.subsetOf(playerStatesSet.map(_.name))).map(_.bonus).sum
+    player.setTanksToPlace(playerStatesSet.size / 3 + continentBonus)
 
   def moveWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
     stateByName(fromStateName).removeWagon(numberOfWagon)
     stateByName(toStateName).addWagon(numberOfWagon)
 
-  private def isPlayerState(stateName: String, player: Player): Boolean = stateByName(stateName).player.equals(player)
+  private def isPlayerState(stateName: String, player: Player): Boolean =   stateByName(stateName).player == player
 
   private def neighborStates(state: String) = _edges collect {
     case (`state`, state2) => state2
