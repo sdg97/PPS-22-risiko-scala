@@ -150,7 +150,7 @@ class GameWindowAttack( panelAttackPhase:JPanel, controller: Controller, stateAt
         buttonClose.setBounds(140, 220, 120, 50)
         labelPlayerMessage.setBounds(40, 340, 300, 80)
         if(controller.getNumberOfRollDiceAttack==1){
-          controller.shiftWagon(stateAttack.name,stateDefender.name,controller.getNumberOfRollDiceAttack)
+          controller.moveTanks(stateAttack.name,stateDefender.name,controller.getNumberOfRollDiceAttack)
           controller.updateView()
           buttonClose.setEnabled(true)
         }
@@ -271,7 +271,7 @@ class GameWindowAttack( panelAttackPhase:JPanel, controller: Controller, stateAt
       buttonClose.setEnabled(true)
 
       val numberOfTank = comboBoxMenu.getSelectedItem().toString.toInt
-      controller.shiftWagon(stateAttack,stateDefender,numberOfTank)
+      controller.moveTanks(stateAttack,stateDefender,numberOfTank)
       comboBoxMenu.setEnabled(false)
     })
 
