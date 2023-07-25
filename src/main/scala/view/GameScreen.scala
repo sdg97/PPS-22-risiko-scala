@@ -149,7 +149,6 @@ private class GameScreenImpl(c: Controller):
     c.stateByName(buttonMap.find((_, button) => button.isSelected).get._1)
 
   def update(): Unit =
-    println("UPDATE LA GAME SCREEN")
     currentPhaseComponent.update()
     currentPlayerComponent.update()
     selectPhaseComponent.update()

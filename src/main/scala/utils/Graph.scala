@@ -36,7 +36,6 @@ trait TraversableGraph extends GraphWithEdge:
   abstract override def addEdge(n1: Node, n2: Node, e: Edge) =
     currentNode = if first then Some(n1) else currentNode
     first = false
-    println(s"current node at add Edge ${currentNode}")
     super.addEdge(n1,n2,e)
   def setCurrentNode(n: Node) =
     //lancia comunque un eccezione
