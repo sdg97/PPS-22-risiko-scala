@@ -1,6 +1,6 @@
 package utils
 
-import model.{Continent, ContinentImpl, GameMap, State}
+import model.{Continent, GameMap, State}
 import java.io.File
 import scala.io.Source
 
@@ -39,7 +39,7 @@ object SetupFromFiles {
         continentStates = continentStates + elem
       }
       val bonus = parts.last.toInt
-      val continent = new ContinentImpl(continentName, continentStates, bonus)
+      val continent = Continent(continentName, continentStates, bonus)
       gameMap.addContinent(continent)
     }
 }
