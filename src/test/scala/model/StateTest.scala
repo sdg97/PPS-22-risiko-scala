@@ -6,8 +6,8 @@ import org.scalatest.matchers.should.Matchers
 import scala.util.Random
 
 class StateTest extends AnyFunSuite with Matchers:
-  val player = new PlayerImpl("player1", PlayerColor.YELLOW)
-  val state = new StateImpl("Brasile", 10, player,0,0)
+  val player = Player("player1", PlayerColor.YELLOW)
+  val state = State("Brasile", 10, player,0,0)
 
   test("Test create State"){
     assert(state.name=="Brasile")

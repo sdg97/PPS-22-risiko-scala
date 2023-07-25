@@ -54,9 +54,11 @@ object ControllerModule:
       override def currentPlayer: Player = model.currentPlayer
       override def allStates: Set[State] = model.allStates
       override def updateView(): Unit = view.update()
-      override def addWagon(stateName: String): Unit = model.addWagon(stateName)
+      override def addWagon(stateName: String): Unit =
+        model.addTank(stateName)
+        view.update()
 
-      override def wagonToPlace: Int = model.wagonToPlace
+      override def wagonToPlace: Int = model.tanksToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] =
         model.switchTurnPhaseActionAvailable
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit =
@@ -65,15 +67,17 @@ object ControllerModule:
 
       override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = model.rollDice(typeOfPlayer,state)
 
-      override def resultAttack(attackerState: State, defenderState: State): Unit = model.resultAttack(attackerState, defenderState)
+      override def resultAttack(attackerState: State, defenderState: State): Unit = model.attack(attackerState, defenderState)
 
-      override def attackPhase(attackerState: State, defenderState: State): Unit = model.attackPhase(attackerState,defenderState)
+      override def attackPhase(attackerState: State, defenderState: State): Unit = model.attackResult(attackerState,defenderState)
 
       override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = model.numberOfDiceForPlayers(attackerState,defenderState)
 
-      override def getNumberOfRollDiceAttack: Int = model.getNumberOfRollDiceAttack()
+      override def getNumberOfRollDiceAttack: Int = model.numberOfRollDiceAttack()
 
-      override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit = model.shiftWagon(fromStateName, toStateName, numberOfWagon)
+      override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
+        model.moveTanks(fromStateName, toStateName, numberOfWagon)
+        view.update()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:

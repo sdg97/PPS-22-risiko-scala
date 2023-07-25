@@ -9,3 +9,10 @@ class ContinentImpl(_name: String, _stateSet: Set[String]) extends Continent:
   override def name: String = _name
   override def states: Set[String] = _states
 
+/**
+extension (continent: Set[String])
+  def bonus(playerStates: Set[String]): Int =
+ *
+  */
+
+

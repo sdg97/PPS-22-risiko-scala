@@ -3,8 +3,8 @@ package model
 import model.PlayerColor.{BLACK, BLUE, YELLOW}
 
 trait TurnManager[T]:
-  def getAll(): Set[T]
-  def current(): T
+  def all: Set[T]
+  def current: T
   def next(): T
 
 object TurnManager:
@@ -17,12 +17,11 @@ object TurnManager:
     override def next(): T=
       curr = Some(iterator.next())
       curr.get
-      
-    override def current(): T =
+
+    override def current: T =
       curr.get
-      
-    override def getAll(): Set[T] =
-      toManage.toSet
+
+    override def all: Set[T] = toManage
 
 object TurnManagerTest extends App:
   val turnManager : TurnManager[Player] = TurnManager(Set(Player("simone", BLUE),

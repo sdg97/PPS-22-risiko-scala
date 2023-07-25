@@ -6,13 +6,13 @@ import org.scalatest.matchers.should.Matchers
 class GameMapTest extends AnyFunSuite with Matchers:
 
   val map = new GameMap()
-  val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
-  val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
-  val player3 = new PlayerImpl("simo", PlayerColor.BLUE)
+  val player1 = Player("pie", PlayerColor.YELLOW)
+  val player2 = Player("martin", PlayerColor.BLUE)
+  val player3 = Player("simo", PlayerColor.BLUE)
 
-  val italy = new StateImpl("italy", 3, player1,0,0)
-  val france = new StateImpl("france", 3, player2,0,0)
-  val brazil = new StateImpl("brazil", 5, player1,0,0)
+  val italy = State("italy", 3, player1,0,0)
+  val france = State("france", 3, player2,0,0)
+  val brazil = State("brazil", 5, player1,0,0)
 
   test("Test add Node"){
     map.addNode(italy)

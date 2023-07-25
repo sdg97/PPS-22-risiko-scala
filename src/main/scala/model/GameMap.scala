@@ -45,7 +45,7 @@ class GameMap extends Graph:
           case "asia" => wagonToPlace = wagonToPlace + 7
         }
     })
-    player.setWagonToPlace(wagonToPlace)
+    player.setTanksToPlace(wagonToPlace)
 
   def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
     stateByName(fromStateName).removeWagon(numberOfWagon)

@@ -13,6 +13,10 @@ enum RisikoSwitchPhaseAction extends RisikoAction:
   case StartAttack
   case EndTurn
 
+enum RisikoRequest extends RisikoAction:
+  case AttackRequest
+  case MoveRequest
+
 object RisikoSwitchPhaseAction:
   extension (a: RisikoSwitchPhaseAction)
     def string : String = a match
@@ -20,10 +24,6 @@ object RisikoSwitchPhaseAction:
       case StartAttack => "Attack Phase"
       case EndTurn => "Pass"
 
-
-enum RisikoRequest extends RisikoAction:
-  case AttackRequest
-  case MoveRequest
 
 object TurnPhasesManager:
 

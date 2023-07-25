@@ -1,7 +1,7 @@
 package view
 
 import controller.ControllerModule.*
-import model.{Player, PlayerColor, PlayerImpl, RisikoPhase, State}
+import model.{Player, PlayerColor, RisikoPhase, State}
 import view.component.{CurrentPhaseComponent, CurrentPlayerComponent, JButtonExtended, JPanelScreen, SelectPhaseComponent, ShiftPhasePanel}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}

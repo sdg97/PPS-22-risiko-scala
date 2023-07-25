@@ -1,6 +1,6 @@
 package utils
 
-import model.{Continent, ContinentImpl, GameMap, StateImpl}
+import model.{Continent, ContinentImpl, GameMap, State}
 import java.io.File
 import scala.io.Source
 
@@ -14,7 +14,7 @@ object SetupFromFiles {
         val name = parts(0).trim
         val posX = parts(1).trim
         val posY = parts(2).trim
-        gameMap.addNode(new StateImpl(name, 0, null, posX.toInt, posY.toInt))
+        gameMap.addNode(State(name, 0, null, posX.toInt, posY.toInt))
       }
     }
 
