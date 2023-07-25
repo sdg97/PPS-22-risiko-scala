@@ -54,7 +54,8 @@ private class GameScreenImpl(c: Controller):
 
   private val wagonPanel = new JPanel()
   wagonPanel.setBounds(800,0,200,40)
-  private val wagonToPlaceLabel = new JLabel("Wagon to be placed: " + c.tanksToPlace.toString)
+  private val wagonToPlaceLabel = new JLabel(s"Wagon to be placed: ${c.tanksToPlace}")
+
   wagonPanel.add(wagonToPlaceLabel)
   setupButtons()
 
@@ -69,61 +70,63 @@ private class GameScreenImpl(c: Controller):
     c.allStates.foreach(state => {
       val btnState = new JButtonExtended(state.posX, state.posY)
       btnState.addActionListener((_: ActionEvent) => {
-        if (c.currentTurnPhase.equals(RisikoPhase.StartTurn)) {
-          resetButton()
-          c.addTank(getStateNameFromButton(btnState))
-          wagonToPlaceLabel.setText("Wagon to be placed: " + c.tanksToPlace.toString)
-        }
-        else if (c.currentTurnPhase.equals(RisikoPhase.Attack)) {
-          if (btnState.isSelected)
+        c.currentTurnPhase match {
+          case RisikoPhase.StartTurn =>
             resetButton()
-          else if (btnState.isNeighbour) {
-            println("isNeighbour")
-            //se clicco su un confinante faccio l'attacco
-            panelAttackPhase.removeAll()
-            panelAttackPhase.revalidate()
-            panelAttackPhase.repaint()
-            panelAttackPhase.setVisible(true)
-            val gameWindowAttack = new GameWindowAttack(panelAttackPhase, c, getStateSelected, c.stateByName(getStateNameFromButton(btnState)))
-            gameWindowAttack.show()
-            resetButton()
-          } else if (!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer) && c.stateByName(getStateNameFromButton(btnState)).numberOfWagon>1)
-            resetButton()
-            println("isSelected")
-            //se clicco su un bottone che non è selezionato lo setto come selezionato
-            btnState.setSelected(true)
-            //setto tutti i confinanti degli altri giocatori come confinanti
-            c.neighborStatesOfEnemies(getStateNameFromButton(btnState)).foreach(stateName => {
-              buttonMap(stateName).setIsNeighbour(true)
-              buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
-            })
-        }
-        else if (c.currentTurnPhase.equals(RisikoPhase.Move)) {
-          if(btnState.isSelected)
-            resetButton()
-          else if(btnState.isNeighbour)
-            val movePanel = new MovePhasePanel(c, getStateSelected.name, getStateNameFromButton(btnState))
-            resetButton()
-          else if(!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer))
-            resetButton()
-            btnState.setSelected(true)
-            c.neighborStatesOfPlayer(getStateNameFromButton(btnState)).foreach(stateName => {
-              buttonMap(stateName).setIsNeighbour(true)
-              buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
-            })
+            c.addTank(getStateNameFromButton(btnState))
+            wagonToPlaceLabel.setText("Wagon to be placed: " + c.tanksToPlace.toString)
+
+          case RisikoPhase.Attack =>
+            if (btnState.isSelected)
+              resetButton()
+            else if (btnState.isNeighbour) {
+              println("isNeighbour")
+              //se clicco su un confinante faccio l'attacco
+              panelAttackPhase.removeAll()
+              panelAttackPhase.revalidate()
+              panelAttackPhase.repaint()
+              panelAttackPhase.setVisible(true)
+              val gameWindowAttack = new GameWindowAttack(panelAttackPhase, c, getStateSelected, c.stateByName(getStateNameFromButton(btnState)))
+              gameWindowAttack.show()
+              resetButton()
+            } else if (!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer) && c.stateByName(getStateNameFromButton(btnState)).numberOfWagon>1)
+              resetButton()
+              println("isSelected")
+              //se clicco su un bottone che non è selezionato lo setto come selezionato
+              btnState.setSelected(true)
+              //setto tutti i confinanti degli altri giocatori come confinanti
+              c.neighborStatesOfEnemies(getStateNameFromButton(btnState)).foreach(stateName => {
+                buttonMap(stateName).setIsNeighbour(true)
+                buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
+              })
+
+          case RisikoPhase.Move =>
+            if(btnState.isSelected)
+              resetButton()
+            else if(btnState.isNeighbour)
+              val movePanel = new MovePhasePanel(c, getStateSelected.name, getStateNameFromButton(btnState))
+              resetButton()
+            else if(!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer))
+              resetButton()
+              btnState.setSelected(true)
+              c.neighborStatesOfPlayer(getStateNameFromButton(btnState)).foreach(stateName => {
+                buttonMap(stateName).setIsNeighbour(true)
+                buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
+              })
         }
       })
+
       btnState.addMouseListener(new MouseAdapter() {
         override def mouseEntered(evt: MouseEvent): Unit = {
           if (!btnState.isSelected && !btnState.isNeighbour && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer))
             btnState.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
         }
-
         override def mouseExited(evt: MouseEvent): Unit = {
           if (!btnState.isSelected && !btnState.isNeighbour && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer))
             btnState.setBorder(BorderFactory.createEmptyBorder())
         }
       })
+
       screen.add(btnState)
       buttonMap += (state.name -> btnState)
       buttonMap(state.name).setText(state.numberOfWagon.toString)
@@ -137,7 +140,7 @@ private class GameScreenImpl(c: Controller):
       button.setSelected(false)
     })
     if (c.currentTurnPhase.equals(RisikoPhase.StartTurn))
-      wagonToPlaceLabel.setText("Wagon to be placed: " + c.tanksToPlace.toString)
+      wagonToPlaceLabel.setText(s"Wagon to be placed: ${c.tanksToPlace}")
       wagonPanel.setVisible(true)
     else
       wagonPanel.setVisible(false)
