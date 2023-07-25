@@ -53,7 +53,7 @@ object ModelModule:
       SetupFromFiles.setup(gameMap)
 
       override def neighborStatesOfPlayer(stateName: String): Set[String] = gameMap.neighborStatesOfPlayer(stateName, currentPlayer)
-      override def neighborStatesOfEnemies(stateName: String): Set[String] = gameMap.neighborStates(stateName, currentPlayer)
+      override def neighborStatesOfEnemies(stateName: String): Set[String] = gameMap.neighborStatesOfEnemies(stateName, currentPlayer)
 
       override def currentPlayerStates: Set[State] =
         gameMap.playerStates(currentPlayer)
@@ -172,10 +172,9 @@ object ModelModule:
       override def numberOfRollDiceAttack(): Int = rollDiceAttack.size
 
       override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
-        gameMap.shiftWagon(fromStateName, toStateName, numberOfWagon)
+        gameMap.moveWagon(fromStateName, toStateName, numberOfWagon)
 
-      private def checkWinner(): Boolean =
-        currentPlayerStates.size >= 24
+      private def checkWinner(): Boolean = currentPlayerStates.size >= 24
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase

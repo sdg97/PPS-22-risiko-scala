@@ -16,7 +16,6 @@ import scala.swing.{Color, Dimension, Image}
 import scala.collection.mutable.Map
 import scala.swing.MenuBar.NoMenuBar.name
 
-
 object GameScreen:
   private var screen : Option[GameScreenImpl] = None
   def apply(c: Controller) =
@@ -43,7 +42,7 @@ private class GameScreenImpl(c: Controller):
     setBackground(Color.gray)
     setBorder(BorderFactory.createLineBorder(Color.gray, 30))
     setVisible(false)
-  };
+  }
   screen.add(panelAttackPhase)
 
   val turnPanel = new JPanel()
@@ -91,7 +90,6 @@ private class GameScreenImpl(c: Controller):
           } else if (!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer) && c.stateByName(getStateNameFromButton(btnState)).numberOfWagon>1)
             resetButton()
             println("isSelected")
-
             //se clicco su un bottone che non è selezionato lo setto come selezionato
             btnState.setSelected(true)
             //setto tutti i confinanti degli altri giocatori come confinanti
@@ -131,7 +129,6 @@ private class GameScreenImpl(c: Controller):
       buttonMap(state.name).setText(state.numberOfWagon.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
-
 
   private def resetButton(): Unit =
     buttonMap.foreach((_, button) => {

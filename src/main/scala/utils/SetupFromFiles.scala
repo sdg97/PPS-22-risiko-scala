@@ -4,7 +4,7 @@ import model.{Continent, GameMap, State}
 import java.io.File
 import scala.io.Source
 
-object SetupFromFiles {
+object SetupFromFiles:
   def setup(gameMap: GameMap): Unit =
     val stateFile = new File("src/main/resources/config/states.txt")
     val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
@@ -39,7 +39,5 @@ object SetupFromFiles {
         continentStates = continentStates + elem
       }
       val bonus = parts.last.toInt
-      val continent = Continent(continentName, continentStates, bonus)
-      gameMap.addContinent(continent)
+      gameMap.addContinent(Continent(continentName, continentStates, bonus))
     }
-}
