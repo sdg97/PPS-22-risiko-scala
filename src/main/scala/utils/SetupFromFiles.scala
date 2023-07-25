@@ -10,7 +10,7 @@ object SetupFromFiles {
     val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
     stateFileLines.foreach { line =>
       val parts = line.split(",")
-      if (parts.length >= 3) {
+      if (parts.length == 3) {
         val name = parts(0).trim
         val posX = parts(1).trim
         val posY = parts(2).trim
@@ -35,10 +35,11 @@ object SetupFromFiles {
       val parts = line.split(",")
       val continentName = parts(0).trim
       var continentStates: Set[String] = Set()
-      for (elem <- parts.tail) {
+      for (elem <- parts.tail.dropRight(1)) {
         continentStates = continentStates + elem
       }
-      val continent = new ContinentImpl(continentName, continentStates)
+      val bonus = parts.last.toInt
+      val continent = new ContinentImpl(continentName, continentStates, bonus)
       gameMap.addContinent(continent)
     }
 }

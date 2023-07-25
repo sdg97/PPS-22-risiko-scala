@@ -36,19 +36,12 @@ class GameMap extends Graph:
     var wagonToPlace = playerStates(player).size / 3
     val allContinent = false
     val playerStatesName = playerStates(player).map(_.name)
-    _continents.foreach(c => {
-      if(c.states.subsetOf(playerStatesName))
-        c.name match {
-          case "oceania" | "sud america" => wagonToPlace = wagonToPlace + 2
-          case "africa" => wagonToPlace = wagonToPlace + 3
-          case "europa" | "nord america" => wagonToPlace = wagonToPlace + 5
-          case "asia" => wagonToPlace = wagonToPlace + 7
-        }
+    _continents.foreach(continent => {
+      if(continent.states.subsetOf(playerStatesName))
+        wagonToPlace = wagonToPlace + continent.bonus
     })
     player.setTanksToPlace(wagonToPlace)
 
   def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
     stateByName(fromStateName).removeWagon(numberOfWagon)
     stateByName(toStateName).addWagon(numberOfWagon)
-
-
