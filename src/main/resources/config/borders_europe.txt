@@ -1,0 +1,40 @@
+portogallo,spagna
+spagna,francia
+francia,germania
+francia,italia
+francia,regno unito
+francia,irlanda
+regno unito,irlanda
+regno unito,islanda
+regno unito,germania
+germania,polonia
+germania,italia
+germania,repubblica ceca
+germania,norvegia
+germania,svezia
+italia,croazia
+polonia,repubblica ceca
+repubblica ceca,croazia
+repubblica ceca,serbia
+repubblica ceca,romania
+polonia,ucraina
+romania,serbia
+romania,ucraina
+grecia,croazia
+grecia,serbia
+croazia,romania
+serbia,croazia
+turchia,georgia
+turchia,serbia
+georgia,russia
+russia,ucraina
+russia,lituania
+russia,finlandia
+russia,norvegia
+lituania,polonia
+lituania,ucraina
+lituania,finlandia
+norvegia,svezia
+norvegia,finlandia
+norvegia,islanda
+svezia,finlandia
