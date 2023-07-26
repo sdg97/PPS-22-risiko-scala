@@ -5,24 +5,11 @@ import java.awt.{Graphics, LayoutManager}
 import javax.swing.{JPanel, SwingUtilities}
 import scala.swing.{Dimension, Image}
 
-class JPanelScreen(layoutManager: LayoutManager) extends JPanel() with MouseListener{
+class JPanelScreen(layoutManager: LayoutManager) extends JPanel() {
   //val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map_europe.png"))
   setLayout(layoutManager)
-
-  addMouseListener(this)
-  override def mouseClicked(e: MouseEvent): Unit = {
-    if (SwingUtilities.isLeftMouseButton(e)) {
-      val x = e.getX
-      val y = e.getY
-      println(s"Coordinate x: $x, y: $y")
-    }
-  }
-
-  override def mousePressed(e: MouseEvent): Unit = {}
-  override def mouseReleased(e: MouseEvent): Unit = {}
-  override def mouseEntered(e: MouseEvent): Unit = {}
-  override def mouseExited(e: MouseEvent): Unit = {}
+  
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
     // Disegna l'immagine di sfondo
