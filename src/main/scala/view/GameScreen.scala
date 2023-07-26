@@ -38,13 +38,6 @@ private class GameScreenImpl(c: Controller):
   // Crea il pannello per contenere gli elementi della GUI
   val screen = new JPanelScreen(null)
   
-  val panelAttackPhase = new JPanel(null) {
-    setBounds(300, 80, 400, 500)
-    setBackground(Color.gray)
-    setBorder(BorderFactory.createLineBorder(Color.gray, 30))
-    setVisible(false)
-  };
-  screen.add(panelAttackPhase)
 
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
@@ -80,13 +73,7 @@ private class GameScreenImpl(c: Controller):
             resetButton()
           else if (btnState.isNeighbour) {
             println("isNeighbour")
-            //se clicco su un confinante faccio l'attacco
-            panelAttackPhase.removeAll()
-            panelAttackPhase.revalidate()
-            panelAttackPhase.repaint()
-            panelAttackPhase.setVisible(true)
-            val gameWindowAttack = new GameWindowAttack(panelAttackPhase, c, getStateSelected, c.stateByName(getStateNameFromButton(btnState)))
-            gameWindowAttack.show()
+            val gameWindowAttack = new GameWindowAttack( c, getStateSelected, c.stateByName(getStateNameFromButton(btnState)))
             resetButton()
           } else if (!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer) && c.stateByName(getStateNameFromButton(btnState)).numberOfWagon>1)
             resetButton()
