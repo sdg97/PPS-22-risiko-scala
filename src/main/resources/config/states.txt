@@ -5,7 +5,6 @@ ucraina, 540, 180
 scandinavia, 460, 100
 gran bretagna, 380, 170
 islanda, 380, 100
-
 america centrale, 130, 290
 stati uniti orientali, 190, 225
 stati uniti occidentali, 110, 200
@@ -15,19 +14,16 @@ quebec, 250, 150
 alaska, 30, 80
 territori del nord ovest, 140, 70
 groenlandia, 310, 40
-
 venezuela, 175, 350
 brasile, 280, 430
 perù, 175, 430
 argentina, 220, 510
-
 africa del nord, 420, 380
 egitto, 500, 360
 congo, 480, 490
 africa orientale, 560, 440
 africa del sud, 500, 570
 madagascar, 600, 580
-
 medio oriente, 600, 340
 afghanistan, 630, 220
 india, 700, 330
@@ -40,7 +36,6 @@ cita, 760, 130
 jacuzia, 780, 40
 kamchatka, 875, 70
 giappone, 900, 190
-
 indonesia, 800, 480
 nuova guinea, 850, 440
 australia occidentale, 840, 560
