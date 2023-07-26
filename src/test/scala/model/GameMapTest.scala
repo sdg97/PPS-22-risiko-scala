@@ -23,7 +23,7 @@ class GameMapTest extends AnyFunSuite with Matchers:
     map.addNode(italy)
     map.addNode(france)
     map.addEdge("italy", "france")
-    assert(map.neighborStates("italy", player1).contains("france"))
+    assert(map.neighborStatesOfEnemies("italy", player1).contains("france"))
   }
 
   test("Test player's states"){

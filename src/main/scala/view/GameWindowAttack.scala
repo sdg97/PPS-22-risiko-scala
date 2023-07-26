@@ -21,7 +21,6 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     setBackground(Color.gray)
   };
 
-
   val labelAttackState = new JLabel() {
     setForeground(Color.BLACK) // Imposta il colore del testo
     setText(stateAttack.name)
@@ -160,7 +159,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
       buttonClose.setBounds(140, 220, 120, 50)
       labelPlayerMessage.setBounds(40, 340, 300, 80)
       if (controller.getNumberOfRollDiceAttack == 1) {
-        controller.shiftWagon(stateAttack.name, stateDefender.name, controller.getNumberOfRollDiceAttack)
+        controller.moveTanks(stateAttack.name, stateDefender.name, controller.getNumberOfRollDiceAttack)
         controller.updateView()
         buttonClose.setEnabled(true)
       }
@@ -284,7 +283,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
       buttonClose.setEnabled(true)
 
       val numberOfTank = comboBoxMenu.getSelectedItem().toString.toInt
-      controller.shiftWagon(stateAttack,stateDefender,numberOfTank)
+      controller.moveTanks(stateAttack,stateDefender,numberOfTank)
       comboBoxMenu.setEnabled(false)
     })
 

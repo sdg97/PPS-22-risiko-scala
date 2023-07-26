@@ -14,9 +14,9 @@ object ModelModule:
     def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit
     def players: Set[Player]
     def deployTroops(): Unit
-    def neighbors(stateName: String, player: Player): Set[String]
-    def neighborStatesOfPlayer(state: String, player: Player): Set[String]
-    def playerStates(player: Player): Set[State]
+    def neighborStatesOfEnemies(stateName: String): Set[String]
+    def neighborStatesOfPlayer(state: String): Set[String]
+    def currentPlayerStates: Set[State]
     def allStates: Set[State]
     def attack(attacker: State, defender: State): Unit
     @throws(classOf[MyCustomException])
@@ -52,11 +52,11 @@ object ModelModule:
       private val turnPhasesManager = TurnPhasesManager()
       SetupFromFiles.setup(gameMap)
 
-      override def neighbors(stateName: String, player: Player): Set[String] = gameMap.neighborStates(stateName, player)
-      override def neighborStatesOfPlayer(state: String, player: Player): Set[String] = gameMap.neighborStatesOfPlayer(state, player)
+      override def neighborStatesOfPlayer(stateName: String): Set[String] = gameMap.neighborStatesOfPlayer(stateName, currentPlayer)
+      override def neighborStatesOfEnemies(stateName: String): Set[String] = gameMap.neighborStatesOfEnemies(stateName, currentPlayer)
 
-      override def playerStates(player: Player): Set[State] =
-        gameMap.playerStates(player)
+      override def currentPlayerStates: Set[State] =
+        gameMap.playerStates(currentPlayer)
 
       override def currentPlayer: Player = turnManager.get.current
 
@@ -172,10 +172,9 @@ object ModelModule:
       override def numberOfRollDiceAttack(): Int = rollDiceAttack.size
 
       override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
-        gameMap.shiftWagon(fromStateName, toStateName, numberOfWagon)
+        gameMap.moveWagon(fromStateName, toStateName, numberOfWagon)
 
-      private def checkWinner(): Boolean =
-        playerStates(currentPlayer).size >= 24
+      private def checkWinner(): Boolean = currentPlayerStates.size >= 24
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase

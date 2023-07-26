@@ -8,22 +8,22 @@ object ControllerModule:
     def startNewGame() : Unit
     def setGameSettings(inputDataPlayer: Set[(String, String)]) : Unit
     def deployTroops() : Unit
-    def getNeighbor(stateName: String, player: Player): Set[String]
-    def getNeighborStatesOfPlayer(state: String, player: Player): Set[String]
+    def neighborStatesOfEnemies(stateName: String): Set[String]
+    def neighborStatesOfPlayer(state: String): Set[String]
     def stateByName(stateName: String): State
-    def playerStates(player: Player): Set[State]
+    def currentPlayerStates: Set[State]
     def currentPlayer: Player
     def allStates: Set[State]
     def updateView(): Unit
-    def addWagon(stateName: String): Unit
-    def wagonToPlace: Int
+    def addTank(stateName: String): Unit
+    def tanksToPlace: Int
     def switchTurnPhaseActionAvailable :  Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
     def rollDice(typeOfPlayer:String, state:State): Seq[Int]
     def resultAttack(attackerState: State, defenderState: State): Unit
     def attackPhase(attackerState: State, defenderState: State): Unit
     def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
-    def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
+    def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
     def getNumberOfRollDiceAttack:Int
     def currentTurnPhase: RisikoPhase
 
@@ -47,18 +47,18 @@ object ControllerModule:
         model.deployTroops()
         context.view.showGameView()
         view.update()
-      override def getNeighbor(stateName: String, player: Player): Set[String] = model.neighbors(stateName, player)
-      override def getNeighborStatesOfPlayer(state: String, player: Player): Set[String] = model.neighborStatesOfPlayer(state, player)
+      override def neighborStatesOfEnemies(stateName: String): Set[String] = model.neighborStatesOfEnemies(stateName)
+      override def neighborStatesOfPlayer(state: String): Set[String] = model.neighborStatesOfPlayer(state)
       override def stateByName(stateName: String): State = model.stateByName(stateName)
-      override def playerStates(player: Player): Set[State] = model.playerStates(player)
+      override def currentPlayerStates: Set[State] = model.currentPlayerStates
       override def currentPlayer: Player = model.currentPlayer
       override def allStates: Set[State] = model.allStates
       override def updateView(): Unit = view.update()
-      override def addWagon(stateName: String): Unit =
+      override def addTank(stateName: String): Unit =
         model.addTank(stateName)
         view.update()
 
-      override def wagonToPlace: Int = model.tanksToPlace
+      override def tanksToPlace: Int = model.tanksToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] =
         model.switchTurnPhaseActionAvailable
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit =
@@ -75,7 +75,7 @@ object ControllerModule:
 
       override def getNumberOfRollDiceAttack: Int = model.numberOfRollDiceAttack()
 
-      override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
+      override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
         model.moveTanks(fromStateName, toStateName, numberOfWagon)
         view.update()
 
