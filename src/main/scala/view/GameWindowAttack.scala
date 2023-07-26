@@ -21,6 +21,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     setBackground(Color.gray)
   };
 
+
   val labelAttackState = new JLabel() {
     setForeground(Color.BLACK) // Imposta il colore del testo
     setText(stateAttack.name)
@@ -142,8 +143,8 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     panelDadoDefender.repaint()
 
     controller.resultAttack(stateAttack, stateDefender)
-    labelWagonAttackState.setText(stateAttack.numberOfWagon.toString)
-    labelWagonDefenderState.setText(stateDefender.numberOfWagon.toString)
+    labelWagonAttackState.setText(stateAttack.numberOfTanks.toString)
+    labelWagonDefenderState.setText(stateDefender.numberOfTanks.toString)
 
     try {
       controller.attackPhase(stateAttack, stateDefender)
@@ -196,14 +197,14 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
 
   lazy val labelWagonAttackState = new JLabel() {
     setForeground(Color.BLACK) // Imposta il colore del testo
-    setText(stateAttack.numberOfWagon.toString)
+    setText(stateAttack.numberOfTanks.toString)
     setFont(new Font("Arial", 12, 24))
   }
   labelWagonAttackState.setBounds(85, 300, 80, 40)
 
   lazy val labelWagonDefenderState = new JLabel() {
     setForeground(Color.BLACK) // Imposta il colore del testo
-    setText(stateDefender.numberOfWagon.toString)
+    setText(stateDefender.numberOfTanks.toString)
     setFont(new Font("Arial", 12, 24))
   }
   labelWagonDefenderState.setBounds(285, 300, 80, 40)

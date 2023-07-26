@@ -7,7 +7,6 @@ class MovePhaseTest extends AnyFunSuite with Matchers:
 
   val map = new GameMap()
   val player1 = Player("pie", PlayerColor.YELLOW)
-
   val italy = State("italy", 8, player1,0,0)
   val france = State("france", 3, player1,0,0)
 
@@ -15,7 +14,7 @@ class MovePhaseTest extends AnyFunSuite with Matchers:
   map.addNode(france)
 
   test("Test add wagon on my state"){
-    map.moveWagon(italy.name, france.name,3)
-    assert(map.stateByName("italy").numberOfWagon == 5)
-    assert(map.stateByName("france").numberOfWagon == 6)
+    map.moveTanks(italy.name, france.name,3)
+    assert(map.stateByName("italy").numberOfTanks == 5)
+    assert(map.stateByName("france").numberOfTanks == 6)
   }
