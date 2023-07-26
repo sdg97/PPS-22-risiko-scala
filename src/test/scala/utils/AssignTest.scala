@@ -40,7 +40,7 @@ class AssignTest extends AnyFunSpec with Matchers:
         players.foreach(p => {
           val playersStates = states.filter(s => s.player.username == p.username)
           playersStates assign players.START_TANK_NUMBER
-          val sizes = playersStates.map(_.numberOfWagon)
+          val sizes = playersStates.map(_.numberOfTanks)
           val max = sizes.max
           sizes.foreach(s => {
             assert(Math.abs(s - max) <= 1)

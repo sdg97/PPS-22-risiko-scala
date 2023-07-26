@@ -11,15 +11,15 @@ class StateTest extends AnyFunSuite with Matchers:
 
   test("Test create State"){
     assert(state.name=="Brasile")
-    assert(state.numberOfWagon.equals(10))
+    assert(state.numberOfTanks.equals(10))
   }
 
   test("Test add wagon to State"){
-    state.addWagon(2)
-    assert(state.numberOfWagon.equals(12))
+    state.addTanks(2)
+    assert(state.numberOfTanks.equals(12))
   }
 
   test("Test remove wagon to State"){
-    state.removeWagon(2)
-    assert(state.numberOfWagon.equals(10))
+    state.removeTanks(2)
+    assert(state.numberOfTanks.equals(10))
   }

@@ -1,6 +1,5 @@
 package utils
 
-import model.{StateImpl}
 import model.State
 
 import java.io.File

@@ -78,7 +78,7 @@ object ModelModule:
           )))
           turnManager.get.next()
           gameMap.assignStatesToPlayers(turnManager.get.all)
-          gameMap.calcWagonToPlace(currentPlayer)
+          gameMap.calcTanksToPlace(currentPlayer)
         }
       }
 
@@ -91,14 +91,14 @@ object ModelModule:
 
       override def addTank(stateName: String): Unit =
         if(currentPlayer.equals(gameMap.stateByName(stateName).player) && currentPlayer.tanksToPlace > 0)
-          gameMap.stateByName(stateName).addWagon(1)
+          gameMap.stateByName(stateName).addTanks(1)
           currentPlayer.setTanksToPlace(currentPlayer.tanksToPlace-1)
 
       override def tanksToPlace: Int = currentPlayer.tanksToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
 
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match
-        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcWagonToPlace(currentPlayer)
+        case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcTanksToPlace(currentPlayer)
         case _ => turnPhasesManager.trigger(a)
 
       override def attack(attacker: State, defender: State): Unit =
@@ -110,17 +110,17 @@ object ModelModule:
           else if (elem1 <= elem2)
             wagonlostAttacker = wagonlostAttacker + 1
         }
-        attacker.removeWagon(wagonlostAttacker)
-        defender.removeWagon(wagonlostDefender)
+        attacker.removeTanks(wagonlostAttacker)
+        defender.removeTanks(wagonlostDefender)
 
       override def attackResult(attackerState: State, defenderState: State): Unit = {
-        if (attackerState.numberOfWagon > 1 && defenderState.numberOfWagon == 0) {
+        if (attackerState.numberOfTanks > 1 && defenderState.numberOfTanks == 0) {
           defenderState.setPlayer(attackerState.player)
           if(checkWinner())
             throw new MyCustomException("""<html>Great, you are the Winner <br>""")
           throw new MyCustomException("""<html>Great, you conquered <br>""" + defenderState.name)
         }
-        else if (attackerState.numberOfWagon == 1) {
+        else if (attackerState.numberOfTanks == 1) {
           throw new MyCustomException("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + defenderState.name + """</html>""".stripMargin)
         }
       }
@@ -132,19 +132,19 @@ object ModelModule:
         var numberOfDice: Int = 0;
         var resultRollDice = Seq[Int]()
         if (typeOfPlayer.equals("attack")) {
-          if (state.numberOfWagon > 3) {
+          if (state.numberOfTanks > 3) {
             numberOfDice = 3
           } else {
-            numberOfDice = state.numberOfWagon - 1
+            numberOfDice = state.numberOfTanks - 1
           }
           resultRollDice = Seq.fill(numberOfDice)(Random.nextInt(6) + 1).sorted.reverse
           rollDiceAttack = resultRollDice
         }
         else {
-          if (state.numberOfWagon >= 3) {
+          if (state.numberOfTanks >= 3) {
             numberOfDice = 3;
           } else {
-            numberOfDice = state.numberOfWagon;
+            numberOfDice = state.numberOfTanks;
           }
           resultRollDice = Seq.fill(numberOfDice)(Random.nextInt(6) + 1).sorted.reverse
           rollDiceDefender = resultRollDice
@@ -155,16 +155,16 @@ object ModelModule:
       override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = {
         var numberOfDiceAttack = 0
         var numberOfDiceDefender = 0
-        if (attackerState.numberOfWagon > 3) {
+        if (attackerState.numberOfTanks > 3) {
           numberOfDiceAttack = 3;
         } else {
-          numberOfDiceAttack = attackerState.numberOfWagon - 1;
+          numberOfDiceAttack = attackerState.numberOfTanks - 1;
         }
 
-        if (defenderState.numberOfWagon >= 3) {
+        if (defenderState.numberOfTanks >= 3) {
           numberOfDiceDefender = 3;
         } else {
-          numberOfDiceDefender = defenderState.numberOfWagon;
+          numberOfDiceDefender = defenderState.numberOfTanks;
         }
         (numberOfDiceAttack, numberOfDiceDefender)
       }
@@ -172,7 +172,7 @@ object ModelModule:
       override def numberOfRollDiceAttack(): Int = rollDiceAttack.size
 
       override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
-        gameMap.moveWagon(fromStateName, toStateName, numberOfWagon)
+        gameMap.moveTanks(fromStateName, toStateName, numberOfWagon)
 
       private def checkWinner(): Boolean = currentPlayerStates.size >= 24
 

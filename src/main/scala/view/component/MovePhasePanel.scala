@@ -24,7 +24,7 @@ class MovePhasePanel(c: Controller, fromState: String, toState: String) {
   private val plusButton = new JButton("+")
   plusButton.addActionListener(new ActionListener {
     override def actionPerformed(e: ActionEvent): Unit = {
-      if(number < c.stateByName(fromState).numberOfWagon-1)
+      if(number < c.stateByName(fromState).numberOfTanks-1)
         number += 1
         numberLabel.setText(number.toString)
     }

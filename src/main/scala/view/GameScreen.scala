@@ -89,7 +89,7 @@ private class GameScreenImpl(c: Controller):
               val gameWindowAttack = new GameWindowAttack(panelAttackPhase, c, getStateSelected, c.stateByName(getStateNameFromButton(btnState)))
               gameWindowAttack.show()
               resetButton()
-            } else if (!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer) && c.stateByName(getStateNameFromButton(btnState)).numberOfWagon>1)
+            } else if (!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer) && c.stateByName(getStateNameFromButton(btnState)).numberOfTanks>1)
               resetButton()
               println("isSelected")
               //se clicco su un bottone che non è selezionato lo setto come selezionato
@@ -129,7 +129,7 @@ private class GameScreenImpl(c: Controller):
 
       screen.add(btnState)
       buttonMap += (state.name -> btnState)
-      buttonMap(state.name).setText(state.numberOfWagon.toString)
+      buttonMap(state.name).setText(state.numberOfTanks.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
 
@@ -153,7 +153,7 @@ private class GameScreenImpl(c: Controller):
     currentPlayerComponent.update()
     selectPhaseComponent.update()
     c.allStates.foreach(state => {
-      buttonMap(state.name).setText(state.numberOfWagon.toString)
+      buttonMap(state.name).setText(state.numberOfTanks.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
     resetButton()

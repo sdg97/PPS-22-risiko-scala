@@ -202,7 +202,7 @@ private class GameMapGuiImpl(c: Controller):
 
   def update(): Unit =
     c.allStates.foreach(state => {
-      buttonMap(state.name).setText(state.numberOfWagon.toString)
+      buttonMap(state.name).setText(state.numberOfTanks.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
 
     })

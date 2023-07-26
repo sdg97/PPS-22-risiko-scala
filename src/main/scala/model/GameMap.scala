@@ -30,16 +30,16 @@ class GameMap extends Graph:
       playerStates(p) assign players.START_TANK_NUMBER
     )
 
-  def calcWagonToPlace(player: Player): Unit =
+  def calcTanksToPlace(player: Player): Unit =
     val playerStatesSet = playerStates(player)
     val continentBonus = _continents.filter(continent => continent.states.subsetOf(playerStatesSet.map(_.name))).map(_.bonus).sum
     player.setTanksToPlace(playerStatesSet.size / 3 + continentBonus)
 
-  def moveWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
-    stateByName(fromStateName).removeWagon(numberOfWagon)
-    stateByName(toStateName).addWagon(numberOfWagon)
+  def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
+    stateByName(fromStateName).removeTanks(numberOfTanks)
+    stateByName(toStateName).addTanks(numberOfTanks)
 
-  private def isPlayerState(stateName: String, player: Player): Boolean =   stateByName(stateName).player == player
+  private def isPlayerState(stateName: String, player: Player): Boolean = stateByName(stateName).player == player
 
   private def neighborStates(state: String) = _edges collect {
     case (`state`, state2) => state2
