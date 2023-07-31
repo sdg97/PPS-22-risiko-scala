@@ -6,8 +6,8 @@ import javax.swing.{JPanel, SwingUtilities}
 import scala.swing.{Dimension, Image}
 
 class JPanelScreen(layoutManager: LayoutManager) extends JPanel() {
-  //val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
-  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map_europe.png"))
+  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
+  //val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map_europe.png"))
   setLayout(layoutManager)
   
   override def paintComponent(g: Graphics): Unit = {

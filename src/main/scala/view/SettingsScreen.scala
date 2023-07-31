@@ -13,6 +13,7 @@ import javax.swing.border.Border
 import scala.swing.MenuBar.NoMenuBar.listenTo
 import scala.swing.event.ButtonClicked
 import scala.swing.{Dimension, Font, Graphics2D, Image, Insets, Menu, MenuBar, MenuItem}
+import model.{MessageSetting, MyCustomException, Player, State}
 
 /**
  * View for setup simulation.
@@ -109,12 +110,21 @@ private[view] object SettingsScreen {
             panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor" + i)).get.getSelectedItem.toString))
           i += 1
         }
-        try {
-          c.setGameSettings(inputDataPlayer)
-        } catch {
-          case e: MyCustomException =>
-            labelError.setText(e.getMessage)
-        }
+        val message=c.setGameSettings(inputDataPlayer)
+        if(message.equals(MessageSetting.ErrorIncompleteUsernames))
+          labelError.setText("All username field must be completed")
+        else if(message.equals(MessageSetting.ErrorDuplicateUsername))
+          labelError.setText("A username must be assigned at only one player")
+        else if(message.equals(MessageSetting.ErrorSameColorsSelected))
+          labelError.setText("A color must be assigned at only one player")
+        else
+          c.showGameView
+//        try {
+//          c.setGameSettings(inputDataPlayer)
+//        } catch {
+//          case e: MyCustomException =>
+//            labelError.setText(e.getMessage)
+//        }
 
       }
     })

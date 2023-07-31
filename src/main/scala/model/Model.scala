@@ -10,8 +10,7 @@ import view.ViewModule.Requirements
 object ModelModule:
   trait Model {
 
-    @throws(classOf[MyCustomException])
-    def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit
+    def setGameSettings(inputDataPlayer: Set[(String, String)]): MessageSetting
     def players: Set[Player]
     def deployTroops(): Unit
     def neighborStatesOfEnemies(stateName: String): Set[String]
@@ -19,7 +18,7 @@ object ModelModule:
     def currentPlayerStates: Set[State]
     def allStates: Set[State]
     def attack(): Unit
-    def attackResult(): Message
+    def attackResult(): MessageAttackPhase
     def rollDiceAttacker(): Seq[Int]
     def rollDiceDefender(): Seq[Int]
 
@@ -56,6 +55,7 @@ object ModelModule:
       private val attackManager=AttackManager(gameMap)
       private var turnManager : Option[TurnManager[Player]] = None
       private val turnPhasesManager = TurnPhasesManager()
+      private val gameSettingManager= GameSettingManager()
       SetupFromFiles.setup(gameMap)
 
       override def neighborStatesOfPlayer(stateName: String): Set[String] = gameMap.neighborStatesOfPlayer(stateName, currentPlayer)
@@ -68,17 +68,9 @@ object ModelModule:
 
       override def stateByName(stateName: String): State = gameMap.stateByName(stateName)
 
-      override def setGameSettings(inputDataPlayer: Set[(String, String)]): Unit = {
-        if (inputDataPlayer.exists(_._1 == "")) {
-          throw new MyCustomException("All username field must be completed")
-        }
-        else if (inputDataPlayer.exists(element => inputDataPlayer.count(_._2 == element._2) > 1)) {
-          throw new MyCustomException("A color must be assigned at only one player")
-        }
-        else if (inputDataPlayer.exists(element => inputDataPlayer.count(_._1 == element._1) > 1)) {
-          throw new MyCustomException("A username must be assigned at only one player")
-        }
-        else {
+      override def setGameSettings(inputDataPlayer: Set[(String, String)]): MessageSetting =
+        val message=gameSettingManager.setGameSettings(inputDataPlayer)
+        if(message.equals(MessageSetting.CorrectSettings)){
           turnManager = Some(TurnManager(inputDataPlayer.map(element =>
             Player(element._1, PlayerColor.valueOf(element._2))
           )))
@@ -86,7 +78,7 @@ object ModelModule:
           gameMap.assignStatesToPlayers(turnManager.get.all)
           gameMap.calcTanksToPlace(currentPlayer)
         }
-      }
+        message
 
       override def deployTroops(): Unit = println("troop deployed")
 
@@ -109,7 +101,7 @@ object ModelModule:
 
       override def attack(): Unit = attackManager.attack()
 
-      override def attackResult(): Message = attackManager.getMessage
+      override def attackResult(): MessageAttackPhase = attackManager.getMessage
 
       override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = attackManager.getNumberOfDice(attacker, defender)
 

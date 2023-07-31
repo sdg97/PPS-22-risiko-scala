@@ -1,7 +1,7 @@
 package view
 
 import controller.ControllerModule.Controller
-import model.{Message, MyCustomException, Player, State}
+import model.{MessageAttackPhase, MyCustomException, Player, State}
 
 import java.awt.event.ActionEvent
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Polygon}
@@ -148,7 +148,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     labelWagonAttackState.setText(stateAttack.numberOfTanks.toString)
     labelWagonDefenderState.setText(stateDefender.numberOfTanks.toString)
 
-    if(controller.resultAttack().equals(Message.ConqueredState)){
+    if(controller.resultAttack().equals(MessageAttackPhase.ConqueredState)){
       labelPlayerMessage.setText("""<html>Great, you conquered <br>""" + stateDefender.name)
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
@@ -166,7 +166,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
         controller.updateView()
       }
     }
-    else if (controller.resultAttack().equals(Message.LoseAttack)) {
+    else if (controller.resultAttack().equals(MessageAttackPhase.LoseAttack)) {
       labelPlayerMessage.setText("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + stateDefender.name + """</html>""".stripMargin)
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
@@ -175,7 +175,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
       labelPlayerMessage.setBounds(40, 340, 300, 80)
       buttonClose.setEnabled(true)
     }
-    else if(controller.resultAttack().equals(Message.Winner)){
+    else if(controller.resultAttack().equals(MessageAttackPhase.Winner)){
       labelPlayerMessage.setText("""WINNER""")
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)

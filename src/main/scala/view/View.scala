@@ -23,6 +23,7 @@ object ViewModule:
         gw = Some(new GameWindow(controller))
         gw.get.show()
       def showSettingsView() = gw.get changeScreen SettingsScreen(context.controller)
+      
       def showDeploymentTroopsView() = gw.get changeScreen DeployTroopScreen(context.controller)
       def showGameView() = gw.get changeScreen GameScreen(context.controller)
       def update() = GameScreen.update()

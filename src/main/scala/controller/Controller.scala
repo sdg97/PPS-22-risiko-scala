@@ -6,7 +6,7 @@ import view.*
 object ControllerModule:
   trait Controller:
     def startNewGame() : Unit
-    def setGameSettings(inputDataPlayer: Set[(String, String)]) : Unit
+    def setGameSettings(inputDataPlayer: Set[(String, String)]) : MessageSetting
     def deployTroops() : Unit
     def neighborStatesOfEnemies(stateName: String): Set[String]
     def neighborStatesOfPlayer(state: String): Set[String]
@@ -19,7 +19,7 @@ object ControllerModule:
     def tanksToPlace: Int
     def switchTurnPhaseActionAvailable :  Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
-    def resultAttack(): Message
+    def resultAttack(): MessageAttackPhase
     def attackPhase(): Unit
     def numberOfDiceForPlayers(attacker: State, defender: State):(Int,Int)
     def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
@@ -35,6 +35,8 @@ object ControllerModule:
     def rollDiceDefender(): Seq[Int]
     def setDefaultSettings:Unit
 
+    def showGameView:Unit
+
   trait Provider:
     val controller: Controller
 
@@ -47,8 +49,8 @@ object ControllerModule:
         context.view.showSettingsView()
       def setGameSettings(inputDataPlayer: Set[(String, String)]) =
         context.model.setGameSettings(inputDataPlayer)
-        context.model.players.foreach(player => println(player.username + ", " + player.color.toString))
-        context.view.showGameView()
+//        context.model.players.foreach(player => println(player.username + ", " + player.color.toString))
+//        context.view.showGameView()
 
 
       def deployTroops() =
@@ -73,7 +75,7 @@ object ControllerModule:
         model.switchPhase(a)
         view.update()
 
-      override def resultAttack(): Message = model.attackResult()
+      override def resultAttack(): MessageAttackPhase = model.attackResult()
 
       override def attackPhase(): Unit = model.attack()
 
@@ -94,6 +96,8 @@ object ControllerModule:
       override def setDefender(state: State): Unit = model.setDefender(state)
 
       override def setDefaultSettings: Unit = model.setDefaultSettings
+
+      override def showGameView: Unit = context.view.showGameView()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:

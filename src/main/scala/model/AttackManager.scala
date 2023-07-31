@@ -3,7 +3,7 @@ package model
 import scala.collection.immutable.Seq
 import scala.util.Random
 
-enum Message:
+enum MessageAttackPhase:
   case ContinueAttack
   case ConqueredState
   case LoseAttack
@@ -15,7 +15,7 @@ trait AttackManager:
   def getDefender:State
   def getRollDiceAttacker: Seq[Int]
   def getRollDiceDefender: Seq[Int]
-  def getMessage: Message
+  def getMessage: MessageAttackPhase
   def setDefaultSettings:Unit
   def setAttacker(state:State):Unit
   def setDefender(state:State):Unit
@@ -34,7 +34,7 @@ object AttackManager:
     private var rollDiceDefender: Seq[Int] = null
     private var numberOfRollDiceAttacker: Int = 0
     private var numberOfRollDiceDefender: Int = 0
-    private var message:Message= null
+    private var message:MessageAttackPhase= null
 
     override def getNumberOfDice(attacker: State, defender: State): (Int, Int) = (attacker, defender) match
       case (attacker, defender) if attacker.numberOfTanks > 3 && defender.numberOfTanks >= 3 => (3, 3)
@@ -65,17 +65,17 @@ object AttackManager:
       (wagonlostAttacker, wagonlostDefender)
     }
 
-    private def attackResult(attacker: State, defender: State): Message = (attacker, defender) match
+    private def attackResult(attacker: State, defender: State): MessageAttackPhase = (attacker, defender) match
       case (attacker, defender) if attacker.numberOfTanks > 1 && defender.numberOfTanks == 0 =>
         defender.setPlayer(attacker.player)
         if (gameMap.playerStates(attacker.player).size >= 24){
-          Message.Winner
+          MessageAttackPhase.Winner
         }
         else{
-          Message.ConqueredState
+          MessageAttackPhase.ConqueredState
         }
-      case (attacker, defender) if attacker.numberOfTanks ==1 => Message.LoseAttack
-      case _ => Message.ContinueAttack
+      case (attacker, defender) if attacker.numberOfTanks ==1 => MessageAttackPhase.LoseAttack
+      case _ => MessageAttackPhase.ContinueAttack
 
 
     override def attack(): Unit =
@@ -99,7 +99,7 @@ object AttackManager:
 
     override def getRollDiceDefender: Seq[Int] = rollDiceDefender
 
-    override def getMessage: Message = message
+    override def getMessage: MessageAttackPhase = message
 
     override def setAttacker(state: State): Unit = attackerState=state
 
