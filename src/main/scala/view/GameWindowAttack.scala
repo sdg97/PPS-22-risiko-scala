@@ -1,7 +1,7 @@
 package view
 
 import controller.ControllerModule.Controller
-import model.{MyCustomException, Player, State}
+import model.{Message, MyCustomException, Player, State}
 
 import java.awt.event.ActionEvent
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Polygon}
@@ -110,12 +110,15 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     setEnabled(false)
   }
 
+  controller.setAttacker(stateAttack)
+  controller.setDefender(stateDefender)
+
   showAttackPlayerDice(panelDadoAttack)
   showDefenderPlayerDice(panelDadoDefender)
 
-
   buttonAttack.addActionListener(_ => {
-    val rollDiceAttack = controller.rollDice("attack", stateAttack)
+    controller.attackPhase()
+    val rollDiceAttack = controller.rollDiceAttacker()
     showAttackPlayerDice(panelDadoAttack)
 
     for (i <- 0 to rollDiceAttack.size - 1) {
@@ -132,46 +135,48 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
 
 
   buttonDefence.addActionListener(_ => {
-    val rollDiceDefender = controller.rollDice("defender", stateDefender)
+    val rollDiceDefender = controller.rollDiceDefender()
 
     showDefenderPlayerDice(panelDadoDefender)
-    for (i <- 0 to rollDiceDefender.size - 1) {
+    for (i <- 0 to rollDiceDefender.size-1 ) {
       val component = panelDadoDefender.getComponent(i).asInstanceOf[DadoComponent]
       component.setValue(rollDiceDefender(i))
     }
     panelDadoDefender.revalidate()
     panelDadoDefender.repaint()
 
-    controller.resultAttack(stateAttack, stateDefender)
     labelWagonAttackState.setText(stateAttack.numberOfTanks.toString)
     labelWagonDefenderState.setText(stateDefender.numberOfTanks.toString)
 
-    try {
-      controller.attackPhase(stateAttack, stateDefender)
-    } catch {
-      case e: MyCustomException =>
-        labelPlayerMessage.setText(e.getMessage)
-    }
-
-    if (labelPlayerMessage.getText.equals("""<html>Great, you conquered <br>""" + stateDefender.name)) {
+    if(controller.resultAttack().equals(Message.ConqueredState)){
+      labelPlayerMessage.setText("""<html>Great, you conquered <br>""" + stateDefender.name)
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
       panelAttackPhase.remove(buttonDefence)
       buttonClose.setBounds(140, 220, 120, 50)
       labelPlayerMessage.setBounds(40, 340, 300, 80)
-      if (controller.getNumberOfRollDiceAttack == 1) {
-        controller.moveTanks(stateAttack.name, stateDefender.name, controller.getNumberOfRollDiceAttack)
+      val numberOfTanks=controller.numberOfTanksToMove(stateAttack)
+      if ((stateAttack.numberOfTanks)-1 == numberOfTanks) {
+        controller.moveTanks(stateAttack.name, stateDefender.name, numberOfTanks)
         controller.updateView()
         buttonClose.setEnabled(true)
       }
       else {
-        showNumberOfTanksToMove(panelAttackPhase, buttonClose, stateAttack.name, stateDefender.name)
+        showNumberOfTanksToMove(panelAttackPhase, buttonClose, stateAttack.name, stateDefender.name, numberOfTanks)
         controller.updateView()
       }
-
-
     }
-    else if (labelPlayerMessage.getText.equals("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + stateDefender.name + """</html>""".stripMargin)) {
+    else if (controller.resultAttack().equals(Message.LoseAttack)) {
+      labelPlayerMessage.setText("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + stateDefender.name + """</html>""".stripMargin)
+      controller.updateView()
+      panelAttackPhase.remove(buttonAttack)
+      panelAttackPhase.remove(buttonDefence)
+      buttonClose.setBounds(140, 220, 120, 50)
+      labelPlayerMessage.setBounds(40, 340, 300, 80)
+      buttonClose.setEnabled(true)
+    }
+    else if(controller.resultAttack().equals(Message.Winner)){
+      labelPlayerMessage.setText("""WINNER""")
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
       panelAttackPhase.remove(buttonDefence)
@@ -189,10 +194,8 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
   })
 
   buttonClose.addActionListener(_ => {
-    val parent = frame.getParent
+    controller.setDefaultSettings
     frame.setVisible(false)
-    parent.revalidate()
-    parent.repaint()
   })
 
   lazy val labelWagonAttackState = new JLabel() {
@@ -238,8 +241,12 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     panelDadoAttack.removeAll()
     panelDadoAttack.revalidate()
     panelDadoAttack.repaint()
-    val numberOfDice = controller.numberOfDiceForPlayers(stateAttack, stateDefender)
-    for (_ <- 1 to numberOfDice._1) {
+    var numberOfDice=0
+    if(controller.rollDiceAttacker()==null)
+      numberOfDice=controller.numberOfDiceForPlayers(stateAttack,stateDefender)._1
+    else
+      numberOfDice =controller.rollDiceAttacker().size
+    for (_ <- 1 to numberOfDice) {
       val dadoComponentAttack = new DadoComponent("attacker")
       dadoComponentAttack.setPreferredSize(new Dimension(50, 50))
       dadoComponentAttack.setValue(1)
@@ -253,8 +260,12 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     panelDadoDefender.removeAll()
     panelDadoDefender.revalidate()
     panelDadoDefender.repaint()
-    val numberOfDice = controller.numberOfDiceForPlayers(stateAttack, stateDefender)
-    for (_ <- 1 to numberOfDice._2) {
+    var numberOfDice = 0
+    if (controller.rollDiceDefender() == null)
+      numberOfDice = controller.numberOfDiceForPlayers(stateAttack, stateDefender)._2
+    else
+      numberOfDice = controller.rollDiceDefender().size
+    for (_ <- 1 to numberOfDice) {
       val dadoComponentDefence = new DadoComponent("defender")
       dadoComponentDefence.setPreferredSize(new Dimension(50, 50))
       dadoComponentDefence.setValue(1)
@@ -262,7 +273,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     }
   }
 
-  def showNumberOfTanksToMove(panel: JPanel, buttonClose:JButton, stateAttack:String, stateDefender: String):Unit={
+  def showNumberOfTanksToMove(panel: JPanel, buttonClose:JButton, stateAttacks:String, stateDefenders: String, numberOfTanks:Int):Unit={
     val labelNumberOfTanksToMove=new JLabel(){
       setText("""<html>Select the number of tank to move, in the conquared state </html>""")
       setFont(new Font("Arial", 12, 17))
@@ -271,7 +282,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
     }
 
     val arrayOfTankToMove: ArrayBuffer[String]= ArrayBuffer()
-    for(i<-1 to controller.getNumberOfRollDiceAttack){
+    for(i<-controller.numberOfDiceForPlayers(stateAttack,stateDefender)._1 to (numberOfTanks-1)){
       arrayOfTankToMove+=i.toString
     }
 
@@ -284,7 +295,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
       buttonClose.setEnabled(true)
 
       val numberOfTank = comboBoxMenu.getSelectedItem().toString.toInt
-      controller.moveTanks(stateAttack,stateDefender,numberOfTank)
+      controller.moveTanks(stateAttacks,stateDefenders,numberOfTank)
       comboBoxMenu.setEnabled(false)
     })
 

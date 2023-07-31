@@ -19,13 +19,21 @@ object ControllerModule:
     def tanksToPlace: Int
     def switchTurnPhaseActionAvailable :  Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
-    def rollDice(typeOfPlayer:String, state:State): Seq[Int]
-    def resultAttack(attackerState: State, defenderState: State): Unit
-    def attackPhase(attackerState: State, defenderState: State): Unit
-    def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
+    def resultAttack(): Message
+    def attackPhase(): Unit
+    def numberOfDiceForPlayers(attacker: State, defender: State):(Int,Int)
     def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
-    def getNumberOfRollDiceAttack:Int
+    def numberOfTanksToMove(attacker:State):Int
     def currentTurnPhase: RisikoPhase
+
+    def setAttacker(state: State): Unit
+
+    def setDefender(state: State): Unit
+
+    def rollDiceAttacker(): Seq[Int]
+
+    def rollDiceDefender(): Seq[Int]
+    def setDefaultSettings:Unit
 
   trait Provider:
     val controller: Controller
@@ -65,19 +73,27 @@ object ControllerModule:
         model.switchPhase(a)
         view.update()
 
-      override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = model.rollDice(typeOfPlayer,state)
+      override def resultAttack(): Message = model.attackResult()
 
-      override def resultAttack(attackerState: State, defenderState: State): Unit = model.attack(attackerState, defenderState)
+      override def attackPhase(): Unit = model.attack()
 
-      override def attackPhase(attackerState: State, defenderState: State): Unit = model.attackResult(attackerState,defenderState)
-
-      override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = model.numberOfDiceForPlayers(attackerState,defenderState)
-
-      override def getNumberOfRollDiceAttack: Int = model.numberOfRollDiceAttack()
+      override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = model.numberOfDiceForPlayers(attacker, defender)
 
       override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
         model.moveTanks(fromStateName, toStateName, numberOfWagon)
         view.update()
+
+      override def rollDiceAttacker(): Seq[Int] = model.rollDiceAttacker()
+
+      override def rollDiceDefender(): Seq[Int] = model.rollDiceDefender()
+
+      override def numberOfTanksToMove(attacker: State): Int = model.numberOfTanksToMove(attacker)
+
+      override def setAttacker(state: State): Unit = model.setAttacker(state)
+
+      override def setDefender(state: State): Unit = model.setDefender(state)
+
+      override def setDefaultSettings: Unit = model.setDefaultSettings
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:

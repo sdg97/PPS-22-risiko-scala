@@ -18,12 +18,16 @@ object ModelModule:
     def neighborStatesOfPlayer(state: String): Set[String]
     def currentPlayerStates: Set[State]
     def allStates: Set[State]
-    def attack(attacker: State, defender: State): Unit
-    @throws(classOf[MyCustomException])
-    def attackResult(attackerState: State, defenderState: State): Unit
-    def rollDice(typeOfPlayer:String, state:State): Seq[Int]
-    def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
-    def numberOfRollDiceAttack():Int
+    def attack(): Unit
+    def attackResult(): Message
+    def rollDiceAttacker(): Seq[Int]
+    def rollDiceDefender(): Seq[Int]
+
+    def setAttacker(state: State): Unit
+
+    def setDefender(state: State): Unit
+    def numberOfDiceForPlayers(attacker: State, defender: State):(Int,Int)
+    def numberOfTanksToMove(attacker:State):Int
     def currentPlayer: Player
     def stateByName(stateName: String): State
     def addTank(stateName: String): Unit
@@ -32,6 +36,7 @@ object ModelModule:
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
     def currentPhase: RisikoPhase
     def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
+    def setDefaultSettings:Unit
   }
 
   type Requirements = ControllerModule.Provider
@@ -48,6 +53,7 @@ object ModelModule:
 
     class ModelImpl extends Model:
       private val gameMap = new GameMap()
+      private val attackManager=AttackManager(gameMap)
       private var turnManager : Option[TurnManager[Player]] = None
       private val turnPhasesManager = TurnPhasesManager()
       SetupFromFiles.setup(gameMap)
@@ -101,80 +107,29 @@ object ModelModule:
         case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcTanksToPlace(currentPlayer)
         case _ => turnPhasesManager.trigger(a)
 
-      override def attack(attacker: State, defender: State): Unit =
-        var wagonlostAttacker: Int = 0;
-        var wagonlostDefender: Int = 0;
-        rollDiceAttack.zip(rollDiceDefender).map { case (elem1, elem2) =>
-          if (elem1 > elem2)
-            wagonlostDefender = wagonlostDefender + 1
-          else if (elem1 <= elem2)
-            wagonlostAttacker = wagonlostAttacker + 1
-        }
-        attacker.removeTanks(wagonlostAttacker)
-        defender.removeTanks(wagonlostDefender)
+      override def attack(): Unit = attackManager.attack()
 
-      override def attackResult(attackerState: State, defenderState: State): Unit = {
-        if (attackerState.numberOfTanks > 1 && defenderState.numberOfTanks == 0) {
-          defenderState.setPlayer(attackerState.player)
-          if(checkWinner())
-            throw new MyCustomException("""<html>Great, you are the Winner <br>""")
-          throw new MyCustomException("""<html>Great, you conquered <br>""" + defenderState.name)
-        }
-        else if (attackerState.numberOfTanks == 1) {
-          throw new MyCustomException("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + defenderState.name + """</html>""".stripMargin)
-        }
-      }
+      override def attackResult(): Message = attackManager.getMessage
 
-      private var rollDiceAttack = Seq[Int]()
-      private var rollDiceDefender = Seq[Int]()
+      override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = attackManager.getNumberOfDice(attacker, defender)
 
-      override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = {
-        var numberOfDice: Int = 0;
-        var resultRollDice = Seq[Int]()
-        if (typeOfPlayer.equals("attack")) {
-          if (state.numberOfTanks > 3) {
-            numberOfDice = 3
-          } else {
-            numberOfDice = state.numberOfTanks - 1
-          }
-          resultRollDice = Seq.fill(numberOfDice)(Random.nextInt(6) + 1).sorted.reverse
-          rollDiceAttack = resultRollDice
-        }
-        else {
-          if (state.numberOfTanks >= 3) {
-            numberOfDice = 3;
-          } else {
-            numberOfDice = state.numberOfTanks;
-          }
-          resultRollDice = Seq.fill(numberOfDice)(Random.nextInt(6) + 1).sorted.reverse
-          rollDiceDefender = resultRollDice
-        }
-        resultRollDice
-      }
-
-      override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = {
-        var numberOfDiceAttack = 0
-        var numberOfDiceDefender = 0
-        if (attackerState.numberOfTanks > 3) {
-          numberOfDiceAttack = 3;
-        } else {
-          numberOfDiceAttack = attackerState.numberOfTanks - 1;
-        }
-
-        if (defenderState.numberOfTanks >= 3) {
-          numberOfDiceDefender = 3;
-        } else {
-          numberOfDiceDefender = defenderState.numberOfTanks;
-        }
-        (numberOfDiceAttack, numberOfDiceDefender)
-      }
-
-      override def numberOfRollDiceAttack(): Int = rollDiceAttack.size
 
       override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
         gameMap.moveTanks(fromStateName, toStateName, numberOfWagon)
 
       private def checkWinner(): Boolean = currentPlayerStates.size >= 24
+
+      override def rollDiceAttacker(): Seq[Int] = attackManager.getRollDiceAttacker
+
+      override def rollDiceDefender(): Seq[Int] = attackManager.getRollDiceDefender
+
+      override def numberOfTanksToMove(attacker: State): Int = attackManager.numberOfTanksToMove(attacker)
+
+      override def setAttacker(state: State): Unit = attackManager.setAttacker(state)
+
+      override def setDefender(state: State): Unit = attackManager.setDefender(state)
+
+      override def setDefaultSettings: Unit = attackManager.setDefaultSettings
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase
