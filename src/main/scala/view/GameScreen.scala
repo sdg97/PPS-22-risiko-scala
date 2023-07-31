@@ -31,9 +31,6 @@ private class GameScreenImpl(c: Controller):
   private val selectPhaseComponent = new SelectPhaseComponent(c)
   private val currentPhaseComponent = new CurrentPhaseComponent(c)
 
-  // Carica l'immagine di sfondo
-  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
-
   // Crea il pannello per contenere gli elementi della GUI
   val screen = new JPanelScreen(null)
 

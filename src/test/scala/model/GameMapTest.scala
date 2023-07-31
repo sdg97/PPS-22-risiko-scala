@@ -5,7 +5,7 @@ import org.junit.Assert.{assertEquals, assertFalse, assertTrue}
 
 class GameMapTest:
 
-  private val map = new GameMap()
+  private val gameMap = new GameMap()
   private val player1 = Player("pie", PlayerColor.YELLOW)
   private val player2 = Player("martin", PlayerColor.BLUE)
   private val player3 = Player("simo", PlayerColor.BLUE)
@@ -19,60 +19,60 @@ class GameMapTest:
 
   @Before
   def before(): Unit =
-    map.addNode(italy)
-    map.addNode(brazil)
-    map.addNode(france)
-    map.addNode(germany)
-    map.addEdge("italy", "france")
-    map.addEdge("italy", "germany")
-    map.addContinent(europa)
+    gameMap.addNode(italy)
+    gameMap.addNode(brazil)
+    gameMap.addNode(france)
+    gameMap.addNode(germany)
+    gameMap.addEdge("italy", "france")
+    gameMap.addEdge("italy", "germany")
+    gameMap.addContinent(europa)
 
   @Test
   def testPlayerState(): Unit =
-    assert(map.playerStates(player1).contains(italy))
-    assert(map.playerStates(player1).contains(brazil))
+    assert(gameMap.playerStates(player1).contains(italy))
+    assert(gameMap.playerStates(player1).contains(brazil))
 
   @Test
   def testGetStateByName(): Unit =
-    assertEquals(map.stateByName("italy"), italy)
+    assertEquals(gameMap.stateByName("italy"), italy)
 
   @Test
   def testAddContinent(): Unit =
-    assert(map.continents.contains(europa))
+    assert(gameMap.continents.contains(europa))
 
   @Test
   def testCalcTanksToPlaceWithoutContinent(): Unit =
-    map.calcTanksToPlace(player1)
+    gameMap.calcTanksToPlace(player1)
     assertEquals(player1.tanksToPlace,1)
 
   @Test
   def testCalcTanksToPlaceWithContinent(): Unit =
-    map.stateByName("france").setPlayer(player1)
-    map.calcTanksToPlace(player1)
+    gameMap.stateByName("france").setPlayer(player1)
+    gameMap.calcTanksToPlace(player1)
     assertEquals(player1.tanksToPlace, 5)
 
   @Test
   def testAddTanks(): Unit =
-    assertEquals(map.stateByName("italy").numberOfTanks, 3)
-    map.stateByName("italy").addTanks(1)
-    assertEquals(map.stateByName("italy").numberOfTanks, 4)
+    assertEquals(gameMap.stateByName("italy").numberOfTanks, 3)
+    gameMap.stateByName("italy").addTanks(1)
+    assertEquals(gameMap.stateByName("italy").numberOfTanks, 4)
 
   @Test
   def testMoveTanks(): Unit =
-    assertEquals(map.stateByName("italy").numberOfTanks, 3)
-    map.moveTanks("italy", "france", 2)
-    assertEquals(map.stateByName("italy").numberOfTanks, 1)
-    assertEquals(map.stateByName("france").numberOfTanks, 5)
+    assertEquals(gameMap.stateByName("italy").numberOfTanks, 3)
+    gameMap.moveTanks("italy", "france", 2)
+    assertEquals(gameMap.stateByName("italy").numberOfTanks, 1)
+    assertEquals(gameMap.stateByName("france").numberOfTanks, 5)
 
 
   @Test
   def testNeighborsOfEnemies(): Unit =
-    assert(map.neighborStatesOfEnemies("italy", player1).contains("france"))
-    assertFalse(map.neighborStatesOfEnemies("italy", player1).contains("brazil"))
-    assertFalse(map.neighborStatesOfEnemies("italy", player1).contains("germany"))
+    assert(gameMap.neighborStatesOfEnemies("italy", player1).contains("france"))
+    assertFalse(gameMap.neighborStatesOfEnemies("italy", player1).contains("brazil"))
+    assertFalse(gameMap.neighborStatesOfEnemies("italy", player1).contains("germany"))
 
   @Test
   def testNeighborsOfPlayer(): Unit =
-    assert(map.neighborStatesOfPlayer("italy", player1).contains("germany"))
-    assertFalse(map.neighborStatesOfPlayer("italy", player1).contains("france"))
-    assertFalse(map.neighborStatesOfPlayer("italy", player1).contains("brazil"))
+    assert(gameMap.neighborStatesOfPlayer("italy", player1).contains("germany"))
+    assertFalse(gameMap.neighborStatesOfPlayer("italy", player1).contains("france"))
+    assertFalse(gameMap.neighborStatesOfPlayer("italy", player1).contains("brazil"))

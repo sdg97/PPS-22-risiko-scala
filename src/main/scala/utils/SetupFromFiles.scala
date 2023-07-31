@@ -30,9 +30,13 @@ object SetupFromFiles:
         case _ => None
       }
 
-    val stateFile = new File("src/main/resources/config/states.txt")
-    val borderFile = new File("src/main/resources/config/borders.txt")
-    val continentFile = new File("src/main/resources/config/continents.txt")
+//    val stateFile = new File("src/main/resources/config/states_europe.txt")
+//    val borderFile = new File("src/main/resources/config/borders_europe.txt")
+//    val continentFile = new File("src/main/resources/config/continents_europe.txt")
+
+    val stateFile = new File("src/main/resources/config/states_europe.txt")
+    val borderFile = new File("src/main/resources/config/borders_europe.txt")
+    val continentFile = new File("src/main/resources/config/continents_europe.txt")
 
     readLinesFromFile(stateFile).flatMap(parseState).foreach(gameMap.addNode)
     readLinesFromFile(borderFile).flatMap(parseBorder).foreach { (state1, state2) => gameMap.addEdge(state1, state2) }

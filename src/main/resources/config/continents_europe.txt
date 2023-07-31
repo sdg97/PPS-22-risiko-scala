@@ -1,0 +1,5 @@
+europa dell'ovest,portogallo,spagna,regno unito,francia,irlanda,4
+europa del nord,islanda,norvegia,svezia,finlandia,lituania,5
+centro europa,germania,italia,croazia,polonia,repubblica ceca,6
+europa dell'est,romania,serbia,grecia,ucraina,3
+asia europea,russia,turchia,georgia,2
