@@ -34,8 +34,15 @@ object Player:
     new PlayerImpl(username, BLACK)
 
   extension (players: Set[Player])
-    def START_TANK_NUMBER = players.size match
-      case 3 => 35
-      case 4 => 30
-      case 5 => 25
-      case _ => 20
+    def START_TANK_NUMBER(typeOfMap:VersionMap) = typeOfMap match
+      case version if version.equals(VersionMap.Classic) => players.size match
+        case 3 => 35
+        case 4 => 30
+        case 5 => 25
+        case _ => 20
+      case version if version.equals(VersionMap.Europe)=> players.size match
+        case 3 => 18
+        case 4 => 15
+        case 5 => 13
+        case _ => 11
+        

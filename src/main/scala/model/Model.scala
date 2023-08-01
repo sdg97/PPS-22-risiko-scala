@@ -10,7 +10,7 @@ import view.ViewModule.Requirements
 object ModelModule:
   trait Model {
 
-    def setGameSettings(inputDataPlayer: Set[(String, String)]): MessageSetting
+    def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String): MessageSetting
     def players: Set[Player]
     def deployTroops(): Unit
     def neighborStatesOfEnemies(stateName: String): Set[String]
@@ -37,6 +37,7 @@ object ModelModule:
     def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
     def setDefaultAttackSettings:Unit
     def setDefaultInitialSettings():Unit
+    def setTypeOfMap():VersionMap
   }
 
   type Requirements = ControllerModule.Provider
@@ -57,7 +58,7 @@ object ModelModule:
       private var turnManager : Option[TurnManager[Player]] = None
       private var turnPhasesManager = TurnPhasesManager()
       private var gameSettingManager = GameSettingManager()
-      SetupFromFiles.setup(gameMap)
+      
 
       override def neighborStatesOfPlayer(stateName: String): Set[String] = gameMap.neighborStatesOfPlayer(stateName, currentPlayer)
       override def neighborStatesOfEnemies(stateName: String): Set[String] = gameMap.neighborStatesOfEnemies(stateName, currentPlayer)
@@ -69,14 +70,15 @@ object ModelModule:
 
       override def stateByName(stateName: String): State = gameMap.stateByName(stateName)
 
-      override def setGameSettings(inputDataPlayer: Set[(String, String)]): MessageSetting =
-        val message=gameSettingManager.setGameSettings(inputDataPlayer)
+      override def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String): MessageSetting =
+        val message=gameSettingManager.setGameSettings(inputDataPlayer, typeOfMap)
         if(message.equals(MessageSetting.CorrectSettings)){
+          SetupFromFiles.setup(gameMap, setTypeOfMap())
           turnManager = Some(TurnManager(inputDataPlayer.map(element =>
             Player(element._1, PlayerColor.valueOf(element._2))
           )))
           turnManager.get.next()
-          gameMap.assignStatesToPlayers(turnManager.get.all)
+          gameMap.assignStatesToPlayers(turnManager.get.all,setTypeOfMap())
           gameMap.calcTanksToPlace(currentPlayer)
         }
         message
@@ -100,7 +102,7 @@ object ModelModule:
         case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcTanksToPlace(currentPlayer)
         case _ => turnPhasesManager.trigger(a)
 
-      override def attack(): Unit = attackManager.attack()
+      override def attack(): Unit = attackManager.attack(setTypeOfMap())
 
       override def attackResult(): MessageAttackPhase = attackManager.getMessage
 
@@ -129,8 +131,9 @@ object ModelModule:
         attackManager = AttackManager(gameMap)
         turnPhasesManager = TurnPhasesManager()
         gameSettingManager = GameSettingManager()
-        SetupFromFiles.setup(gameMap)
+        
 
+      override def setTypeOfMap(): VersionMap = gameSettingManager.setTypeOfMap()
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase

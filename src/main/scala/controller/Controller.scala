@@ -6,7 +6,7 @@ import view.*
 object ControllerModule:
   trait Controller:
     def startNewGame() : Unit
-    def setGameSettings(inputDataPlayer: Set[(String, String)]) : MessageSetting
+    def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String) : MessageSetting
     def deployTroops() : Unit
     def neighborStatesOfEnemies(stateName: String): Set[String]
     def neighborStatesOfPlayer(state: String): Set[String]
@@ -37,6 +37,7 @@ object ControllerModule:
 
     def showGameView:Unit
     def setDefaultInitialSettings():Unit
+    def setTypeOfMap(): VersionMap
 
   trait Provider:
     val controller: Controller
@@ -48,8 +49,8 @@ object ControllerModule:
     class ControllerImpl extends Controller:
       def startNewGame() =
         context.view.showSettingsView()
-      def setGameSettings(inputDataPlayer: Set[(String, String)]) =
-        context.model.setGameSettings(inputDataPlayer)
+      def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String) =
+        context.model.setGameSettings(inputDataPlayer, typeOfMap)
       
       def deployTroops() =
         model.deployTroops()
@@ -98,6 +99,8 @@ object ControllerModule:
       override def showGameView: Unit = context.view.showGameView()
 
       override def setDefaultInitialSettings(): Unit = model.setDefaultInitialSettings()
+
+      override def setTypeOfMap(): VersionMap = model.setTypeOfMap()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:

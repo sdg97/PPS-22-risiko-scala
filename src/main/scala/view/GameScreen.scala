@@ -32,7 +32,7 @@ private class GameScreenImpl(c: Controller):
   private val currentPhaseComponent = new CurrentPhaseComponent(c)
 
   // Crea il pannello per contenere gli elementi della GUI
-  val screen = new JPanelScreen(null)
+  val screen = new JPanelScreen(null, c.setTypeOfMap())
 
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())

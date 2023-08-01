@@ -22,12 +22,14 @@ class GameMap extends Graph:
   def stateByName(nameState: String): State = _nodes.filter(_.name == nameState).head
 
   def playerStates(player: Player): Set[State] = _nodes.filter(_.player == player)
+  
+  
 
-  def assignStatesToPlayers(players: Set[Player]) =
+  def assignStatesToPlayers(players: Set[Player], versionMap: VersionMap) =
     import utils.AssignGivenInstances.given
     players assign nodes
     players.foreach(p =>
-      playerStates(p) assign players.START_TANK_NUMBER
+      playerStates(p) assign players.START_TANK_NUMBER(versionMap)
     )
 
   def calcTanksToPlace(player: Player): Unit =

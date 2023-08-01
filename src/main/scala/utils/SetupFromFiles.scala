@@ -1,12 +1,12 @@
 package utils
 
-import model.{Continent, GameMap, State}
+import model.{Continent, GameMap, State, VersionMap}
 
 import java.io.File
 import scala.io.Source
 
 object SetupFromFiles:
-  def setup(gameMap: GameMap): Unit = {
+  def setup(gameMap: GameMap, map:VersionMap): Unit = {
     def readLinesFromFile(file: File): Seq[String] = Source.fromFile(file).getLines().toList
 
     def parseState(stateLine: String): Option[State] =
@@ -30,13 +30,19 @@ object SetupFromFiles:
         case _ => None
       }
 
-    val stateFile = new File("src/main/resources/config/states.txt")
-    val borderFile = new File("src/main/resources/config/borders.txt")
-    val continentFile = new File("src/main/resources/config/continents.txt")
+    def setTypeOfMap(): (String, String, String) = map match
+      case typeMap if typeMap==(VersionMap.Classic) =>
+        ("src/main/resources/config/states.txt", "src/main/resources/config/borders.txt", "src/main/resources/config/continents.txt")
+      case typeMap if typeMap==(VersionMap.Europe) =>
+        ("src/main/resources/config/states_europe.txt", "src/main/resources/config/borders_europe.txt", "src/main/resources/config/continents_europe.txt")
+      case _ => null
 
-//    val stateFile = new File("src/main/resources/config/states_europe.txt")
-//    val borderFile = new File("src/main/resources/config/borders_europe.txt")
-//    val continentFile = new File("src/main/resources/config/continents_europe.txt")
+    val resultVersionMap=setTypeOfMap()
+
+    val stateFile = new File(resultVersionMap._1)
+    val borderFile = new File(resultVersionMap._2)
+    val continentFile = new File(resultVersionMap._3)
+    
 
     readLinesFromFile(stateFile).flatMap(parseState).foreach(gameMap.addNode)
     readLinesFromFile(borderFile).flatMap(parseBorder).foreach { (state1, state2) => gameMap.addEdge(state1, state2) }

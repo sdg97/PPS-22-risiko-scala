@@ -10,7 +10,7 @@ enum MessageAttackPhase:
   case Winner
 
 trait AttackManager:
-  def attack(): Unit
+  def attack(typeOfMap:VersionMap): Unit
   def getAttacker: State
   def getDefender:State
   def getRollDiceAttacker: Seq[Int]
@@ -65,20 +65,19 @@ object AttackManager:
       (wagonlostAttacker, wagonlostDefender)
     }
 
-    private def attackResult(attacker: State, defender: State): MessageAttackPhase = (attacker, defender) match
-      case (attacker, defender) if attacker.numberOfTanks > 1 && defender.numberOfTanks == 0 =>
+    private def attackResult(attacker: State, defender: State,typeOfMap:VersionMap): MessageAttackPhase = (attacker, defender, typeOfMap) match
+      case (attacker, defender, mapGame) if attacker.numberOfTanks > 1 && defender.numberOfTanks == 0 =>
         defender.setPlayer(attacker.player)
-        if (gameMap.playerStates(attacker.player).size >= 24){
-          MessageAttackPhase.Winner
-        }
-        else{
-          MessageAttackPhase.ConqueredState
-        }
-      case (attacker, defender) if attacker.numberOfTanks ==1 => MessageAttackPhase.LoseAttack
+        mapGame match
+          case VersionMap.Classic if gameMap.playerStates(attacker.player).size >= 24 => MessageAttackPhase.Winner
+          case VersionMap.Classic if gameMap.playerStates(attacker.player).size < 24 => MessageAttackPhase.ConqueredState
+          case VersionMap.Europe if gameMap.playerStates(attacker.player).size >=13 => MessageAttackPhase.Winner
+          case VersionMap.Europe if gameMap.playerStates(attacker.player).size <13 => MessageAttackPhase.ConqueredState
+      case (attacker, defender,map) if attacker.numberOfTanks ==1 => MessageAttackPhase.LoseAttack
       case _ => MessageAttackPhase.ContinueAttack
 
 
-    override def attack(): Unit =
+    override def attack(typeOfMap:VersionMap): Unit =
       numberOfRollDiceAttacker=getNumberOfDice(attackerState, defenderState)._1
       numberOfRollDiceDefender=getNumberOfDice(attackerState, defenderState)._2
       rollDiceAttacker=rollDice("attacker", attackerState)
@@ -86,7 +85,7 @@ object AttackManager:
       val result=attackProcess(rollDiceAttacker,rollDiceDefender)
       attackerState.removeTanks(result._1)
       defenderState.removeTanks(result._2)
-      message=attackResult(attackerState,defenderState)
+      message=attackResult(attackerState,defenderState, typeOfMap)
 
     override def numberOfTanksToMove(attacker: State): Int = attacker match
       case attacker if (attacker.numberOfTanks - 1).equals(numberOfRollDiceAttacker) => numberOfRollDiceAttacker
