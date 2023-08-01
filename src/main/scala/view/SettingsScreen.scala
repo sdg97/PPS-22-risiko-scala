@@ -119,12 +119,6 @@ private[view] object SettingsScreen {
           labelError.setText("A color must be assigned at only one player")
         else
           c.showGameView
-//        try {
-//          c.setGameSettings(inputDataPlayer)
-//        } catch {
-//          case e: MyCustomException =>
-//            labelError.setText(e.getMessage)
-//        }
 
       }
     })

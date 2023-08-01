@@ -35,7 +35,8 @@ object ModelModule:
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
     def currentPhase: RisikoPhase
     def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
-    def setDefaultSettings:Unit
+    def setDefaultAttackSettings:Unit
+    def setDefaultInitialSettings():Unit
   }
 
   type Requirements = ControllerModule.Provider
@@ -51,11 +52,11 @@ object ModelModule:
     import RisikoSwitchPhaseAction.*
 
     class ModelImpl extends Model:
-      private val gameMap = new GameMap()
-      private val attackManager=AttackManager(gameMap)
+      private var gameMap = new GameMap()
+      private var attackManager = AttackManager(gameMap)
       private var turnManager : Option[TurnManager[Player]] = None
-      private val turnPhasesManager = TurnPhasesManager()
-      private val gameSettingManager= GameSettingManager()
+      private var turnPhasesManager = TurnPhasesManager()
+      private var gameSettingManager = GameSettingManager()
       SetupFromFiles.setup(gameMap)
 
       override def neighborStatesOfPlayer(stateName: String): Set[String] = gameMap.neighborStatesOfPlayer(stateName, currentPlayer)
@@ -121,7 +122,15 @@ object ModelModule:
 
       override def setDefender(state: State): Unit = attackManager.setDefender(state)
 
-      override def setDefaultSettings: Unit = attackManager.setDefaultSettings
+      override def setDefaultAttackSettings: Unit = attackManager.setDefaultSettings
+
+      override def setDefaultInitialSettings(): Unit =
+        gameMap = new GameMap()
+        attackManager = AttackManager(gameMap)
+        turnPhasesManager = TurnPhasesManager()
+        gameSettingManager = GameSettingManager()
+        SetupFromFiles.setup(gameMap)
+
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase

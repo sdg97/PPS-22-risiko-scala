@@ -33,9 +33,10 @@ object ControllerModule:
     def rollDiceAttacker(): Seq[Int]
 
     def rollDiceDefender(): Seq[Int]
-    def setDefaultSettings:Unit
+    def setDefaultAttackSettings:Unit
 
     def showGameView:Unit
+    def setDefaultInitialSettings():Unit
 
   trait Provider:
     val controller: Controller
@@ -49,10 +50,7 @@ object ControllerModule:
         context.view.showSettingsView()
       def setGameSettings(inputDataPlayer: Set[(String, String)]) =
         context.model.setGameSettings(inputDataPlayer)
-//        context.model.players.foreach(player => println(player.username + ", " + player.color.toString))
-//        context.view.showGameView()
-
-
+      
       def deployTroops() =
         model.deployTroops()
         context.view.showGameView()
@@ -95,9 +93,11 @@ object ControllerModule:
 
       override def setDefender(state: State): Unit = model.setDefender(state)
 
-      override def setDefaultSettings: Unit = model.setDefaultSettings
+      override def setDefaultAttackSettings: Unit = model.setDefaultAttackSettings
 
       override def showGameView: Unit = context.view.showGameView()
+
+      override def setDefaultInitialSettings(): Unit = model.setDefaultInitialSettings()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:

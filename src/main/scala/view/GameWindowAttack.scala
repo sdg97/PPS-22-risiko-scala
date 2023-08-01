@@ -4,11 +4,13 @@ import controller.ControllerModule.Controller
 import model.{MessageAttackPhase, MyCustomException, Player, State}
 
 import java.awt.event.ActionEvent
-import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Polygon}
+import java.awt.{BasicStroke, BorderLayout, Color, Event, FlowLayout, Font, Graphics, Polygon}
 import java.util.Random
 import javax.swing.{BorderFactory, BoxLayout, JButton, JComboBox, JComponent, JFrame, JLabel, JPanel, SwingConstants}
 import scala.collection.mutable.ArrayBuffer
-import scala.swing.{Dimension, Graphics2D}
+import scala.swing.MenuBar.NoMenuBar.reactions
+import scala.swing.event.{WindowClosed, WindowClosing}
+import scala.swing.{Dialog, Dimension, Frame, Graphics2D}
 
 class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender:State) {
 
@@ -25,13 +27,13 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
   val labelAttackState = new JLabel() {
     setForeground(Color.BLACK) // Imposta il colore del testo
     setText(stateAttack.name)
-    setFont(new Font("Arial", 12, 17))
+    setFont(new Font("Arial", 12, 16))
   }
   labelAttackState.setBounds(12, 40, 160, 40)
   val labelDefenderState = new JLabel() {
     setForeground(Color.BLACK) // Imposta il colore del testo
     setText(stateDefender.name)
-    setFont(new Font("Arial", 12, 17))
+    setFont(new Font("Arial", 12, 16))
   }
   labelDefenderState.setBounds(220, 40, 160, 40)
 
@@ -176,13 +178,18 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
       buttonClose.setEnabled(true)
     }
     else if(controller.resultAttack().equals(MessageAttackPhase.Winner)){
-      labelPlayerMessage.setText("""WINNER""")
+      labelPlayerMessage.setText("""<html>Congratulation """+stateAttack.player.username+""",<br>you are the WINNER!!! </html>""")
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
       panelAttackPhase.remove(buttonDefence)
       buttonClose.setBounds(140, 220, 120, 50)
       labelPlayerMessage.setBounds(40, 340, 300, 80)
       buttonClose.setEnabled(true)
+      buttonClose.addActionListener(_ => {
+        controller.setDefaultInitialSettings()
+        frame.setVisible(false)
+        controller.startNewGame()
+      })
     }
     else {
       buttonDefence.setEnabled(false)
@@ -194,7 +201,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
   })
 
   buttonClose.addActionListener(_ => {
-    controller.setDefaultSettings
+    controller.setDefaultAttackSettings
     frame.setVisible(false)
   })
 
