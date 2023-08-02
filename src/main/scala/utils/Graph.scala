@@ -56,14 +56,4 @@ case class CantConnectTwoDifferentNodeWithTheSameEdge[X,Y](source: X, n1: X, n2:
   extends Exception(s"Can't connect ${n1} and ${n2} with ${source} using the same edge")
 case class NodeNotFound[X](n:X)
   extends Exception(s"Node ${n} not found in the graph")
-object TryGraph extends App:
-  val g = new GraphWithEdgeImpl with TraversableGraph:
-    override type Node = String
-    override type Edge = Int
 
-  g.addEdge("a", "b", 2)
-  g.addEdge("b", "c", 3)
-  println(g.currentNode)
-  g.crossEdge(2)
-  println(g.currentNode)
-  g.crossEdge(3)

@@ -23,16 +23,6 @@ object TurnManager:
 
     override def all: Set[T] = toManage
 
-object TurnManagerTest extends App:
-  val turnManager : TurnManager[Player] = TurnManager(Set(Player("simone", BLUE),
-    Player("Martin", BLACK),
-    Player("Pietro", YELLOW)))
-
-  println(turnManager.next().username)
-  println(turnManager.next().username)
-  println(turnManager.next().username)
-  println(turnManager.next().username)
-  println(turnManager.next().username)
 
 
 
