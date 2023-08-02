@@ -4,6 +4,7 @@ import view.ViewModule.Requirements
 
 import scala.util.Random
 import controller.ControllerModule
+import model.RisikoRequest.MoveRequest
 import utils.SetupFromFiles
 import view.ViewModule.Requirements
 
@@ -111,6 +112,8 @@ object ModelModule:
 
       override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
         gameMap.moveTanks(fromStateName, toStateName, numberOfWagon)
+        turnPhasesManager.trigger(MoveRequest)
+        turnManager.get.next()
 
       private def checkWinner(): Boolean = currentPlayerStates.size >= 24
 
