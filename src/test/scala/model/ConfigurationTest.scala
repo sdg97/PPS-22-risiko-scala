@@ -13,7 +13,7 @@ class ConfigurationTest:
 
   @Before
   def before(): Unit =
-    SetupFromFiles.setup(gameMap)
+    SetupFromFiles.setup(gameMap, VersionMap.Classic)
 
   @Test
   def testAllStatesAreLoaded(): Unit =

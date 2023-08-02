@@ -23,15 +23,14 @@ trait FSMImpl() extends FSM:
   override def +(p1: Phase, a: Action, p2: Phase): Unit =
     g.addEdge(p1,p2,a)
   override def trigger(a: Action): Phase =
-    println(s"TRIGGER ${a} ${g.currentNode()}")
     g.crossEdge(a)
-    g.currentNode().get
+    g.currentNode.get
   override def currentPhase: Phase =
-    g.currentNode().get
+    g.currentNode.get
   override def next: Set[Phase] =
-    g.getNeighbours(g.currentNode().get)
+    g.getNeighbours(g.currentNode.get)
   override def phases: Set[Phase] = g.nodes
-  override def permittedAction: Set[Action] = g.outEdges(g.currentNode().get)
+  override def permittedAction: Set[Action] = g.outEdges(g.currentNode.get)
 
 
 
