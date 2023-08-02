@@ -24,7 +24,3 @@ def statesFromFile(file: String): Set[State] =
     }
   )
   s.toSet
-object TryRingBuffer extends App:
-  val colors = Array("RED", "GREEN", "YELLOW", "PURPLE", "BLUE", "BLACK")
-  println(shiftLeft(colors))
-
