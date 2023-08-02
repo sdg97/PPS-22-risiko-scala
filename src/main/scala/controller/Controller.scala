@@ -6,26 +6,38 @@ import view.*
 object ControllerModule:
   trait Controller:
     def startNewGame() : Unit
-    def setGameSettings(inputDataPlayer: Set[(String, String)]) : Unit
+    def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String) : MessageSetting
     def deployTroops() : Unit
-    def getNeighbor(stateName: String, player: Player): Set[String]
-    def getNeighborStatesOfPlayer(state: String, player: Player): Set[String]
-    def getState(stateName: String): State
-    def getPlayerStates(player: Player): Set[State]
-    def getCurrentPlayer(): Player
-    def getAllStates(): Set[State]
+    def neighborStatesOfEnemies(stateName: String): Set[String]
+    def neighborStatesOfPlayer(state: String): Set[String]
+    def stateByName(stateName: String): State
+    def currentPlayerStates: Set[State]
+    def currentPlayer: Player
+    def allStates: Set[State]
     def updateView(): Unit
-    def addWagon(stateName: String): Unit
-    def wagonToPlace(): Int
+    def addTank(stateName: String): Unit
+    def tanksToPlace: Int
     def switchTurnPhaseActionAvailable :  Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
-    def rollDice(typeOfPlayer:String, state:State): Seq[Int]
-    def resultAttack(attackerState: State, defenderState: State): Unit
-    def attackPhase(attackerState: State, defenderState: State): Unit
-    def numberOfDiceForPlayers(attackerState: State, defenderState: State):(Int,Int)
-    def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
-    def getNumberOfRollDiceAttack:Int
+    def resultAttack(): MessageAttackPhase
+    def attackPhase(): Unit
+    def numberOfDiceForPlayers(attacker: State, defender: State):(Int,Int)
+    def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
+    def numberOfTanksToMove(attacker:State):Int
     def currentTurnPhase: RisikoPhase
+
+    def setAttacker(state: State): Unit
+
+    def setDefender(state: State): Unit
+
+    def rollDiceAttacker(): Seq[Int]
+
+    def rollDiceDefender(): Seq[Int]
+    def setDefaultAttackSettings:Unit
+
+    def showGameView:Unit
+    def setDefaultInitialSettings():Unit
+    def setTypeOfMap(): VersionMap
 
   trait Provider:
     val controller: Controller
@@ -37,43 +49,58 @@ object ControllerModule:
     class ControllerImpl extends Controller:
       def startNewGame() =
         context.view.showSettingsView()
-      def setGameSettings(inputDataPlayer: Set[(String, String)]) =
-        context.model.setGameSettings(inputDataPlayer)
-        context.model.getPlayers().foreach(player => println(player.username + ", " + player.color.toString))
-        context.view.showGameView()
-
-
+      def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String) =
+        context.model.setGameSettings(inputDataPlayer, typeOfMap)
+      
       def deployTroops() =
         model.deployTroops()
         context.view.showGameView()
         view.update()
-      override def getNeighbor(stateName: String, player: Player): Set[String] = model.getNeighbor(stateName, player)
-      override def getNeighborStatesOfPlayer(state: String, player: Player): Set[String] = model.getNeighborStatesOfPlayer(state, player)
-      override def getState(stateName: String): State = model.getState(stateName)
-      override def getPlayerStates(player: Player): Set[State] = model.getPlayerStates(player)
-      override def getCurrentPlayer(): Player = model.getCurrentPlayer()
-      override def getAllStates(): Set[State] = model.getAllStates
+      override def neighborStatesOfEnemies(stateName: String): Set[String] = model.neighborStatesOfEnemies(stateName)
+      override def neighborStatesOfPlayer(state: String): Set[String] = model.neighborStatesOfPlayer(state)
+      override def stateByName(stateName: String): State = model.stateByName(stateName)
+      override def currentPlayerStates: Set[State] = model.currentPlayerStates
+      override def currentPlayer: Player = model.currentPlayer
+      override def allStates: Set[State] = model.allStates
       override def updateView(): Unit = view.update()
-      override def addWagon(stateName: String): Unit = model.addWagon(stateName)
+      override def addTank(stateName: String): Unit =
+        model.addTank(stateName)
+        view.update()
 
-      override def wagonToPlace(): Int = model.wagonToPlace()
+      override def tanksToPlace: Int = model.tanksToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] =
         model.switchTurnPhaseActionAvailable
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit =
         model.switchPhase(a)
         view.update()
 
-      override def rollDice(typeOfPlayer: String, state: State): Seq[Int] = model.rollDice(typeOfPlayer,state)
+      override def resultAttack(): MessageAttackPhase = model.attackResult()
 
-      override def resultAttack(attackerState: State, defenderState: State): Unit = model.resultAttack(attackerState, defenderState)
+      override def attackPhase(): Unit = model.attack()
 
-      override def attackPhase(attackerState: State, defenderState: State): Unit = model.attackPhase(attackerState,defenderState)
+      override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = model.numberOfDiceForPlayers(attacker, defender)
 
-      override def numberOfDiceForPlayers(attackerState: State, defenderState: State): (Int, Int) = model.numberOfDiceForPlayers(attackerState,defenderState)
+      override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
+        model.moveTanks(fromStateName, toStateName, numberOfWagon)
+        view.update()
 
-      override def getNumberOfRollDiceAttack: Int = model.getNumberOfRollDiceAttack()
+      override def rollDiceAttacker(): Seq[Int] = model.rollDiceAttacker()
 
-      override def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit = model.shiftWagon(fromStateName, toStateName, numberOfWagon)
+      override def rollDiceDefender(): Seq[Int] = model.rollDiceDefender()
+
+      override def numberOfTanksToMove(attacker: State): Int = model.numberOfTanksToMove(attacker)
+
+      override def setAttacker(state: State): Unit = model.setAttacker(state)
+
+      override def setDefender(state: State): Unit = model.setDefender(state)
+
+      override def setDefaultAttackSettings: Unit = model.setDefaultAttackSettings
+
+      override def showGameView: Unit = context.view.showGameView()
+
+      override def setDefaultInitialSettings(): Unit = model.setDefaultInitialSettings()
+
+      override def setTypeOfMap(): VersionMap = model.setTypeOfMap()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:

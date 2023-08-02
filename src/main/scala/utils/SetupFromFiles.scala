@@ -1,45 +1,50 @@
 package utils
 
-import model.{Continent, ContinentImpl, GameMap, StateImpl}
+import model.{Continent, GameMap, State, VersionMap}
 
 import java.io.File
 import scala.io.Source
 
-object SetupFromFiles {
-  def setup(gameMap: GameMap): Unit =
-    val stateFile = new File("src/main/resources/config/states.txt")
-    val stateFileLines: Seq[String] = Source.fromFile(stateFile).getLines().toList
-    stateFileLines.foreach { line =>
-      val parts = line.split(",")
-      if (parts.length >= 3) {
-        val name = parts(0).trim
-        val posX = parts(1).trim
-        val posY = parts(2).trim
-        gameMap.addNode(new StateImpl(name, 0, null, posX.toInt, posY.toInt))
-      }
-    }
+object SetupFromFiles:
+  def setup(gameMap: GameMap, map:VersionMap): Unit = {
+    def readLinesFromFile(file: File): Seq[String] = Source.fromFile(file).getLines().toList
 
-    val borderFile = new File("src/main/resources/config/borders.txt")
-    val borderFileLines: Seq[String] = Source.fromFile(borderFile).getLines().toList
-    borderFileLines.foreach { line =>
-      val parts = line.split(",")
-      if (parts.length >= 2) {
-        val state1 = parts(0).trim
-        val state2 = parts(1).trim
-        gameMap.addEdge(state1, state2)
+    def parseState(stateLine: String): Option[State] =
+      stateLine.split(",").toList match {
+        case name :: posX :: posY :: Nil => Some(State(name.trim, 0, null, posX.trim.toInt, posY.trim.toInt))
+        case _ => None
       }
-    }
 
-    val continentFile = new File("src/main/resources/config/continents.txt")
-    val continentFileLines: Seq[String] = Source.fromFile(continentFile).getLines().toList
-    continentFileLines.foreach { line =>
-      val parts = line.split(",")
-      val continentName = parts(0).trim
-      var continentStates: Set[String] = Set()
-      for (elem <- parts.tail) {
-        continentStates = continentStates + elem
+    def parseBorder(borderLine: String): Option[(String, String)] =
+      borderLine.split(",").toList match {
+        case state1 :: state2 :: Nil => Some((state1.trim, state2.trim))
+        case _ => None
       }
-      val continent = new ContinentImpl(continentName, continentStates)
-      gameMap.addContinent(continent)
-    }
-}
+
+    def parseContinent(continentLine: String): Option[Continent] =
+      continentLine.split(",").toList match {
+        case continentName :: other if other.nonEmpty =>
+          val continentStates = other.dropRight(1).map(_.trim).toSet
+          val bonus = other.last.trim.toInt
+          Some(Continent(continentName.trim, continentStates, bonus))
+        case _ => None
+      }
+
+    def setTypeOfMap(): (String, String, String) = map match
+      case typeMap if typeMap==(VersionMap.Classic) =>
+        ("src/main/resources/config/states.txt", "src/main/resources/config/borders.txt", "src/main/resources/config/continents.txt")
+      case typeMap if typeMap==(VersionMap.Europe) =>
+        ("src/main/resources/config/states_europe.txt", "src/main/resources/config/borders_europe.txt", "src/main/resources/config/continents_europe.txt")
+      case _ => null
+
+    val resultVersionMap=setTypeOfMap()
+
+    val stateFile = new File(resultVersionMap._1)
+    val borderFile = new File(resultVersionMap._2)
+    val continentFile = new File(resultVersionMap._3)
+    
+
+    readLinesFromFile(stateFile).flatMap(parseState).foreach(gameMap.addNode)
+    readLinesFromFile(borderFile).flatMap(parseBorder).foreach { (state1, state2) => gameMap.addEdge(state1, state2) }
+    readLinesFromFile(continentFile).flatMap(parseContinent).foreach(gameMap.addContinent)
+  }

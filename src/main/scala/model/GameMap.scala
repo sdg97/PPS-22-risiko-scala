@@ -1,55 +1,49 @@
 package model
 import utils.Graph
 
-
 class GameMap extends Graph:
   override type Node = State
-  private var edgesSet = Set[(String,String)]()
-  private var nodeSet = Set[State]()
-  private var continentSet = Set[Continent]()
+  private var _edges = Set[(String,String)]()
+  private var _nodes = Set[State]()
+  private var _continents = Set[Continent]()
 
-  override def nodes: Set[State] = nodeSet
-  override def edges: Set[(String,String)] = edgesSet
-  override def addEdge(state1: String, state2: String): Unit = edgesSet += ((state1,state2))
-  override def addNode(state: State): Unit = nodeSet += state
-  def continents: Set[Continent] = continentSet
-  def addContinent(continent: Continent): Unit = continentSet += continent
+  override def nodes: Set[State] = _nodes
+  override def edges: Set[(String,String)] = _edges
+  override def addEdge(state1: String, state2: String): Unit = _edges += (state1,state2)
+  override def addNode(state: State): Unit = _nodes += state
 
-  def getNeighborStates(state: String, player: Player): Set[String] = edgesSet collect {
-      case (`state`, state2) if getStateByName(state2).player != player => state2
-      case (state2, `state`) if getStateByName(state2).player != player => state2
-  }
-  def getNeighborStatesOfPlayer(state: String, player: Player): Set[String] = edgesSet collect {
-    case (`state`, state2) if getStateByName(state2).player == player => state2
-    case (state2, `state`) if getStateByName(state2).player == player => state2
-  }
-  def getStateByName(nameState: String): State = nodeSet.filter(s => s.name == nameState).head
-  def getPlayerStates(player: Player): Set[State] = nodeSet.filter(s => s.player.username.equals(player.username))
+  def continents: Set[Continent] = _continents
+  def addContinent(continent: Continent): Unit = _continents += continent
 
-  def assignStatesToPlayers(players: Set[Player]) =
+  def neighborStatesOfEnemies(stateName: String, player: Player): Set[String] = neighborStates(stateName) filterNot(s => isPlayerState(s, player))
+
+  def neighborStatesOfPlayer(stateName: String, player: Player): Set[String] = neighborStates(stateName) filter(s => isPlayerState(s, player))
+
+  def stateByName(nameState: String): State = _nodes.filter(_.name == nameState).head
+
+  def playerStates(player: Player): Set[State] = _nodes.filter(_.player == player)
+  
+  
+
+  def assignStatesToPlayers(players: Set[Player], versionMap: VersionMap) =
     import utils.AssignGivenInstances.given
-    players assign nodeSet
+    players assign nodes
     players.foreach(p =>
-        getPlayerStates(p) assign players.START_TANK_NUMBER
+      playerStates(p) assign players.START_TANK_NUMBER(versionMap)
     )
-    
-  def calcWagonToPlace(player: Player): Unit =
-    var wagonToPlace = getPlayerStates(player).size / 3
-    val allContinent = false
-    val playerStatesName = getPlayerStates(player).map(_.name)
-    continentSet.foreach(c => {
-      if(c.states.subsetOf(playerStatesName))
-        c.name match {
-          case "oceania" | "sud america" => wagonToPlace = wagonToPlace + 2
-          case "africa" => wagonToPlace = wagonToPlace + 3
-          case "europa" | "nord america" => wagonToPlace = wagonToPlace + 5
-          case "asia" => wagonToPlace = wagonToPlace + 7
-        }
-    })
-    player.setWagonToPlace(wagonToPlace)
 
-  def shiftWagon(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
-    getStateByName(fromStateName).removeWagon(numberOfWagon)
-    getStateByName(toStateName).addWagon(numberOfWagon)
+  def calcTanksToPlace(player: Player): Unit =
+    val playerStatesSet = playerStates(player)
+    val continentBonus = _continents.filter(continent => continent.states.subsetOf(playerStatesSet.map(_.name))).map(_.bonus).sum
+    player.setTanksToPlace(playerStatesSet.size / 3 + continentBonus)
 
+  def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
+    stateByName(fromStateName).removeTanks(numberOfTanks)
+    stateByName(toStateName).addTanks(numberOfTanks)
 
+  private def isPlayerState(stateName: String, player: Player): Boolean = stateByName(stateName).player == player
+
+  private def neighborStates(state: String) = _edges collect {
+    case (`state`, state2) => state2
+    case (state2, `state`) => state2
+  }

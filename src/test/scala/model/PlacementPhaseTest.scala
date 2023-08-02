@@ -6,16 +6,16 @@ import org.scalatest.matchers.should.Matchers
 class PlacementPhaseTest extends AnyFunSuite with Matchers:
 
   val map = new GameMap()
-  val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
-  val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
+  val player1 = Player("pie", PlayerColor.YELLOW)
+  val player2 = Player("martin", PlayerColor.BLUE)
 
-  val italy = new StateImpl("italy", 3, player1,0,0)
-  val france = new StateImpl("france", 3, player2,0,0)
+  val italy = State("italy", 3, player1,0,0)
+  val france = State("france", 3, player2,0,0)
 
   map.addNode(italy)
   map.addNode(france)
 
   test("Test add wagon on my state"){
-    italy.addWagon(1)
-    assert(map.getStateByName("italy").numberOfWagon == 4)
+    italy.addTanks(1)
+    assert(map.stateByName("italy").numberOfTanks == 4)
   }

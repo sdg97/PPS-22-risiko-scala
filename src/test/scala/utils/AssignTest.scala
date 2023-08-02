@@ -1,5 +1,6 @@
 package utils
 
+import model.PlayerColor.BLACK
 import model.{Player, State}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
@@ -38,8 +39,8 @@ class AssignTest extends AnyFunSpec with Matchers:
         players assign states
         players.foreach(p => {
           val playersStates = states.filter(s => s.player.username == p.username)
-          playersStates.assign(players.START_TANK_NUMBER)
-          val sizes = playersStates.map(_.numberOfWagon)
+          playersStates assign players.START_TANK_NUMBER
+          val sizes = playersStates.map(_.numberOfTanks)
           val max = sizes.max
           sizes.foreach(s => {
             assert(Math.abs(s - max) <= 1)

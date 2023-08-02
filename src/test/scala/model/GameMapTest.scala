@@ -1,34 +1,78 @@
 package model
 
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers
+import org.junit.{Before, Test}
+import org.junit.Assert.{assertEquals, assertFalse, assertTrue}
 
-class GameMapTest extends AnyFunSuite with Matchers:
+class GameMapTest:
 
-  val map = new GameMap()
-  val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
-  val player2 = new PlayerImpl("martin", PlayerColor.BLUE)
-  val player3 = new PlayerImpl("simo", PlayerColor.BLUE)
+  private val gameMap = new GameMap()
+  private val player1 = Player("pie", PlayerColor.YELLOW)
+  private val player2 = Player("martin", PlayerColor.BLUE)
+  private val player3 = Player("simo", PlayerColor.BLUE)
 
-  val italy = new StateImpl("italy", 3, player1,0,0)
-  val france = new StateImpl("france", 3, player2,0,0)
-  val brazil = new StateImpl("brazil", 5, player1,0,0)
+  private val italy = State("italy", 3, player1, 0, 0)
+  private val france = State("france", 3, player2, 0, 0)
+  private val germany = State("germany", 3, player1, 0, 0)
+  private val brazil = State("brazil", 5, player1, 0, 0)
 
-  test("Test add Node"){
-    map.addNode(italy)
-    assert(map.getStateByName("italy").equals(italy))
-  }
+  private val europa = Continent("europa", Set("italy", "germany", "france"), 4)
 
-  test("Test neighbour"){
-    map.addNode(italy)
-    map.addNode(france)
-    map.addEdge("italy", "france")
-    assert(map.getNeighborStates("italy", player1).contains("france"))
-  }
+  @Before
+  def before(): Unit =
+    gameMap.addNode(italy)
+    gameMap.addNode(brazil)
+    gameMap.addNode(france)
+    gameMap.addNode(germany)
+    gameMap.addEdge("italy", "france")
+    gameMap.addEdge("italy", "germany")
+    gameMap.addContinent(europa)
 
-  test("Test player's states"){
-    map.addNode(italy)
-    map.addNode(brazil)
-    assert(map.getPlayerStates(player1).contains(italy))
-    assert(map.getPlayerStates(player1).contains(brazil))
-  }
+  @Test
+  def testPlayerState(): Unit =
+    assert(gameMap.playerStates(player1).contains(italy))
+    assert(gameMap.playerStates(player1).contains(brazil))
+
+  @Test
+  def testGetStateByName(): Unit =
+    assertEquals(gameMap.stateByName("italy"), italy)
+
+  @Test
+  def testAddContinent(): Unit =
+    assert(gameMap.continents.contains(europa))
+
+  @Test
+  def testCalcTanksToPlaceWithoutContinent(): Unit =
+    gameMap.calcTanksToPlace(player1)
+    assertEquals(player1.tanksToPlace,1)
+
+  @Test
+  def testCalcTanksToPlaceWithContinent(): Unit =
+    gameMap.stateByName("france").setPlayer(player1)
+    gameMap.calcTanksToPlace(player1)
+    assertEquals(player1.tanksToPlace, 5)
+
+  @Test
+  def testAddTanks(): Unit =
+    assertEquals(gameMap.stateByName("italy").numberOfTanks, 3)
+    gameMap.stateByName("italy").addTanks(1)
+    assertEquals(gameMap.stateByName("italy").numberOfTanks, 4)
+
+  @Test
+  def testMoveTanks(): Unit =
+    assertEquals(gameMap.stateByName("italy").numberOfTanks, 3)
+    gameMap.moveTanks("italy", "france", 2)
+    assertEquals(gameMap.stateByName("italy").numberOfTanks, 1)
+    assertEquals(gameMap.stateByName("france").numberOfTanks, 5)
+
+
+  @Test
+  def testNeighborsOfEnemies(): Unit =
+    assert(gameMap.neighborStatesOfEnemies("italy", player1).contains("france"))
+    assertFalse(gameMap.neighborStatesOfEnemies("italy", player1).contains("brazil"))
+    assertFalse(gameMap.neighborStatesOfEnemies("italy", player1).contains("germany"))
+
+  @Test
+  def testNeighborsOfPlayer(): Unit =
+    assert(gameMap.neighborStatesOfPlayer("italy", player1).contains("germany"))
+    assertFalse(gameMap.neighborStatesOfPlayer("italy", player1).contains("france"))
+    assertFalse(gameMap.neighborStatesOfPlayer("italy", player1).contains("brazil"))

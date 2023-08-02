@@ -1,0 +1,23 @@
+portogallo,151,555
+spagna,230,560
+francia,318,460
+italia,455,535
+croazia,505,486
+grecia,585,580
+serbia,625,500
+bulgaria,0,0
+turchia,755,535
+romania,638,445
+repubblica ceca,556,425
+germania,417,375
+regno unito,280,330
+irlanda,210,300
+polonia,560,355
+ucraina,678,326
+lituania,580,235
+russia,760,155
+georgia,920,495
+islanda,190,70
+norvegia,400,180
+svezia,470,140
+finlandia,546,135

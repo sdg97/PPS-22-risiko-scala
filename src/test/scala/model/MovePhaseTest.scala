@@ -6,16 +6,15 @@ import org.scalatest.matchers.should.Matchers
 class MovePhaseTest extends AnyFunSuite with Matchers:
 
   val map = new GameMap()
-  val player1 = new PlayerImpl("pie", PlayerColor.YELLOW)
-
-  val italy = new StateImpl("italy", 8, player1,0,0)
-  val france = new StateImpl("france", 3, player1,0,0)
+  val player1 = Player("pie", PlayerColor.YELLOW)
+  val italy = State("italy", 8, player1,0,0)
+  val france = State("france", 3, player1,0,0)
 
   map.addNode(italy)
   map.addNode(france)
 
   test("Test add wagon on my state"){
-    map.shiftWagon(italy.name, france.name,3)
-    assert(map.getStateByName("italy").numberOfWagon == 5)
-    assert(map.getStateByName("france").numberOfWagon == 6)
+    map.moveTanks(italy.name, france.name,3)
+    assert(map.stateByName("italy").numberOfTanks == 5)
+    assert(map.stateByName("france").numberOfTanks == 6)
   }

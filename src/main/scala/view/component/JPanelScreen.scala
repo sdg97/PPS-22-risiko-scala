@@ -1,12 +1,22 @@
 package view.component
 
+import model.VersionMap
+
+import java.awt.event.{MouseEvent, MouseListener}
 import java.awt.{Graphics, LayoutManager}
-import javax.swing.JPanel
+import javax.swing.{JPanel, SwingUtilities}
 import scala.swing.{Dimension, Image}
 
-class JPanelScreen(layoutManager: LayoutManager) extends JPanel(){
-  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
+class JPanelScreen(layoutManager: LayoutManager, map:VersionMap) extends JPanel() {
+
+  def setImage():String= map match
+    case typeOfMap if typeOfMap.equals(VersionMap.Europe) => "src/main/resources/img_map_europe.png"
+    case typeOfMap if typeOfMap.equals(VersionMap.Classic) => "src/main/resources/img_map.png"
+
+  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File(setImage()))
+  //val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map_europe.png"))
   setLayout(layoutManager)
+  
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
     // Disegna l'immagine di sfondo
@@ -20,4 +30,5 @@ class JPanelScreen(layoutManager: LayoutManager) extends JPanel(){
     g.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight, null)
   }
   setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
+
 }
