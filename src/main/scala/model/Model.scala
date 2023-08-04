@@ -136,7 +136,7 @@ object ModelModule:
         gameSettingManager = GameSettingManager()
         
 
-      override def setTypeOfMap(): VersionMap = gameSettingManager.setTypeOfMap()
+      override def setTypeOfMap(): VersionMap = gameSettingManager.getTypeOfMap()
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase

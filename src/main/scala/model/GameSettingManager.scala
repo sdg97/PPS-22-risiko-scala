@@ -13,7 +13,6 @@ enum VersionMap:
 
 trait GameSettingManager:
   def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String):MessageSetting
-  def setTypeOfMap():VersionMap
   def getTypeOfMap():VersionMap
 
 object GameSettingManager:
@@ -30,9 +29,7 @@ object GameSettingManager:
         map=typeOfMap
         MessageSetting.CorrectSettings
 
-    override def getTypeOfMap(): VersionMap = setTypeOfMap()
-
-    override def setTypeOfMap(): VersionMap = map match
+    override def getTypeOfMap(): VersionMap = map match
       case typeMap if typeMap.equals("Classic") => VersionMap.Classic
       case typeMap if typeMap.equals("Europe") => VersionMap.Europe
       case _ => null

@@ -42,7 +42,7 @@ object AttackManager:
       case (attacker, defender) if attacker.numberOfTanks <= 3 && defender.numberOfTanks >= 3 => (attacker.numberOfTanks - 1, 3)
       case (attacker, defender) if attacker.numberOfTanks <= 3 && defender.numberOfTanks < 3 => (attacker.numberOfTanks - 1, defender.numberOfTanks)
       case _ => null
-    private def rollDice(typeOfPlayer: String, state: State): Seq[Int] = (typeOfPlayer, state) match
+    def rollDice(typeOfPlayer: String, state: State): Seq[Int] = (typeOfPlayer, state) match
       case ("attacker", state) if state.numberOfTanks > 3 =>
         Seq.fill(numberOfRollDiceAttacker)(Random.nextInt(6) + 1).sorted.reverse
       case ("attacker", state) if state.numberOfTanks <= 3 =>
@@ -53,7 +53,7 @@ object AttackManager:
         Seq.fill(numberOfRollDiceDefender)(Random.nextInt(6) + 1).sorted.reverse
       case _=>null
 
-    private def attackProcess(diceAttack: Seq[Int], diceDefence: Seq[Int]): (Int, Int) = {
+    def attackProcess(diceAttack: Seq[Int], diceDefence: Seq[Int]): (Int, Int) = {
       var wagonlostAttacker: Int = 0;
       var wagonlostDefender: Int = 0;
       diceAttack.sorted.reverse.zip(diceDefence.sorted.reverse).map { case (elem1, elem2) =>
@@ -65,7 +65,7 @@ object AttackManager:
       (wagonlostAttacker, wagonlostDefender)
     }
 
-    private def attackResult(attacker: State, defender: State,typeOfMap:VersionMap): MessageAttackPhase = (attacker, defender, typeOfMap) match
+    def attackResult(attacker: State, defender: State,typeOfMap:VersionMap): MessageAttackPhase = (attacker, defender, typeOfMap) match
       case (attacker, defender, mapGame) if attacker.numberOfTanks > 1 && defender.numberOfTanks == 0 =>
         defender.setPlayer(attacker.player)
         mapGame match
@@ -105,6 +105,8 @@ object AttackManager:
     override def setDefender(state: State): Unit = defenderState=state
 
     override def setDefaultSettings: Unit =
+      attackerState=null
+      defenderState=null
       rollDiceAttacker= null
       rollDiceDefender= null
       numberOfRollDiceAttacker= 0

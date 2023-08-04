@@ -17,7 +17,7 @@ Sprint 1: 5-11 July
 | I need to define the states neighbours                          | make the method to read neighbour from config file and add edges in the graph | Lelli     | 0                          | 0 | 0 | 1 | 2 | 0 |
 | I need to view the states of a user                             | make the method to filter the states                                          | Lelli     | 0                          | 0 | 0 | 0 | 1 | 2 |
 
-Sprint 2: 13-19 June
+Sprint 2: 13-19 July
 
 |                                                                |                                                                                                                               |           |                            |     |     |     |     |     |   |   |
 |----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-----------|----------------------------|-----|-----|-----|-----|-----|---|---|
