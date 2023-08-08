@@ -117,6 +117,7 @@ object ModelModule:
         if(turnPhasesManager.currentPhase == Move){
           turnPhasesManager.trigger(MoveRequest)
           turnManager.get.next()
+          gameMap.calcTanksToPlace(currentPlayer)
         }
 
       private def checkWinner(): Boolean = currentPlayerStates.size >= 24
