@@ -1,15 +1,53 @@
 package model
 
 trait State:
+  /**
+   *
+   * @return the name of the state.
+   */
   def name: String
-  def numberOfTanks: Int
-  def player: Player
-  def posX: Int
-  def posY: Int
-  def addTanks(numberOfTanksToAdd: Int): Unit
-  def removeTanks(numberOfTanksToRemove: Int): Unit
-  def setPlayer(p: Player): Unit
 
+  /**
+   *
+   * @return an integer representing the number of tanks in the state.
+   */
+  def numberOfTanks: Int
+
+  /**
+   *
+   * @return the player owning the state.
+   */
+  def player: Player
+
+  /**
+   *
+   * @return the x-coordinate of the state in the map.
+   */
+  def posX: Int
+
+  /**
+   *
+   * @return the y-coordinate of the state in the map.
+   */
+  def posY: Int
+
+  /**
+   * method to add tanks to a state.
+   * @param numberOfTanksToAdd the number of tanks to add to the state.
+   */
+  def addTanks(numberOfTanksToAdd: Int): Unit
+
+  /**
+   *  method to remove tanks from a state.
+   * @param numberOfTanksToRemove the number of tanks to remove from the state.
+   */
+  def removeTanks(numberOfTanksToRemove: Int): Unit
+
+  /**
+   * method to assign state to a player.
+   * @param  p the player to assign the status to.
+   */
+  def setPlayer(p: Player): Unit
 
 object State:
   private class StateImpl(_name: String, var _numberOfTanks: Int, var _player: Player, _posX: Int, _posY: Int) extends State:

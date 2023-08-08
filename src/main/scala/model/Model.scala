@@ -15,9 +15,29 @@ object ModelModule:
     def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String): MessageSetting
     def players: Set[Player]
     def deployTroops(): Unit
+
+    /**
+     * @param stateName the state's name from which to search for neighbors
+     * @return a Set of the names of neighboring states with the state passed as a parameter and owned by enemy players
+     */
     def neighborStatesOfEnemies(stateName: String): Set[String]
-    def neighborStatesOfPlayer(state: String): Set[String]
+
+    /**
+     * @param stateName the state's name from which to search for neighbors
+     * @return a Set of the names of neighboring states with the state passed as a parameter and owned by the player passed as a parameter
+     */
+    def neighborStatesOfPlayer(stateName: String): Set[String]
+
+    /**
+     *
+     * @return a Set of all states owned by the current player
+     */
     def currentPlayerStates: Set[State]
+
+    /**
+     *
+     * @return a Set of all the states
+     */
     def allStates: Set[State]
     def attack(): Unit
     def attackResult(): MessageAttackPhase
@@ -29,14 +49,42 @@ object ModelModule:
     def setDefender(state: State): Unit
     def numberOfDiceForPlayers(attacker: State, defender: State):(Int,Int)
     def numberOfTanksToMove(attacker:State):Int
+
+    /**
+     *
+     * @return the current player
+     */
     def currentPlayer: Player
+
+    /**
+     * @param stateName the name of the state
+     * @return the state object
+     */
     def stateByName(stateName: String): State
+
+    /**
+     * @param stateName the name of the state to assign the tanks to
+     * @return a Set of all states owned by the current player
+     */
     def addTank(stateName: String): Unit
+
+    /**
+     * @return the number of tanks that the current player can place.
+     */
     def tanksToPlace: Int
     def switchTurnPhaseActionAvailable : Set[RisikoAction]
     def switchPhase(a: RisikoSwitchPhaseAction): Unit
     def currentPhase: RisikoPhase
-    def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
+
+    /**
+     *
+     * moves tanks from a state to another state
+     *
+     * @param fromStateName starting state
+     * @param toStateName   arrival status
+     * @param numberOfTanks the number of tanks to move
+     */
+    def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit
     def setDefaultAttackSettings:Unit
     def setDefaultInitialSettings():Unit
     def setTypeOfMap():VersionMap
@@ -111,8 +159,8 @@ object ModelModule:
       override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = attackManager.getNumberOfDice(attacker, defender)
 
 
-      override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
-        gameMap.moveTanks(fromStateName, toStateName, numberOfWagon)
+      override def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
+        gameMap.moveTanks(fromStateName, toStateName, numberOfTanks)
         println(turnManager.get.current)
         if(turnPhasesManager.currentPhase == Move){
           turnPhasesManager.trigger(MoveRequest)

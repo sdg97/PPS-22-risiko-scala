@@ -1,8 +1,22 @@
 package model
 
 trait Continent:
+  /**
+   *
+   * @return the name of the continent.
+   */
   def name: String
+
+  /**
+   *
+   * @return the Set of all the names of the states that make up the continent.
+   */
   def states: Set[String]
+
+  /**
+   *
+   * @return an integer representing the number of bonus tanks you get if you own all states on the continent.
+   */
   def bonus: Int
 
 object Continent:
