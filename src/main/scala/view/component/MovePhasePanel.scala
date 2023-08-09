@@ -12,7 +12,7 @@ class MovePhasePanel(c: Controller, fromState: String, toState: String) {
 
   private val mainContainer = new JPanel()
   mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS))
-  mainContainer.setBackground(Color.DARK_GRAY) // Impostiamo lo sfondo grigio scuro
+  mainContainer.setBackground(Color.DARK_GRAY)
 
   private val titleLabel = new JLabel("Numero di carri armati da spostare: ")
   titleLabel.setHorizontalAlignment(SwingConstants.CENTER)
@@ -20,6 +20,8 @@ class MovePhasePanel(c: Controller, fromState: String, toState: String) {
   headerPanel.add(titleLabel)
 
   private var number = 1
+  private val numberLabel = new JLabel(number.toString)
+  numberLabel.setHorizontalAlignment(SwingConstants.CENTER)
 
   private val plusButton = new JButton("+")
   plusButton.addActionListener(new ActionListener {
@@ -29,9 +31,6 @@ class MovePhasePanel(c: Controller, fromState: String, toState: String) {
         numberLabel.setText(number.toString)
     }
   })
-
-  private val numberLabel = new JLabel(number.toString)
-  numberLabel.setHorizontalAlignment(SwingConstants.CENTER)
 
   private val minusButton = new JButton("-")
   minusButton.addActionListener(new ActionListener {
@@ -55,6 +54,7 @@ class MovePhasePanel(c: Controller, fromState: String, toState: String) {
       frame.dispose()
     }
   })
+
   private val confirmPanel = new JPanel(new FlowLayout())
   confirmPanel.add(confirmButton)
 

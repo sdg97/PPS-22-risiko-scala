@@ -7,19 +7,17 @@ import java.awt.{Graphics, LayoutManager}
 import javax.swing.{JPanel, SwingUtilities}
 import scala.swing.{Dimension, Image}
 
-class JPanelScreen(layoutManager: LayoutManager, map:VersionMap) extends JPanel() {
+class JPanelScreen(layoutManager: LayoutManager, versionMap:VersionMap) extends JPanel() {
 
-  def setImage():String= map match
-    case typeOfMap if typeOfMap.equals(VersionMap.Europe) => "src/main/resources/img_map_europe.png"
-    case typeOfMap if typeOfMap.equals(VersionMap.Classic) => "src/main/resources/img_map.png"
-
+  private def setImage():String = versionMap match {
+    case VersionMap.Europe => "src/main/resources/img_map_europe.png"
+    case VersionMap.Classic => "src/main/resources/img_map.png"
+  }
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File(setImage()))
-  //val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map_europe.png"))
   setLayout(layoutManager)
   
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
-    // Disegna l'immagine di sfondo
     val widthRatio = getWidth.toDouble / backgroundImage.getWidth(null)
     val heightRatio = getHeight.toDouble / backgroundImage.getHeight(null)
     val scaleFactor = Math.max(widthRatio, heightRatio)
@@ -29,6 +27,5 @@ class JPanelScreen(layoutManager: LayoutManager, map:VersionMap) extends JPanel(
     val y = (getHeight - scaledHeight) / 2
     g.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight, null)
   }
-  setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
-
+  setPreferredSize(new Dimension(1000, 650))
 }
