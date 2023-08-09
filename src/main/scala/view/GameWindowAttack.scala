@@ -6,7 +6,7 @@ import model.{MessageAttackPhase, MyCustomException, Player, State}
 import java.awt.event.ActionEvent
 import java.awt.{BasicStroke, BorderLayout, Color, Event, FlowLayout, Font, Graphics, Polygon}
 import java.util.Random
-import javax.swing.{BorderFactory, BoxLayout, JButton, JComboBox, JComponent, JFrame, JLabel, JPanel, SwingConstants}
+import javax.swing.{BorderFactory, BoxLayout, JButton, JComboBox, JComponent, JFrame, JLabel, JPanel, SwingConstants, WindowConstants}
 import scala.collection.mutable.ArrayBuffer
 import scala.swing.MenuBar.NoMenuBar.reactions
 import scala.swing.event.{WindowClosed, WindowClosing}
@@ -16,6 +16,7 @@ class GameWindowAttack(controller: Controller, stateAttack: State, stateDefender
 
   val frame = new JFrame("Wagon to shift")
   frame.setSize(420, 520)
+  frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
   //frame.setLayout(new BorderLayout())
 
   val panelAttackPhase = new JPanel(null) {
