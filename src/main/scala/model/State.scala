@@ -50,6 +50,7 @@ trait State:
   def setPlayer(p: Player): Unit
 
 object State:
+
   private class StateImpl(_name: String, var _numberOfTanks: Int, var _player: Player, _posX: Int, _posY: Int) extends State:
     override def name: String = _name
     override def numberOfTanks: Int = _numberOfTanks
@@ -72,7 +73,6 @@ object State:
   def apply(name: String, numberOfTanks: Int, player: Player, posX: Int, posY: Int): State =
     new StateImpl(name, numberOfTanks, player, posX, posY)
 
-  //da modificare o da togliere
   def apply(name: String) : State =
     new StateImpl(name, 0, Player("mock"), 0, 0)
 
