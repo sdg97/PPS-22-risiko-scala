@@ -5,7 +5,7 @@ import model.{Player, PlayerColor, RisikoPhase, State}
 import view.component.{CurrentPhaseComponent, CurrentPlayerComponent, JButtonExtended, JPanelScreen, MovePhasePanel, SelectPhaseComponent}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
-import java.awt.event.{ActionEvent, ActionListener, MouseAdapter, MouseEvent}
+import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent, MouseListener}
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.io.{File, FileReader}
 import java.util.Random
@@ -31,8 +31,10 @@ private class GameScreenImpl(controller: Controller):
   private val selectPhaseComponent = new SelectPhaseComponent(controller)
   private val currentPhaseComponent = new CurrentPhaseComponent(controller)
 
+
   // Crea il pannello per contenere gli elementi della GUI
   val screen = new JPanelScreen(null, controller.setTypeOfMap())
+
 
   val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
@@ -74,11 +76,10 @@ private class GameScreenImpl(controller: Controller):
               resetButton()
             else if (btnState.isNeighbour) {
               println("isNeighbour")
-              disableButtons(screen,false)
               //se clicco su un confinante faccio l'attacco
               controller.setAttacker(getStateSelected)
               controller.setDefender(controller.stateByName(getStateNameFromButton(btnState)))
-              val gameWindowAttack = new GameWindowAttack(screen,controller)
+              val gameWindowAttack = new GameWindowAttack(this,controller)
               resetButton()
             } else if (!btnState.isSelected && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer) && controller.stateByName(getStateNameFromButton(btnState)).numberOfTanks>1)
               resetButton()
@@ -95,8 +96,7 @@ private class GameScreenImpl(controller: Controller):
             if(btnState.isSelected)
               resetButton()
             else if(btnState.isNeighbour)
-              disableButtons(screen,false)
-              val movePanel = new MovePhasePanel(controller, getStateSelected.name, getStateNameFromButton(btnState), screen)
+              val movePanel = new MovePhasePanel(this, controller, getStateSelected.name, getStateNameFromButton(btnState))
               resetButton()
             else if(!btnState.isSelected && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer))
               resetButton()
@@ -110,9 +110,6 @@ private class GameScreenImpl(controller: Controller):
 
 
 
-//      btnState.addActionListener((_:MyButtonClickEvent)=>{
-//        btnState.setEnabled(true)
-//      })
 
       btnState.addMouseListener(new MouseAdapter() {
         override def mouseEntered(evt: MouseEvent): Unit = {
@@ -147,9 +144,10 @@ private class GameScreenImpl(controller: Controller):
     controller.stateByName(buttonMap.find((_, button) => button.isSelected).get._1)
 
   def update(): Unit =
-    currentPhaseComponent.update()
-    currentPlayerComponent.update()
-    selectPhaseComponent.update()
+    if(buttonMap.head._2.isEnabled)
+      currentPhaseComponent.update()
+      currentPlayerComponent.update()
+      selectPhaseComponent.update()
     controller.allStates.foreach(state => {
       buttonMap(state.name).setText(state.numberOfTanks.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
@@ -157,9 +155,9 @@ private class GameScreenImpl(controller: Controller):
     resetButton()
 
 
-  def disableButtons(container: JPanel, enable:Boolean): Unit = {
-    container.getComponents.filter(_.isInstanceOf[JButtonExtended]).foreach(
-      button => button.setEnabled(enable)
-    )
-    selectPhaseComponent.disableButtons(false)
-  }
+  def setClickable(enable:Boolean): Unit =
+    buttonMap.values.foreach(_.setEnabled(enable))
+    selectPhaseComponent.setButtonsEnabled(enable)
+
+
+

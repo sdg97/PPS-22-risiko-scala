@@ -15,7 +15,7 @@ import scala.swing.{Dialog, Dimension, Frame, Graphics2D}
 
 case class MyButtonClickEvent(button: JButton) extends scala.swing.event.Event
 
-class GameWindowAttack(gameView: JPanel, controller: Controller) {
+class GameWindowAttack(gameScreen:GameScreenImpl,controller: Controller) {
 
   val frame = new JFrame("Wagon to shift")
   frame.setSize(420, 520)
@@ -25,6 +25,7 @@ class GameWindowAttack(gameView: JPanel, controller: Controller) {
   private val stateAttack=controller.getAttacker()
   private val stateDefender=controller.getDefender()
 
+  gameScreen.setClickable(false)
 
   val panelAttackPhase = new JPanel(null) {
     setBounds(1, 1, 420, 520)
@@ -209,9 +210,7 @@ class GameWindowAttack(gameView: JPanel, controller: Controller) {
   buttonClose.addActionListener(_ => {
     controller.setDefaultAttackSettings
     frame.setVisible(false)
-    gameView.getComponents.filter(_.isInstanceOf[JButtonExtended]).foreach(
-      button => button.setEnabled(true)
-    )
+    gameScreen.setClickable(true)
   })
 
   lazy val labelWagonAttackState = new JLabel() {

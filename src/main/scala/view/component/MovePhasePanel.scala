@@ -1,14 +1,19 @@
 package view.component
 import controller.ControllerModule.Controller
+import view.GameScreenImpl
 
 import javax.swing.*
 import java.awt.*
 import java.awt.event.*
 
-class MovePhasePanel(c: Controller, fromState: String, toState: String, gameView: JPanel) {
+
+class MovePhasePanel(gameScreen:GameScreenImpl, c: Controller, fromState: String, toState: String) {
   val frame = new JFrame("Wagon to shift")
   frame.setSize(300, 200)
   frame.setLayout(new BorderLayout())
+  frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
+
+  gameScreen.setClickable(false)
 
   private val mainContainer = new JPanel()
   mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS))
@@ -51,12 +56,10 @@ class MovePhasePanel(c: Controller, fromState: String, toState: String, gameView
   confirmButton.addActionListener(new ActionListener {
     override def actionPerformed(e: ActionEvent): Unit = {
       c.moveTanks(fromState, toState, number)
+      gameScreen.setClickable(true)
       frame.dispose()
     }
-
-    gameView.getComponents.filter(_.isInstanceOf[JButtonExtended]).foreach(
-      button => button.setEnabled(true)
-    )
+    
   })
 
   private val confirmPanel = new JPanel(new FlowLayout())
