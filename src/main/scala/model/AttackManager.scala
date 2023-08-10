@@ -44,9 +44,9 @@ object AttackManager:
       case _ => null
     def rollDice(typeOfPlayer: String, state: State): Seq[Int] = (typeOfPlayer, state) match
       case ("attacker", state) if state.numberOfTanks > 3 =>
-        Seq.fill(numberOfRollDiceAttacker)(6).sorted.reverse
+        Seq.fill(numberOfRollDiceAttacker)(Random.nextInt(6) + 1).sorted.reverse
       case ("attacker", state) if state.numberOfTanks <= 3 =>
-        Seq.fill(numberOfRollDiceAttacker)(6).sorted.reverse
+        Seq.fill(numberOfRollDiceAttacker)(Random.nextInt(6) + 1).sorted.reverse
       case ("defender", state) if state.numberOfTanks >= 3 =>
         Seq.fill(numberOfRollDiceDefender)(Random.nextInt(6) + 1).sorted.reverse
       case ("defender", state) if state.numberOfTanks < 3 =>

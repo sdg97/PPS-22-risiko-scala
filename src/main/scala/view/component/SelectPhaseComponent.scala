@@ -13,6 +13,12 @@ private[view] class SelectPhaseComponent(private val c: Controller) {
     update()
     panel
 
+  def disableButtons(enable:Boolean): Unit = {
+    panel.getComponents.filter(_.isInstanceOf[JButton]).foreach(
+      button => button.setEnabled(enable)
+    )
+
+  }
 
   def update() =
     panel.removeAll()

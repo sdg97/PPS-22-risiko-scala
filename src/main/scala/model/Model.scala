@@ -15,6 +15,9 @@ object ModelModule:
     def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String): MessageSetting
     def players: Set[Player]
     def deployTroops(): Unit
+    
+    def getAttacker():State
+    def getDefender():State
 
     /**
      * @param stateName the state's name from which to search for neighbors
@@ -190,6 +193,10 @@ object ModelModule:
         
 
       override def setTypeOfMap(): VersionMap = gameSettingManager.getTypeOfMap()
+
+      override def getAttacker(): State = attackManager.getAttacker
+
+      override def getDefender(): State = attackManager.getDefender
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase

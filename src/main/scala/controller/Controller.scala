@@ -34,6 +34,9 @@ object ControllerModule:
 
     def rollDiceDefender(): Seq[Int]
     def setDefaultAttackSettings:Unit
+    
+    def getAttacker():State
+    def getDefender():State
 
     def showGameView:Unit
     def setDefaultInitialSettings():Unit
@@ -101,6 +104,10 @@ object ControllerModule:
       override def setDefaultInitialSettings(): Unit = model.setDefaultInitialSettings()
 
       override def setTypeOfMap(): VersionMap = model.setTypeOfMap()
+
+      override def getAttacker(): State = model.getAttacker()
+
+      override def getDefender(): State = model.getDefender()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:

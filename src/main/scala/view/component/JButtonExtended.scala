@@ -1,14 +1,22 @@
 package view.component
 
+import view.MyButtonClickEvent
+
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.awt.{Color, Font, Graphics, Graphics2D}
 import javax.swing.{BorderFactory, JButton}
+import scala.collection.mutable.ListBuffer
 import scala.swing.Color
+
+trait MyButtonClickEventListener {
+  def buttonClickEventOccurred(event: MyButtonClickEvent): Unit
+}
 
 class JButtonExtended(posX: Int, posY: Int) extends JButton() {
   private var _isNeighbour: Boolean = false
   private var _color: Color = Color.DARK_GRAY
-
+  private val listeners = ListBuffer[MyButtonClickEventListener]()
+  
   def setIsNeighbour(value: Boolean): Unit =
     _isNeighbour = value
 

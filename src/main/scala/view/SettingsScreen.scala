@@ -2,7 +2,6 @@ package view
 
 
 import controller.ControllerModule.Controller
-import model.MyCustomException
 import utils.shiftLeft
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D, RoundRectangle2D}
@@ -13,7 +12,7 @@ import javax.swing.border.Border
 import scala.swing.MenuBar.NoMenuBar.listenTo
 import scala.swing.event.ButtonClicked
 import scala.swing.{Dimension, Font, Graphics2D, Image, Insets, Menu, MenuBar, MenuItem}
-import model.{MessageSetting, MyCustomException, Player, State}
+import model.{MessageSetting, Player, State}
 
 /**
  * View for setup simulation.
