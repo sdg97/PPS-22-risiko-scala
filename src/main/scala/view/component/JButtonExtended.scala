@@ -8,15 +8,10 @@ import javax.swing.{BorderFactory, JButton}
 import scala.collection.mutable.ListBuffer
 import scala.swing.Color
 
-trait MyButtonClickEventListener {
-  def buttonClickEventOccurred(event: MyButtonClickEvent): Unit
-}
-
 class JButtonExtended(posX: Int, posY: Int) extends JButton() {
   private var _isNeighbour: Boolean = false
   private var _color: Color = Color.DARK_GRAY
-  private val listeners = ListBuffer[MyButtonClickEventListener]()
-  
+
   def setIsNeighbour(value: Boolean): Unit =
     _isNeighbour = value
 
@@ -24,7 +19,7 @@ class JButtonExtended(posX: Int, posY: Int) extends JButton() {
     _isNeighbour
 
   def color: Color = _color
-  def setColor(c: Color) = _color = c
+  def setColor(c: Color): Unit = _color = c
 
   setBorder(BorderFactory.createEmptyBorder())
   setContentAreaFilled(false)

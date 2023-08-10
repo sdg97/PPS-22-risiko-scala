@@ -31,12 +31,9 @@ private class GameScreenImpl(controller: Controller):
   private val selectPhaseComponent = new SelectPhaseComponent(controller)
   private val currentPhaseComponent = new CurrentPhaseComponent(controller)
 
-
-  // Crea il pannello per contenere gli elementi della GUI
   val screen = new JPanelScreen(null, controller.setTypeOfMap())
 
-
-  val turnPanel = new JPanel()
+  private val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
   turnPanel.add(currentPhaseComponent.get())
   turnPanel.add(selectPhaseComponent.get())
@@ -51,7 +48,7 @@ private class GameScreenImpl(controller: Controller):
   setupButtons()
 
   private def getStateNameFromButton(button: JButton): String =
-    buttonMap.find((n, b) => {
+    buttonMap.find((_, b) => {
       b.equals(button)
     }).get._1
 
@@ -102,9 +99,6 @@ private class GameScreenImpl(controller: Controller):
               })
         }
       })
-
-
-
 
       btnState.addMouseListener(new MouseAdapter() {
         override def mouseEntered(evt: MouseEvent): Unit = {

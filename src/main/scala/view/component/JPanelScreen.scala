@@ -16,7 +16,6 @@ class JPanelScreen(layoutManager: LayoutManager, versionMap:VersionMap) extends 
   val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File(setImage()))
   setLayout(layoutManager)
   
-  
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
     val widthRatio = getWidth.toDouble / backgroundImage.getWidth(null)
