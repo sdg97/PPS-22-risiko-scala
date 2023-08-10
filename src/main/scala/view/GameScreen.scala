@@ -55,16 +55,11 @@ private class GameScreenImpl(controller: Controller):
       b.equals(button)
     }).get._1
 
-
-
-
-
   private def setupButtons(): Unit =
     if(controller.currentTurnPhase.equals(RisikoPhase.StartTurn))
       screen.add(wagonPanel)
     controller.allStates.foreach(state => {
-      val btnState = new JButtonExtended(state.posX, state.posY)
-
+      val btnState = new JButtonExtended(state.position._1, state.position._2)
       btnState.addActionListener((_: ActionEvent) => {
         controller.currentTurnPhase match {
           case RisikoPhase.StartTurn =>
@@ -145,19 +140,17 @@ private class GameScreenImpl(controller: Controller):
 
   def update(): Unit =
     if(buttonMap.head._2.isEnabled)
-      currentPhaseComponent.update()
-      currentPlayerComponent.update()
       selectPhaseComponent.update()
+    currentPhaseComponent.update()
+    currentPlayerComponent.update()
     controller.allStates.foreach(state => {
       buttonMap(state.name).setText(state.numberOfTanks.toString)
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
     resetButton()
 
-
   def setClickable(enable:Boolean): Unit =
     buttonMap.values.foreach(_.setEnabled(enable))
     selectPhaseComponent.setButtonsEnabled(enable)
-
-
-
+    if(enable)
+      selectPhaseComponent.update()

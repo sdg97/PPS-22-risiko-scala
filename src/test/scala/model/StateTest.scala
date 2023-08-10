@@ -7,7 +7,7 @@ import scala.util.Random
 
 class StateTest extends AnyFunSuite with Matchers:
   val player = Player("player1", PlayerColor.YELLOW)
-  val state = State("Brasile", 10, player,0,0)
+  val state = State("Brasile", 10, player)
 
   test("Test create State"){
     assert(state.name=="Brasile")
