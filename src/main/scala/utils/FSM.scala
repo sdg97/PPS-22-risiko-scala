@@ -1,9 +1,18 @@
 package utils
 
+/**
+ * Final State Machine
+ */
 trait FSM:
   type Phase
   type Action
 
+  /**
+   * Add a new phases link. The function add the new phases to the FSM.
+   * @param p1
+   * @param a
+   * @param p2
+   */
   def + (p1: Phase, a: Action, p2: Phase): Unit
 
   def trigger(a: Action): Phase
