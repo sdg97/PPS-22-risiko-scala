@@ -40,11 +40,11 @@ private class GameScreenImpl(controller: Controller):
   turnPanel.setBounds(0,0,700,  40)
   screen.add(turnPanel)
 
-  private val wagonPanel = new JPanel()
-  wagonPanel.setBounds(800,0,200,40)
-  private val wagonToPlaceLabel = new JLabel(s"Wagon to be placed: ${controller.tanksToPlace}")
+  private val tanksPanel = new JPanel()
+  tanksPanel.setBounds(800,0,200,40)
+  private val tanksToPlaceLabel = new JLabel(s"Tanks to be placed: ${controller.tanksToPlace}")
 
-  wagonPanel.add(wagonToPlaceLabel)
+  tanksPanel.add(tanksToPlaceLabel)
   setupButtons()
 
   private def getStateNameFromButton(button: JButton): String =
@@ -54,7 +54,7 @@ private class GameScreenImpl(controller: Controller):
 
   private def setupButtons(): Unit =
     if(controller.currentTurnPhase.equals(RisikoPhase.StartTurn))
-      screen.add(wagonPanel)
+      screen.add(tanksPanel)
     controller.allStates.foreach(state => {
       val btnState = new JButtonExtended(state.position._1, state.position._2)
       btnState.addActionListener((_: ActionEvent) => {
@@ -62,7 +62,7 @@ private class GameScreenImpl(controller: Controller):
           case RisikoPhase.StartTurn =>
             resetButton()
             controller.addTank(getStateNameFromButton(btnState))
-            wagonToPlaceLabel.setText("Wagon to be placed: " + controller.tanksToPlace.toString)
+            tanksToPlaceLabel.setText("Tanks to be placed: " + controller.tanksToPlace.toString)
           case RisikoPhase.Attack =>
             if (btnState.isSelected)
               resetButton()
@@ -124,10 +124,10 @@ private class GameScreenImpl(controller: Controller):
       button.setSelected(false)
     })
     if (controller.currentTurnPhase.equals(RisikoPhase.StartTurn))
-      wagonToPlaceLabel.setText(s"Wagon to be placed: ${controller.tanksToPlace}")
-      wagonPanel.setVisible(true)
+      tanksToPlaceLabel.setText(s"Tanks to be placed: ${controller.tanksToPlace}")
+      tanksPanel.setVisible(true)
     else
-      wagonPanel.setVisible(false)
+      tanksPanel.setVisible(false)
 
   private def getStateSelected: State =
     controller.stateByName(buttonMap.find((_, button) => button.isSelected).get._1)

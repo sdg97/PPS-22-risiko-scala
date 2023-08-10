@@ -17,17 +17,17 @@ class StateTest extends AnyFunSuite with Matchers:
     assert(state.player == player1)
   }
 
-  test("Test add wagon to State"){
+  test("Test add tanks to State"){
     state.addTanks(2)
     assert(state.numberOfTanks.equals(7))
   }
 
-  test("Test remove wagon to State"){
+  test("Test remove tanks to State"){
     state.removeTanks(2)
     assert(state.numberOfTanks.equals(3))
   }
 
-  test("Test assign to player") {
+  test("Test assign state to player") {
     state.setPlayer(player2)
     assert(state.player == player2)
   }

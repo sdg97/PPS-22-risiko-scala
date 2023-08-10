@@ -22,7 +22,7 @@ object ControllerModule:
     def resultAttack(): MessageAttackPhase
     def attackPhase(): Unit
     def numberOfDiceForPlayers(attacker: State, defender: State):(Int,Int)
-    def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit
+    def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit
     def numberOfTanksToMove(attacker:State):Int
     def currentTurnPhase: RisikoPhase
 
@@ -83,8 +83,8 @@ object ControllerModule:
 
       override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = model.numberOfDiceForPlayers(attacker, defender)
 
-      override def moveTanks(fromStateName: String, toStateName: String, numberOfWagon: Int): Unit =
-        model.moveTanks(fromStateName, toStateName, numberOfWagon)
+      override def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
+        model.moveTanks(fromStateName, toStateName, numberOfTanks)
         view.update()
 
       override def rollDiceAttacker(): Seq[Int] = model.rollDiceAttacker()

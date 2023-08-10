@@ -7,7 +7,7 @@ import java.awt.*
 import java.awt.event.*
 
 class MovePhasePanel(gameScreen:GameScreenImpl, c: Controller, fromState: String, toState: String) {
-  val frame = new JFrame("Wagon to shift")
+  val frame = new JFrame("Tanks to shift")
   frame.setSize(300, 200)
   frame.setLayout(new BorderLayout())
   frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
