@@ -2,10 +2,10 @@ package view
 
 import controller.ControllerModule.*
 import model.{Player, PlayerColor, RisikoPhase, State}
-import view.component.{CurrentPhaseComponent, CurrentPlayerComponent, JButtonExtended, JPanelScreen, SelectPhaseComponent, MovePhasePanel}
+import view.component.{CurrentPhaseComponent, CurrentPlayerComponent, JButtonExtended, JPanelScreen, MovePhasePanel, SelectPhaseComponent}
 
 import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
-import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent}
+import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent, MouseListener}
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.io.{File, FileReader}
 import java.util.Random
@@ -31,7 +31,6 @@ private class GameScreenImpl(c: Controller):
   private val selectPhaseComponent = new SelectPhaseComponent(c)
   private val currentPhaseComponent = new CurrentPhaseComponent(c)
 
-  // Crea il pannello per contenere gli elementi della GUI
   val screen = new JPanelScreen(null, c.setTypeOfMap())
 
   val turnPanel = new JPanel()
@@ -87,7 +86,7 @@ private class GameScreenImpl(c: Controller):
             if(btnState.isSelected)
               resetButton()
             else if(btnState.isNeighbour)
-              val movePanel = new MovePhasePanel(c, getStateSelected.name, getStateNameFromButton(btnState))
+              val movePanel = new MovePhasePanel(this, c, getStateSelected.name, getStateNameFromButton(btnState))
               resetButton()
             else if(!btnState.isSelected && c.stateByName(getStateNameFromButton(btnState)).player.equals(c.currentPlayer))
               resetButton()
@@ -140,3 +139,12 @@ private class GameScreenImpl(c: Controller):
       buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
     resetButton()
+
+  def disableMouse(): Unit =
+    buttonMap.values.foreach(_.setEnabled(false))
+    selectPhaseComponent.setButtonsEnabled(false)
+
+  def enableMouse(): Unit =
+    buttonMap.values.foreach(_.setEnabled(true))
+    selectPhaseComponent.setButtonsEnabled(true)
+
