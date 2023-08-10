@@ -1,5 +1,6 @@
-package model
+package utils
 
+import model.{GameMap, VersionMap}
 import org.junit.Assert.{assertEquals, assertFalse, assertTrue}
 import org.junit.{Before, Test}
 import utils.SetupFromFiles
