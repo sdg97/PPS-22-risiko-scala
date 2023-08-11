@@ -7,6 +7,6 @@ import org.scalatest.matchers.should.Matchers
 class PlayerTest extends AnyFunSuite with Matchers:
   val player= Player("Martin", BLACK)
   test("Test create Player"){
-    assert(player.username.equals("Martin"))
-    assert(player.color.equals(BLACK))
+    assert(player.getUsername.equals("Martin"))
+    assert(player.getColor.equals(BLACK))
   }

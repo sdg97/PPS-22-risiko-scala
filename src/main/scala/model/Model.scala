@@ -144,11 +144,11 @@ object ModelModule:
 
 
       override def addTank(stateName: String): Unit =
-        if(currentPlayer.equals(gameMap.stateByName(stateName).player) && currentPlayer.tanksToPlace > 0)
+        if(currentPlayer.equals(gameMap.stateByName(stateName).player) && currentPlayer.getTanksToPlace > 0)
           gameMap.stateByName(stateName).addTanks(1)
-          currentPlayer.setTanksToPlace(currentPlayer.tanksToPlace-1)
+          currentPlayer.setTanksToPlace(currentPlayer.getTanksToPlace-1)
 
-      override def tanksToPlace: Int = currentPlayer.tanksToPlace
+      override def tanksToPlace: Int = currentPlayer.getTanksToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
 
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match

@@ -11,27 +11,24 @@ enum PlayerColor(val rgb: Int):
   case PURPLE extends PlayerColor(0x4C0099)
 
 trait Player:
-  def username: String
-  def color: PlayerColor
-  def tanksToPlace: Int
+  def getUsername: String
+  def getColor: PlayerColor
+  def getTanksToPlace: Int
   def setTanksToPlace(tanksNumber: Int): Unit
 
 
 object Player:
   private class PlayerImpl(_username: String, _color: PlayerColor) extends Player:
     private var _numTanks = 0
-    override def username: String = _username
-    override def color: PlayerColor = _color
-    override def tanksToPlace: Int = _numTanks
+    override def getUsername: String = _username
+    override def getColor: PlayerColor = _color
+    override def getTanksToPlace: Int = _numTanks
     override def setTanksToPlace(tanksNumber: Int): Unit = _numTanks = tanksNumber
 
 
   def apply(username: String, color: PlayerColor): Player =
     new PlayerImpl(username, color)
 
-  //da togliere o da modificare
-  def apply(username: String): Player =
-    new PlayerImpl(username, BLACK)
 
   extension (players: Set[Player])
     def START_TANK_NUMBER(typeOfMap:VersionMap) = typeOfMap match
