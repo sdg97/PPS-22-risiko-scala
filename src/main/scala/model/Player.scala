@@ -29,6 +29,9 @@ object Player:
   def apply(username: String, color: PlayerColor): Player =
     new PlayerImpl(username, color)
 
+  def apply(username: String): Player =
+    new PlayerImpl(username,null)
+
 
   extension (players: Set[Player])
     def START_TANK_NUMBER(typeOfMap:VersionMap) = typeOfMap match
