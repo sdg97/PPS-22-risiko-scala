@@ -1,7 +1,7 @@
 package model.config
 
 import model.entity.map
-import model.entity.map.{Continent, State}
+import model.entity.map.{Continent, State, StateName}
 
 object Parsers:
   /**
@@ -29,12 +29,12 @@ object Parsers:
       }
 
   /**
-   * a parser to convert strings to Borders (String, String)
+   * a parser to convert strings to Borders (StateName, StateName)
    */
-  object BorderParser extends Parser[(String,String)]:
-    override def parse(line: String): Option[(String,String)] =
+  object BorderParser extends Parser[(StateName, StateName)]:
+    override def parse(line: String): Option[(StateName, StateName)] =
       line.split(",").toList match {
-        case state1 :: state2 :: Nil => Some((state1.trim, state2.trim))
+        case stateName1 :: stateName2 :: Nil => Some((stateName1.trim, stateName2.trim))
         case _ => None
       }
 

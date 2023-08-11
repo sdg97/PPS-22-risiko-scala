@@ -23,7 +23,18 @@ class GameMap extends Graph:
    * @return the Set of all pairs of state names, representing a state borders
    */
   override def edges: Set[(StateName, StateName)] = _edges
-  override def addEdge(stateName1: StateName, stateName2: StateName): Unit = _edges += (stateName1,stateName2)
+
+  /**
+   * method to create a edge between two states
+   * @param stateName1 the first state to link
+   * @param stateName2 the second state to link
+   */
+  override def addEdge(stateName1: StateName, stateName2: StateName): Unit = _edges += (stateName1, stateName2)
+
+  /**
+   * method to add a new state to the map
+   * @param state the state to add to the map
+   */
   override def addNode(state: State): Unit = _nodes += state
 
   /**
@@ -31,6 +42,12 @@ class GameMap extends Graph:
    * @return the Set of all continents
    */
   def continents: Set[Continent] = _continents
+
+  /**
+   * method to add a new continent
+   *
+   * @param continent the continent to add
+   */
   def addContinent(continent: Continent): Unit = _continents += continent
 
   /**
