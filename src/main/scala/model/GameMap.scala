@@ -19,7 +19,7 @@ class GameMap extends Graph:
    * @return the Set of all pairs of state names, representing a state borders
    */
   override def edges: Set[(StateName, StateName)] = _edges
-  override def addEdge(state1: StateName, state2: StateName): Unit = _edges += (state1,state2)
+  override def addEdge(stateName1: StateName, stateName2: StateName): Unit = _edges += (stateName1,stateName2)
   override def addNode(state: State): Unit = _nodes += state
 
   /**
@@ -47,7 +47,7 @@ class GameMap extends Graph:
    * @param stateName the state's name from which to search for neighbors
    * @return the state instance with the name passed as a parameter
    */
-  def stateByName(nameState: StateName): State = _nodes.filter(_.name == nameState).head
+  def stateByName(stateName: StateName): State = _nodes.filter(_.name == stateName).head
 
   /**
    * @param player    the current player
