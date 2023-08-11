@@ -5,7 +5,6 @@ import model.manager.VersionMap
 import model.entity.Player
 import utils.Graph
 
-type StateName = String
 class GameMap extends Graph:
   override type Node = State
   private var _edges = Set[(StateName, StateName)]()
@@ -76,7 +75,7 @@ class GameMap extends Graph:
    */
   def playerStates(player: Player): Set[State] = _nodes.filter(_.player == player)
   
-  def assignStatesToPlayers(players: Set[Player], versionMap: VersionMap) =
+  def assignStatesToPlayers(players: Set[Player], versionMap: VersionMap): Unit =
     import utils.AssignGivenInstances.given
     players assign nodes
     players.foreach(p =>

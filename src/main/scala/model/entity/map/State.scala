@@ -4,7 +4,7 @@ import model.entity.map.State
 import model.entity.Player
 
 type Position = (Int, Int)
-
+type StateName = String
 trait State:
   /**
    *

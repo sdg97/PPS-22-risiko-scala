@@ -23,7 +23,6 @@ import scala.swing.{Color, Container, Dimension, Image}
 trait GameScreen:
   def setClickable(enable:Boolean): Unit
 
-
 object GameScreen:
   private var screen : Option[GameScreenImpl] = None
   def apply(c: Controller) =
@@ -67,7 +66,6 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
       val btnState = new JButtonExtended(state.position)
       btnState.addActionListener(createButtonActionListener(btnState))
       btnState.addMouseListener(createButtonMouseListener(btnState))
-
       screen.add(btnState)
       buttonMap += (state.name -> btnState)
       buttonMap(state.name).setText(state.numberOfTanks.toString)
@@ -111,7 +109,7 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
       case RisikoPhase.StartTurn =>
         resetButton()
         controller.addTank(getStateNameFromButton(btnState))
-        tanksToPlaceLabel.setText("Tanks to be placed: " + controller.tanksToPlace.toString)
+        tanksToPlaceLabel.setText(s"Tanks to be placed: ${controller.tanksToPlace}")
 
       case RisikoPhase.Attack =>
         if (btnState.isSelected)

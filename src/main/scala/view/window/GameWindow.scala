@@ -7,9 +7,9 @@ import java.awt.BorderLayout
 import javax.swing.{JFrame, JPanel, WindowConstants}
 
 class GameWindow(c: Controller) {
-  private val TITILE = "Risiko"
+  private val TITLE = "Risiko"
   private val ICON_PATH = "/map_ref.png"
-  private val frame = new JFrame(TITILE)
+  private val frame = new JFrame(TITLE)
 
   def show() =
     // Imposta le dimensioni del frame e visualizzalo
@@ -17,7 +17,7 @@ class GameWindow(c: Controller) {
     frame.pack()
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setVisible(true)
-    //frame.setResizable(false)
+    frame.setResizable(false)
     c.startNewGame()
 
   def changeScreen(p: JPanel) =
