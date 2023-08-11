@@ -2,29 +2,29 @@
 
 Sprint 1: 5-11 July
 
-|                                                                 |                                                    |           |                            |   |   |   |   |   |
-|-----------------------------------------------------------------|----------------------------------------------------|-----------|----------------------------|---|---|---|---|---|
-| Product Backlog Item                                            | Sprint Task                                        | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 |
-| I need a way to represent the entity about the State and Player | Implementation of Player class in Model package    | Marcolini | 1                          | 1 | 0 | 0 | 0 | 0 |
-|                                                                 | Implementation of State class in Model package     | Marcolini | 1                          | 2 | 0 | 0 | 0 | 0 |
-| Implementation of User registration phase                       | model registration logic and testing               | Marcolini | 2                          | 0 | 2 | 1 | 0 | 0 |
-|                                                                 | Creating view about user registartion              | Marcolini | 2                          | 0 | 0 | 2 | 1 | 0 |
-| Init Setup                                                      | Repository with github Actions                     | Del Gatto | 4                          | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
-|                                                                 | MVC and repository structure                       | Del Gatto | 8                          | 0 | 2 | 2 | 2 | 2 | 0 | 0 |
-|                                                                 | Restart support                                    | Del Gatto | 2                          | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
-| I need to have a graphical interface for positioning the tanks  | make the view of the tanks placement               | Lelli     | 5                          | 3 | 2 | 0 | 0 | 0 |
-| I need to have a game map implementation                        | make the class gameMap in the Model                | Lelli     | 7                          | 1 | 3 | 3 | 1 | 0 |
-| I need to define the states neighbours                          | make the method to add edges in the graph          | Lelli     | 2                          | 0 | 0 | 1 | 1 | 0 |
-| I need to have an implementation of the State entity            | Implement the state class and the relative methods | Lelli     | 4                          | 0 | 0 | 0 | 1 | 3 |
+|                                                                 |                                                    |           |                            |   |   |   |   |   |   |   |
+|-----------------------------------------------------------------|----------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
+| Product Backlog Item                                            | Sprint Task                                        | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 0 | 0 |
+| I need a way to represent the entity about the State and Player | Implementation of Player class in Model package    | Marcolini | 1                          | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+|                                                                 | Implementation of State class in Model package     | Marcolini | 1                          | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Implementation of User registration phase                       | model registration logic and testing               | Marcolini | 2                          | 0 | 2 | 1 | 0 | 0 | 0 | 0 |
+|                                                                 | Creating view about user registartion              | Marcolini | 2                          | 0 | 0 | 2 | 1 | 0 | 0 | 0 |
+| Init Setup                                                      | Repository with github Actions                     | Del Gatto | 6                          | 2 | 2 | 2 | 0 | 0 | 0 | 0 |
+|                                                                 | MVC and repository structure                       | Del Gatto | 10                         | 0 | 2 | 2 | 2 | 2 | 2 | 0 |
+|                                                                 | Restart support                                    | Del Gatto | 4                          | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| I need to have a graphical interface for positioning the tanks  | make the view of the tanks placement               | Lelli     | 5                          | 3 | 2 | 0 | 0 | 0 | 0 | 0 |
+| I need to have a game map implementation                        | make the class gameMap in the Model                | Lelli     | 7                          | 1 | 3 | 3 | 1 | 0 | 0 | 0 |
+| I need to define the states neighbours                          | make the method to add edges in the graph          | Lelli     | 2                          | 0 | 0 | 1 | 1 | 0 | 0 | 0 |
+| I need to have an implementation of the State entity            | Implement the state class and the relative methods | Lelli     | 4                          | 0 | 0 | 0 | 1 | 3 | 0 | 0 |
 
 Sprint 2: 13-19 July
 
 |                                                                 |                                                                                                                               |           |                            |   |   |   |   |   |   |   |
 |-----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
 | Product Backlog Item                                            | Sprint Task                                                                                                                   | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-| Start Game                                                      | Assign State to players                                                                                                       | Del Gatto | 4                          | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
-| Game Logic                                                      | Players turn Managment                                                                                                        | Del Gatto | 5                          | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Game Logic                                                      | Switch players turn management                                                                                                | Del Gatto | 5                          | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Start Game                                                      | Assign State to players                                                                                                       | Del Gatto | 7                          | 2 | 2 | 1 | 1 | 1 | 0 | 0 |
+| Game Logic                                                      | Players turn Managment                                                                                                        | Del Gatto | 7                          | 0 | 0 | 3 | 2 | 2 | 0 | 0 |
+| Game Logic                                                      | Switch players turn management                                                                                                | Del Gatto | 5                          | 0 | 0 | 0 | 0 | 2 | 3 | 0 |
 | I need to view the states of a user                             | Make the method to filter the states                                                                                          | Lelli     | 1                          | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
 | I need to have the graphical interface always updated           | Make an update method to update the view when the data change                                                                 | Lelli     | 5                          | 2 | 3 | 0 | 0 | 0 | 0 | 0 |
 | I need to have a graphical interface with buttons on the states | Draw button on correct position in the view                                                                                   | Lelli     | 5                          | 1 | 1 | 3 | 0 | 0 | 0 | 0 |
@@ -37,14 +37,17 @@ Sprint 2: 13-19 July
 
 Sprint 3: 20-26 July
 
-|                                                              |                                                                       |           |                            |   |   |   |   |   |   |   |
-|--------------------------------------------------------------|-----------------------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
-| Product Backlog Item                                         | Sprint Task                                                           | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-| I need to configure all states and borders from config files | Make parsers to read config files and create objects                  | Lelli     | 7                          | 3 | 4 | 0 | 0 | 0 | 0 | 0 |
-|                                                              | Make the config file of states and borders                            | Lelli     | 4                          | 0 | 0 | 4 | 0 | 0 | 0 | 0 |
-| I need to have an implementation of the Continent entity     | Implement the state class and the relative methods                    | Lelli     | 3                          | 0 | 0 | 2 | 1 | 0 | 0 | 0 |
-| I need to configure continents from config file              | Make parsers to read config files and create objects                  | Lelli     | 3                          | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
-|                                                              | Make the config file of continents                                    | Lelli     | 1                          | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+|                                                              |                                                      |           |                            |   |   |   |   |   |   |   |
+|--------------------------------------------------------------|------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
+| Product Backlog Item                                         | Sprint Task                                          | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+| I need to configure all states and borders from config files | Make parsers to read config files and create objects | Lelli     | 7                          | 3 | 4 | 0 | 0 | 0 | 0 | 0 |
+|                                                              | Make the config file of states and borders           | Lelli     | 4                          | 0 | 0 | 4 | 0 | 0 | 0 | 0 |
+| I need to have an implementation of the Continent entity     | Implement the state class and the relative methods   | Lelli     | 3                          | 0 | 0 | 2 | 1 | 0 | 0 | 0 |
+| I need to configure continents from config file              | Make parsers to read config files and create objects | Lelli     | 3                          | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
+|                                                              | Make the config file of continents                   | Lelli     | 1                          | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+| Refactor                                                     | Refactor the previus sprint code                     | Del Gatto | 10                         | 2 | 2 | 1 | 2 | 0 | 0 | 0 |
+| View                                                         | Switch phase component                               | Del Gatto | 6                          | 0 | 0 | 0 | 0 | 3 | 3 | 0 |
+| View                                                         | Current player component                             | Del Gatto | 3                          | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 
 Sprint 4: 27-2 July-August
 
@@ -56,4 +59,4 @@ Sprint 4: 27-2 July-August
 | I need to have a graphical interface to select the two states involved in the movement owned by the current player | Make the view to select the two states                                      | Lelli     | 2                          | 0 | 0 | 2 | 0 | 0 | 0 | 0 |
 | I need to have a graphical interface to select the number of tanks to move                                         | Make the view to select the number of tanks                                 | Lelli     | 3                          | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
 | I need to have an alternative map of game                                                                          | Make alternative config files                                               | Lelli     | 5                          | 0 | 0 | 0 | 1 | 4 | 0 | 0 |
-
+| Test                                                                                                               | Correct and refactor test and add some useful tests                         | Del Gatto | 8                          | 2 | 2 | 2 | 2 | 0 | 0 | 0 |
