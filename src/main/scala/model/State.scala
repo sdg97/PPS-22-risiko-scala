@@ -1,5 +1,7 @@
 package model
 
+type Position = (Int, Int)
+
 trait State:
   /**
    *
@@ -21,15 +23,9 @@ trait State:
 
   /**
    *
-   * @return the x-coordinate of the state in the map.
+   * @return the coordinates of the state in the map.
    */
-  def posX: Int
-
-  /**
-   *
-   * @return the y-coordinate of the state in the map.
-   */
-  def posY: Int
+  def position: Position
 
   /**
    * method to add tanks to a state.
@@ -50,15 +46,14 @@ trait State:
   def setPlayer(p: Player): Unit
 
 object State:
-  private class StateImpl(_name: String, var _numberOfTanks: Int, var _player: Player, _posX: Int, _posY: Int) extends State:
+
+  private class StateImpl(_name: String, var _numberOfTanks: Int, var _player: Player, _position: Position) extends State:
     override def name: String = _name
     override def numberOfTanks: Int = _numberOfTanks
 
     override def player: Player = _player
 
-    override def posX: Int = _posX
-
-    override def posY: Int = _posY
+    override def position: (Int, Int) = _position
 
     override def setPlayer(p: Player): Unit =
       _player = p
@@ -69,10 +64,11 @@ object State:
     override def removeTanks(numberOfTanksToRemove: Int): Unit =
       _numberOfTanks = _numberOfTanks - numberOfTanksToRemove
 
-  def apply(name: String, numberOfTanks: Int, player: Player, posX: Int, posY: Int): State =
-    new StateImpl(name, numberOfTanks, player, posX, posY)
+  def apply(name: String, numberOfTanks: Int, player: Player, position: Position): State =
+    new StateImpl(name, numberOfTanks, player, position)
 
-  //da modificare o da togliere
   def apply(name: String) : State =
-    new StateImpl(name, 0, Player("mock"), 0, 0)
+    new StateImpl(name, 0, Player("mock"), (0, 0))
 
+  def apply(name: String, numberOfTanks: Int, player: Player): State =
+    new StateImpl(name, numberOfTanks, player, (0, 0))

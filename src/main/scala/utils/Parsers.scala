@@ -23,7 +23,7 @@ object Parsers:
   object StateParser extends Parser[State] :
     override def parse(line: String): Option[State] =
       line.split(",").toList match {
-        case name :: posX :: posY :: Nil => Some(State(name.trim, 0, null, posX.trim.toInt, posY.trim.toInt))
+        case name :: posX :: posY :: Nil => Some(State(name.trim, 0, null, (posX.trim.toInt, posY.trim.toInt)))
         case _ => None
       }
 

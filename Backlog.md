@@ -2,35 +2,58 @@
 
 Sprint 1: 5-11 July
 
-|                                                                 |                                                                               |           |                            |   |   |   |   |   |
-|-----------------------------------------------------------------|-------------------------------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|
-| Product Backlog Item                                            | Sprint Task                                                                   | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 |
-| I need a way to represent the entity about the State and Player | Implementation of Player class in Model package                               | Marcolini | 1                          | 1 | 0 | 0 | 0 | 0 |
-|                                                           | Implementation of State class in Model package                                | Marcolini | 1                          | 2 | 0 | 0 | 0 | 0 |
-| Implementation of User registration phase                       | model registration logic and testing                                          | Marcolini | 2                          | 0 | 2 | 1 | 0 | 0 |
-|                                                          | Creating view about user registartion                                         | Marcolini | 2                          | 0 | 0 | 2 | 1 | 0 |
-| Init Setup                                                      | Repository with github Actions                                                | Del Gatto | 4                          | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
-|                                                                 | MVC and repository structure                                                  | Del Gatto | 8                          | 0 | 2 | 2 | 2 | 2 | 0 | 0 |
-|                                                                 | Restart support                                                               | Del Gatto | 2                          | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
-| I need to have a graphical interface for positioning the wagons | make the view of the wagon placement                                          | Lelli     | 2                          | 2 | 0 | 0 | 0 | 0 |
-| I need to have a game map implementation                        | make the class gameMap in the Model                                           | Lelli     | 0                          | 1 | 3 | 2 | 0 | 0 |
-| I need to define the states neighbours                          | make the method to read neighbour from config file and add edges in the graph | Lelli     | 0                          | 0 | 0 | 1 | 2 | 0 |
-| I need to view the states of a user                             | make the method to filter the states                                          | Lelli     | 0                          | 0 | 0 | 0 | 1 | 2 |
+|                                                                 |                                                    |           |                            |   |   |   |   |   |
+|-----------------------------------------------------------------|----------------------------------------------------|-----------|----------------------------|---|---|---|---|---|
+| Product Backlog Item                                            | Sprint Task                                        | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 |
+| I need a way to represent the entity about the State and Player | Implementation of Player class in Model package    | Marcolini | 1                          | 1 | 0 | 0 | 0 | 0 |
+|                                                                 | Implementation of State class in Model package     | Marcolini | 1                          | 2 | 0 | 0 | 0 | 0 |
+| Implementation of User registration phase                       | model registration logic and testing               | Marcolini | 2                          | 0 | 2 | 1 | 0 | 0 |
+|                                                                 | Creating view about user registartion              | Marcolini | 2                          | 0 | 0 | 2 | 1 | 0 |
+| Init Setup                                                      | Repository with github Actions                     | Del Gatto | 4                          | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
+|                                                                 | MVC and repository structure                       | Del Gatto | 8                          | 0 | 2 | 2 | 2 | 2 | 0 | 0 |
+|                                                                 | Restart support                                    | Del Gatto | 2                          | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+| I need to have a graphical interface for positioning the tanks  | make the view of the tanks placement               | Lelli     | 5                          | 3 | 2 | 0 | 0 | 0 |
+| I need to have a game map implementation                        | make the class gameMap in the Model                | Lelli     | 7                          | 1 | 3 | 3 | 1 | 0 |
+| I need to define the states neighbours                          | make the method to add edges in the graph          | Lelli     | 2                          | 0 | 0 | 1 | 1 | 0 |
+| I need to have an implementation of the State entity            | Implement the state class and the relative methods | Lelli     | 4                          | 0 | 0 | 0 | 1 | 3 |
 
 Sprint 2: 13-19 July
 
-|                                                                |                                                                                                                               |           |                            |     |     |     |     |     |   |   |
-|----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-----------|----------------------------|-----|-----|-----|-----|-----|---|---|
-| Product Backlog Item                                           | Sprint Task                                                                                                                   | Volunteer | Initial Estimate of Effort | 1   | 2   | 3   | 4   | 5   | 6 | 7 |
-| Start Game                                                     | Assign State to players                                                                                                       | Del Gatto | 4                          | 2   | 2   | 0   | 0   | 0   | 0 | 0 |
-| Game Logic                                                     | Players turn Managment                                                                                                        | Del Gatto | 5                          | 0   | 2   | 0   | 0   | 0   | 0 | 0 | 0 |
-| Game Logic                                                     | Switch players turn management                                                                                                | Del Gatto | 5                          | 0   | 2   | 0   | 0   | 0   | 0 | 0 | 0 |
-| I need to have the graphical interface always updated          | make an update method to update the view when data change                                                                     | Lelli     | 3                          | 2   | 0   | 0   | 0   | 0   |0|0|0|
-| I need to have a graphical interface with botton on the states | read config data of states from a text file and paint botton on the view                                                      | Lelli     | 0                          | 1   | 3   | 0   | 0   | 0   |0|0|
-| I need to add wagon on my states at the begin of the turn      | make the method to add a calculated number of wagon only on my states                                                         | Lelli     | 0                          | 0   | 0   | 3   | 1   | 0   |0|0|
-| Attack phase logic                                             | make the method to return the result of roll dice of Attacker and defender                                                    | Marcolini | 2                          | 2   | 0   | 0   | 0   | 0   |0|0|
-|                                                                | make the method that compare the results of roll dice and calculate the number of tank lost by every players                  | Marcolini | 2                          | 1   | 2   | 0   | 0   | 0   |0|0|
-|                                                                | make the method to check if the attacker conquered the state and if he has the sufficient number of tank to do another attack | Marcolini | 2                          | 0   | 1   | 2   | 0   | 0   |0|0|
-| I need to have a graphical interface fro the attack phase      | make a different class that represent the view of attack phase                                                                | Marcolini | 3                          | 1   | 0   | 1   | 2   | 1   |0|0|
+|                                                                 |                                                                                                                               |           |                            |   |   |   |   |   |   |   |
+|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
+| Product Backlog Item                                            | Sprint Task                                                                                                                   | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+| Start Game                                                      | Assign State to players                                                                                                       | Del Gatto | 4                          | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
+| Game Logic                                                      | Players turn Managment                                                                                                        | Del Gatto | 5                          | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Game Logic                                                      | Switch players turn management                                                                                                | Del Gatto | 5                          | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| I need to view the states of a user                             | Make the method to filter the states                                                                                          | Lelli     | 1                          | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| I need to have the graphical interface always updated           | Make an update method to update the view when the data change                                                                 | Lelli     | 5                          | 2 | 3 | 0 | 0 | 0 | 0 | 0 |
+| I need to have a graphical interface with buttons on the states | Draw button on correct position in the view                                                                                   | Lelli     | 5                          | 1 | 1 | 3 | 0 | 0 | 0 | 0 |
+| I need to add tanks in my states at the begin of the turn       | Make the method to add a calculated number of tanks only on my states                                                         | Lelli     | 4                          | 0 | 0 | 1 | 3 | 0 | 0 | 0 |
+| I need to have a graphical interface to add tanks in my states  | Make the view of the position phase                                                                                           | Lelli     | 2                          | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+| Attack phase logic                                              | make the method to return the result of roll dice of Attacker and defender                                                    | Marcolini | 2                          | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+|                                                                 | make the method that compare the results of roll dice and calculate the number of tank lost by every players                  | Marcolini | 2                          | 1 | 2 | 0 | 0 | 0 | 0 | 0 |
+|                                                                 | make the method to check if the attacker conquered the state and if he has the sufficient number of tank to do another attack | Marcolini | 2                          | 0 | 1 | 2 | 0 | 0 | 0 | 0 |
+| I need to have a graphical interface fro the attack phase       | make a different class that represent the view of attack phase                                                                | Marcolini | 3                          | 1 | 0 | 1 | 2 | 1 | 0 | 0 |
 
+Sprint 3: 20-26 July
+
+|                                                              |                                                                       |           |                            |   |   |   |   |   |   |   |
+|--------------------------------------------------------------|-----------------------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
+| Product Backlog Item                                         | Sprint Task                                                           | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+| I need to configure all states and borders from config files | Make parsers to read config files and create objects                  | Lelli     | 7                          | 3 | 4 | 0 | 0 | 0 | 0 | 0 |
+|                                                              | Make the config file of states and borders                            | Lelli     | 4                          | 0 | 0 | 4 | 0 | 0 | 0 | 0 |
+| I need to have an implementation of the Continent entity     | Implement the state class and the relative methods                    | Lelli     | 3                          | 0 | 0 | 2 | 1 | 0 | 0 | 0 |
+| I need to configure continents from config file              | Make parsers to read config files and create objects                  | Lelli     | 3                          | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
+|                                                              | Make the config file of continents                                    | Lelli     | 1                          | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+
+Sprint 4: 27-2 July-August
+
+|                                                                                                                    |                                                                             |           |                            |   |   |   |   |   |   |   |
+|--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
+| Product Backlog Item                                                                                               | Sprint Task                                                                 | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+| I need to calculate the number of tanks to add in my states at the begin of the turn with continent bonus          | Make the method to calc and assign to the player the number of tanks        | Lelli     | 4                          | 4 | 0 | 0 | 0 | 0 | 0 | 0 |
+| I need to move one time the tanks in a neighbor state at the end of the turn                                       | Make methods to move tanks between neighbor states owned by the same player | Lelli     | 4                          | 0 | 3 | 1 | 0 | 0 | 0 | 0 |
+| I need to have a graphical interface to select the two states involved in the movement owned by the current player | Make the view to select the two states                                      | Lelli     | 2                          | 0 | 0 | 2 | 0 | 0 | 0 | 0 |
+| I need to have a graphical interface to select the number of tanks to move                                         | Make the view to select the number of tanks                                 | Lelli     | 3                          | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
+| I need to have an alternative map of game                                                                          | Make alternative config files                                               | Lelli     | 5                          | 0 | 0 | 0 | 1 | 4 | 0 | 0 |
 

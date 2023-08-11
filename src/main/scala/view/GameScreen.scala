@@ -31,46 +31,38 @@ private class GameScreenImpl(controller: Controller):
   private val selectPhaseComponent = new SelectPhaseComponent(controller)
   private val currentPhaseComponent = new CurrentPhaseComponent(controller)
 
-
-  // Crea il pannello per contenere gli elementi della GUI
   val screen = new JPanelScreen(null, controller.setTypeOfMap())
 
-
-  val turnPanel = new JPanel()
+  private val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
   turnPanel.add(currentPhaseComponent.get())
   turnPanel.add(selectPhaseComponent.get())
   turnPanel.setBounds(0,0,700,  40)
   screen.add(turnPanel)
 
-  private val wagonPanel = new JPanel()
-  wagonPanel.setBounds(800,0,200,40)
-  private val wagonToPlaceLabel = new JLabel(s"Wagon to be placed: ${controller.tanksToPlace}")
+  private val tanksPanel = new JPanel()
+  tanksPanel.setBounds(800,0,200,40)
+  private val tanksToPlaceLabel = new JLabel(s"Tanks to be placed: ${controller.tanksToPlace}")
 
-  wagonPanel.add(wagonToPlaceLabel)
+  tanksPanel.add(tanksToPlaceLabel)
   setupButtons()
 
   private def getStateNameFromButton(button: JButton): String =
-    buttonMap.find((n, b) => {
+    buttonMap.find((_, b) => {
       b.equals(button)
     }).get._1
 
-
-
-
-
   private def setupButtons(): Unit =
     if(controller.currentTurnPhase.equals(RisikoPhase.StartTurn))
-      screen.add(wagonPanel)
+      screen.add(tanksPanel)
     controller.allStates.foreach(state => {
-      val btnState = new JButtonExtended(state.posX, state.posY)
-
+      val btnState = new JButtonExtended(state.position._1, state.position._2)
       btnState.addActionListener((_: ActionEvent) => {
         controller.currentTurnPhase match {
           case RisikoPhase.StartTurn =>
             resetButton()
             controller.addTank(getStateNameFromButton(btnState))
-            wagonToPlaceLabel.setText("Wagon to be placed: " + controller.tanksToPlace.toString)
+            tanksToPlaceLabel.setText("Tanks to be placed: " + controller.tanksToPlace.toString)
           case RisikoPhase.Attack =>
             if (btnState.isSelected)
               resetButton()
@@ -108,9 +100,6 @@ private class GameScreenImpl(controller: Controller):
         }
       })
 
-
-
-
       btnState.addMouseListener(new MouseAdapter() {
         override def mouseEntered(evt: MouseEvent): Unit = {
           if (!btnState.isSelected && !btnState.isNeighbour && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer))
@@ -135,29 +124,27 @@ private class GameScreenImpl(controller: Controller):
       button.setSelected(false)
     })
     if (controller.currentTurnPhase.equals(RisikoPhase.StartTurn))
-      wagonToPlaceLabel.setText(s"Wagon to be placed: ${controller.tanksToPlace}")
-      wagonPanel.setVisible(true)
+      tanksToPlaceLabel.setText(s"Tanks to be placed: ${controller.tanksToPlace}")
+      tanksPanel.setVisible(true)
     else
-      wagonPanel.setVisible(false)
+      tanksPanel.setVisible(false)
 
   private def getStateSelected: State =
     controller.stateByName(buttonMap.find((_, button) => button.isSelected).get._1)
 
   def update(): Unit =
     if(buttonMap.head._2.isEnabled)
-      currentPhaseComponent.update()
-      currentPlayerComponent.update()
       selectPhaseComponent.update()
+    currentPhaseComponent.update()
+    currentPlayerComponent.update()
     controller.allStates.foreach(state => {
       buttonMap(state.name).setText(state.numberOfTanks.toString)
       buttonMap(state.name).setColor(new Color(state.player.getColor.rgb))
     })
     resetButton()
 
-
   def setClickable(enable:Boolean): Unit =
     buttonMap.values.foreach(_.setEnabled(enable))
     selectPhaseComponent.setButtonsEnabled(enable)
-
-
-
+    if(enable)
+      selectPhaseComponent.update()

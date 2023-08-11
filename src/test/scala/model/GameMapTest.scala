@@ -10,10 +10,10 @@ class GameMapTest:
   private val player2 = Player("martin", PlayerColor.BLUE)
   private val player3 = Player("simo", PlayerColor.BLUE)
 
-  private val italy = State("italy", 3, player1, 0, 0)
-  private val france = State("france", 3, player2, 0, 0)
-  private val germany = State("germany", 3, player1, 0, 0)
-  private val brazil = State("brazil", 5, player1, 0, 0)
+  private val italy = State("italy", 3, player1)
+  private val france = State("france", 3, player2)
+  private val germany = State("germany", 3, player1)
+  private val brazil = State("brazil", 5, player1)
 
   private val europa = Continent("europa", Set("italy", "germany", "france"), 4)
 
