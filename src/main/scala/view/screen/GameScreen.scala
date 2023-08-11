@@ -1,20 +1,28 @@
-package view
+package view.screen
 
-import controller.ControllerModule.*
-import model.{Player, PlayerColor, RisikoPhase, State}
-import view.component.{CurrentPhaseComponent, CurrentPlayerComponent, JButtonExtended, JPanelScreen, MovePhasePanel, SelectPhaseComponent}
+import controller.Controller
+import model.entity.map.State
+import model.entity.{Player, PlayerColor}
+import model.manager.RisikoPhase
+import view.screen.GameScreen
+import view.component.*
+import view.window.{GameWindowAttack, MoveWindow}
 
-import java.awt.{BasicStroke, BorderLayout, Color, FlowLayout, Font, Graphics, Graphics2D, Polygon}
+import java.awt.*
 import java.awt.event.{ActionEvent, MouseAdapter, MouseEvent, MouseListener}
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.io.{File, FileReader}
 import java.util.Random
-import javax.swing.{BorderFactory, JButton, JComponent, JFrame, JLabel, JPanel, SwingConstants, UIManager}
+import javax.swing.*
 import scala.collection.mutable
-import scala.io.Source
-import scala.swing.{Color, Container, Dimension, Image}
 import scala.collection.mutable.Map
+import scala.io.Source
 import scala.swing.MenuBar.NoMenuBar.name
+import scala.swing.{Color, Container, Dimension, Image}
+
+trait GameScreen:
+  def setClickable(enable:Boolean): Unit
+
 
 object GameScreen:
   private var screen : Option[GameScreenImpl] = None
@@ -25,13 +33,13 @@ object GameScreen:
   def update() =
     screen.get.update()
 
-private class GameScreenImpl(controller: Controller):
+private class GameScreenImpl(controller: Controller) extends GameScreen:
   private val buttonMap: mutable.Map[String, JButtonExtended] = mutable.Map()
   private val currentPlayerComponent = new CurrentPlayerComponent(controller)
   private val selectPhaseComponent = new SelectPhaseComponent(controller)
   private val currentPhaseComponent = new CurrentPhaseComponent(controller)
 
-  val screen = new JPanelScreen(null, controller.setTypeOfMap())
+  val screen = new Background(null, controller.setTypeOfMap())
 
   private val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
@@ -88,7 +96,7 @@ private class GameScreenImpl(controller: Controller):
             if(btnState.isSelected)
               resetButton()
             else if(btnState.isNeighbour)
-              val movePanel = new MovePhasePanel(this, controller, getStateSelected.name, getStateNameFromButton(btnState))
+              val movePanel = new MoveWindow(this, controller, getStateSelected.name, getStateNameFromButton(btnState))
               resetButton()
             else if(!btnState.isSelected && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer))
               resetButton()
@@ -114,7 +122,7 @@ private class GameScreenImpl(controller: Controller):
       screen.add(btnState)
       buttonMap += (state.name -> btnState)
       buttonMap(state.name).setText(state.numberOfTanks.toString)
-      buttonMap(state.name).setColor(new Color(state.player.color.rgb))
+      buttonMap(state.name).setColor(new Color(state.player.getColor.rgb))
     })
 
   private def resetButton(): Unit =
@@ -139,7 +147,7 @@ private class GameScreenImpl(controller: Controller):
     currentPlayerComponent.update()
     controller.allStates.foreach(state => {
       buttonMap(state.name).setText(state.numberOfTanks.toString)
-      buttonMap(state.name).setColor(new Color(state.player.color.rgb))
+      buttonMap(state.name).setColor(new Color(state.player.getColor.rgb))
     })
     resetButton()
 

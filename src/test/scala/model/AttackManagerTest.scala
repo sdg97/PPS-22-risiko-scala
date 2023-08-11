@@ -1,5 +1,8 @@
 package model
 
+import model.entity.{Player, PlayerColor}
+import model.entity.map.{GameMap, State}
+import model.manager.{AttackManager, MessageAttackPhase, VersionMap}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 

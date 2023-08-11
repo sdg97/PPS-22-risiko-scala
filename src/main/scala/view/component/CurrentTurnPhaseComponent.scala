@@ -1,6 +1,6 @@
 package view.component
 
-import controller.ControllerModule.Controller
+import controller.Controller
 
 import javax.swing.{JLabel, JPanel}
 

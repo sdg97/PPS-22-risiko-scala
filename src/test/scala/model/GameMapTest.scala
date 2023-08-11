@@ -1,5 +1,7 @@
 package model
 
+import model.entity.{Player, PlayerColor}
+import model.entity.map.{Continent, GameMap, State}
 import org.junit.{Before, Test}
 import org.junit.Assert.{assertEquals, assertFalse, assertTrue}
 
@@ -43,13 +45,13 @@ class GameMapTest:
   @Test
   def testCalcTanksToPlaceWithoutContinent(): Unit =
     gameMap.calcTanksToPlace(player1)
-    assertEquals(player1.tanksToPlace,1)
+    assertEquals(player1.getTanksToPlace,1)
 
   @Test
   def testCalcTanksToPlaceWithContinent(): Unit =
     gameMap.stateByName("france").setPlayer(player1)
     gameMap.calcTanksToPlace(player1)
-    assertEquals(player1.tanksToPlace, 5)
+    assertEquals(player1.getTanksToPlace, 5)
 
   @Test
   def testAddTanks(): Unit =

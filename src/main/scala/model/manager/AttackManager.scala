@@ -1,4 +1,7 @@
-package model
+package model.manager
+
+import model.*
+import model.entity.map.{GameMap, State}
 
 import scala.collection.immutable.Seq
 import scala.util.Random

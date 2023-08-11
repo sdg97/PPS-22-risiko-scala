@@ -1,4 +1,7 @@
-package model
+package model.entity.map
+
+import model.entity.map.State
+import model.entity.Player
 
 type Position = (Int, Int)
 

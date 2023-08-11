@@ -1,13 +1,12 @@
 package view.component
 
-import model.VersionMap
-
+import model.manager.VersionMap
 import java.awt.event.{MouseEvent, MouseListener}
 import java.awt.{Graphics, LayoutManager}
 import javax.swing.{JPanel, SwingUtilities}
 import scala.swing.{Dimension, Image}
 
-class JPanelScreen(layoutManager: LayoutManager, versionMap:VersionMap) extends JPanel() {
+class Background(layoutManager: LayoutManager, versionMap:VersionMap) extends JPanel() {
 
   private def setImage():String = versionMap match {
     case VersionMap.Europe => "src/main/resources/img_map_europe.png"

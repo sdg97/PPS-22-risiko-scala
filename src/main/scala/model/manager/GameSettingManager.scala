@@ -1,4 +1,6 @@
-package model
+package model.manager
+
+import model.manager.{GameSettingManager, MessageSetting}
 
 enum MessageSetting:
   case ErrorIncompleteUsernames

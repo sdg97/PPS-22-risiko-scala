@@ -1,8 +1,10 @@
-package view
+package view.screen
 
 
-import controller.ControllerModule.Controller
+import controller.Controller
+import model.manager.MessageSetting
 import utils.shiftLeft
+
 import java.awt.event.ActionEvent
 import java.awt.geom.{Ellipse2D, Point2D, RoundRectangle2D}
 import java.awt.{Color, Component, Graphics, GridLayout, RenderingHints}
@@ -12,7 +14,8 @@ import javax.swing.border.Border
 import scala.swing.MenuBar.NoMenuBar.listenTo
 import scala.swing.event.ButtonClicked
 import scala.swing.{Dimension, Font, Graphics2D, Image, Insets, Menu, MenuBar, MenuItem}
-import model.{MessageSetting, Player, State}
+import model.entity.Player
+import model.entity.map.State
 
 /**
  * View for setup simulation.
@@ -60,7 +63,7 @@ private[view] object SettingsScreen {
     }
     labelNumberOfPlayers.setBounds(70, 40, 120, 40)
 
-     val panelInfo = new JPanel() {
+    val panelInfo = new JPanel() {
       setBounds(30, 90, 350, 250)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.BLACK, 10))

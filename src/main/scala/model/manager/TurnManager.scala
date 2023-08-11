@@ -1,6 +1,7 @@
-package model
+package model.manager
 
-import model.PlayerColor.{BLACK, BLUE, YELLOW}
+import model.entity.PlayerColor.{BLACK, BLUE, YELLOW}
+import model.manager.TurnManager
 
 trait TurnManager[T]:
   def all: Set[T]

@@ -1,9 +1,14 @@
-package model
+package model.entity.map
+
+import model.entity.map.Continent
+import model.manager.VersionMap
+import model.entity.Player
 import utils.Graph
 
+type StateName = String
 class GameMap extends Graph:
   override type Node = State
-  private var _edges = Set[(String,String)]()
+  private var _edges = Set[(StateName, StateName)]()
   private var _nodes = Set[State]()
   private var _continents = Set[Continent]()
 
@@ -17,8 +22,8 @@ class GameMap extends Graph:
    *
    * @return the Set of all pairs of state names, representing a state borders
    */
-  override def edges: Set[(String,String)] = _edges
-  override def addEdge(state1: String, state2: String): Unit = _edges += (state1,state2)
+  override def edges: Set[(StateName, StateName)] = _edges
+  override def addEdge(stateName1: StateName, stateName2: StateName): Unit = _edges += (stateName1,stateName2)
   override def addNode(state: State): Unit = _nodes += state
 
   /**
@@ -33,20 +38,20 @@ class GameMap extends Graph:
    * @param player the current player
    * @return a Set of the names of neighboring states with the state passed as a parameter and owned by enemy players
    */
-  def neighborStatesOfEnemies(stateName: String, player: Player): Set[String] = neighborStates(stateName) filterNot(s => isPlayerState(s, player))
+  def neighborStatesOfEnemies(stateName: StateName, player: Player): Set[StateName] = neighborStates(stateName) filterNot(s => isPlayerState(s, player))
 
   /**
    * @param stateName the state's name from which to search for neighbors
    * @param player    the current player
    * @return a Set of the names of neighboring states with the state passed as a parameter and owned by the player passed as a parameter
    */
-  def neighborStatesOfPlayer(stateName: String, player: Player): Set[String] = neighborStates(stateName) filter(s => isPlayerState(s, player))
+  def neighborStatesOfPlayer(stateName: StateName, player: Player): Set[StateName] = neighborStates(stateName) filter(s => isPlayerState(s, player))
 
   /**
    * @param stateName the state's name from which to search for neighbors
    * @return the state instance with the name passed as a parameter
    */
-  def stateByName(nameState: String): State = _nodes.filter(_.name == nameState).head
+  def stateByName(stateName: StateName): State = _nodes.filter(_.name == stateName).head
 
   /**
    * @param player    the current player
@@ -78,7 +83,7 @@ class GameMap extends Graph:
    * @param toStateName arrival status
    * @param numberOfTanks the number of tanks to move
    */
-  def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
+  def moveTanks(fromStateName: StateName, toStateName: StateName, numberOfTanks: Int): Unit =
     stateByName(fromStateName).removeTanks(numberOfTanks)
     stateByName(toStateName).addTanks(numberOfTanks)
 
@@ -87,13 +92,13 @@ class GameMap extends Graph:
    * @param player the current player
    * @return a boolean representing whether the state passed as a parameter is of the player passed as a parameter
    */
-  private def isPlayerState(stateName: String, player: Player): Boolean = stateByName(stateName).player == player
+  private def isPlayerState(stateName: StateName, player: Player): Boolean = stateByName(stateName).player == player
 
   /**
    * @param stateName the state name to check
    * @return a Set of state names representing the neighboring states of the state passed as a parameter
    */
-  private def neighborStates(stateName: String) = _edges collect {
+  private def neighborStates(stateName: StateName) = _edges collect {
     case (`stateName`, state2) => state2
     case (state2, `stateName`) => state2
   }

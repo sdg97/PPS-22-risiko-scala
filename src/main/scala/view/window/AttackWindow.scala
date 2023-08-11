@@ -1,13 +1,16 @@
-package view
+package view.window
 
-import controller.ControllerModule.Controller
-import model.{MessageAttackPhase, Player, State}
-import view.component.{JButtonExtended, SelectPhaseComponent}
+import controller.Controller
+import model.manager.MessageAttackPhase
+import model.entity.Player
+import model.entity.map.State
+import view.component.{DadoComponent, JButtonExtended, SelectPhaseComponent}
+import view.screen.GameScreen
 
+import java.awt.*
 import java.awt.event.ActionEvent
-import java.awt.{BasicStroke, BorderLayout, Color, Event, FlowLayout, Font, Graphics, Polygon}
 import java.util.Random
-import javax.swing.{BorderFactory, BoxLayout, JButton, JComboBox, JComponent, JFrame, JLabel, JPanel, SwingConstants, WindowConstants}
+import javax.swing.*
 import scala.collection.mutable.ArrayBuffer
 import scala.swing.MenuBar.NoMenuBar.{publish, reactions}
 import scala.swing.event.{ButtonClicked, WindowClosed, WindowClosing}
@@ -15,7 +18,7 @@ import scala.swing.{Dialog, Dimension, Frame, Graphics2D}
 
 case class MyButtonClickEvent(button: JButton) extends scala.swing.event.Event
 
-class GameWindowAttack(gameScreen:GameScreenImpl,controller: Controller) {
+class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
 
   val frame = new JFrame("Wagon to shift")
   frame.setSize(420, 520)
@@ -185,7 +188,7 @@ class GameWindowAttack(gameScreen:GameScreenImpl,controller: Controller) {
       buttonClose.setEnabled(true)
     }
     else if(controller.resultAttack().equals(MessageAttackPhase.Winner)){
-      labelPlayerMessage.setText("""<html>Congratulation """+stateAttack.player.username+""",<br>you are the WINNER!!! </html>""")
+      labelPlayerMessage.setText("""<html>Congratulation """+stateAttack.player.getUsername+""",<br>you are the WINNER!!! </html>""")
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
       panelAttackPhase.remove(buttonDefence)

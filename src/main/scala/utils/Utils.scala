@@ -1,7 +1,6 @@
 package utils
 
-import model.State
-
+import model.entity.map.State
 import java.io.File
 import scala.io.Source
 

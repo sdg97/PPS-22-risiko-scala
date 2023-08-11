@@ -1,5 +1,6 @@
-package view
+package view.window
 
+import controller.Controller
 import controller.ControllerModule.*
 
 import java.awt.BorderLayout

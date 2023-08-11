@@ -1,5 +1,7 @@
 package model
 
+import model.entity.Player
+import model.manager.TurnManager
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -12,10 +14,10 @@ class TurnManagerTest extends AnyFunSpec with Matchers:
         Player("Martin"),
         Player("Pietro")))
 
-      assert(turnManager.next().username == "Simone")
-      assert(turnManager.next().username == "Martin")
-      assert(turnManager.next().username == "Pietro")
-      assert(turnManager.next().username == "Simone")
+      assert(turnManager.next().getUsername == "Simone")
+      assert(turnManager.next().getUsername == "Martin")
+      assert(turnManager.next().getUsername == "Pietro")
+      assert(turnManager.next().getUsername == "Simone")
     }
   }
 

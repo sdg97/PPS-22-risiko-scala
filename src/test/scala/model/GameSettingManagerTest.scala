@@ -1,5 +1,6 @@
 package model
 
+import model.manager.{GameSettingManager, MessageSetting, VersionMap}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 

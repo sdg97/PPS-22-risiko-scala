@@ -1,7 +1,6 @@
 package view.component
 
-import view.MyButtonClickEvent
-
+import view.window.MyButtonClickEvent
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.awt.{Color, Font, Graphics, Graphics2D}
 import javax.swing.{BorderFactory, JButton}

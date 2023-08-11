@@ -4,9 +4,12 @@ import view.ViewModule.Requirements
 
 import scala.util.Random
 import controller.ControllerModule
-import model.RisikoRequest.*
-import model.RisikoPhase.*
-import utils.SetupFromFiles
+import model.manager.RisikoRequest.*
+import model.manager.RisikoPhase.*
+import model.config.SetupFromFiles
+import model.entity.{Player, PlayerColor}
+import model.entity.map.{GameMap, State}
+import model.manager.{AttackManager, GameSettingManager, MessageAttackPhase, MessageSetting, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, TurnManager, TurnPhasesManager, VersionMap}
 import view.ViewModule.Requirements
 
 object ModelModule:
@@ -103,7 +106,7 @@ object ModelModule:
 
     import java.io.File
     import scala.io.Source
-    import RisikoSwitchPhaseAction.*
+    import model.manager.RisikoSwitchPhaseAction.*
 
     class ModelImpl extends Model:
       private var gameMap = new GameMap()
@@ -144,11 +147,11 @@ object ModelModule:
 
 
       override def addTank(stateName: String): Unit =
-        if(currentPlayer.equals(gameMap.stateByName(stateName).player) && currentPlayer.tanksToPlace > 0)
+        if(currentPlayer.equals(gameMap.stateByName(stateName).player) && currentPlayer.getTanksToPlace > 0)
           gameMap.stateByName(stateName).addTanks(1)
-          currentPlayer.setTanksToPlace(currentPlayer.tanksToPlace-1)
+          currentPlayer.setTanksToPlace(currentPlayer.getTanksToPlace-1)
 
-      override def tanksToPlace: Int = currentPlayer.tanksToPlace
+      override def tanksToPlace: Int = currentPlayer.getTanksToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
 
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match
@@ -187,7 +190,7 @@ object ModelModule:
 
       override def setDefaultInitialSettings(): Unit =
         gameMap = new GameMap()
-        attackManager = AttackManager(gameMap)
+        attackManager = manager.AttackManager(gameMap)
         turnPhasesManager = TurnPhasesManager()
         gameSettingManager = GameSettingManager()
         

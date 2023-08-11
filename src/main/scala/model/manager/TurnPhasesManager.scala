@@ -1,5 +1,6 @@
-package model
+package model.manager
 
+import model.manager.{RisikoAction, RisikoPhase, RisikoRequest, RisikoSwitchPhaseAction}
 import utils.FSMImpl
 
 enum RisikoPhase:

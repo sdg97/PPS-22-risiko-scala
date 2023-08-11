@@ -1,7 +1,9 @@
 package utils
 
-import model.PlayerColor.BLACK
-import model.{Player, State, VersionMap}
+import model.entity.PlayerColor.BLACK
+import model.manager.VersionMap
+import model.entity.Player
+import model.entity.map.State
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -19,7 +21,7 @@ class AssignTest extends AnyFunSpec with Matchers:
           Player("gianluca")
         )
         players assign states
-        val sizes = states.groupBy(_.player.username)
+        val sizes = states.groupBy(_.player.getUsername)
           .map(_._2.size)
         val max = sizes.max
         sizes.foreach(s =>{
@@ -38,7 +40,7 @@ class AssignTest extends AnyFunSpec with Matchers:
         )
         players assign states
         players.foreach(p => {
-          val playersStates = states.filter(s => s.player.username == p.username)
+          val playersStates = states.filter(s => s.player.getUsername == p.getUsername)
           playersStates assign players.START_TANK_NUMBER(VersionMap.Classic)
           val sizes = playersStates.map(_.numberOfTanks)
           val max = sizes.max

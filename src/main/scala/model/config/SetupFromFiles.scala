@@ -1,7 +1,8 @@
-package utils
+package model.config
 
-import model.{Continent, GameMap, State, VersionMap}
-import utils.Parsers.{BorderParser, ContinentParser, StateParser}
+import model.config.Parsers.{BorderParser, ContinentParser, StateParser}
+import model.entity.map.{Continent, GameMap, State}
+import model.manager.VersionMap
 
 import java.io.File
 import scala.io.Source

@@ -1,6 +1,7 @@
 package utils
-import model.PlayerColor.{BLACK, BLUE, GREEN}
-import model.{Player, State}
+import model.entity.PlayerColor.{BLACK, BLUE, GREEN}
+import model.entity.Player
+import model.entity.map.State
 
 import scala.collection.mutable.{HashMap, Map}
 import scala.collection.immutable.{Nil, Seq}

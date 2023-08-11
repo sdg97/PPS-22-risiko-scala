@@ -1,9 +1,10 @@
 package utils
 
-import model.{GameMap, VersionMap}
+import model.config.SetupFromFiles
+import model.entity.map.GameMap
+import model.manager.VersionMap
 import org.junit.Assert.{assertEquals, assertFalse, assertTrue}
 import org.junit.{Before, Test}
-import utils.SetupFromFiles
 
 import java.io.File
 import scala.io.Source

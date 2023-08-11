@@ -1,7 +1,7 @@
 package view.component
 
-import controller.ControllerModule.Controller
-import model.RisikoSwitchPhaseAction.*
+import controller.Controller
+import model.manager.RisikoSwitchPhaseAction.*
 
 import java.awt.event.ActionEvent
 import javax.swing.{JButton, JPanel, SwingUtilities}

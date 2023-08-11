@@ -1,7 +1,7 @@
 package view.component
 
-import controller.ControllerModule.Controller
-import model.Player
+import controller.Controller
+import model.entity.Player
 
 import java.awt.Color
 import javax.swing.{JLabel, JPanel}
@@ -14,8 +14,8 @@ private[view] class CurrentPlayerComponent(c: Controller):
     panel
 
   def update() =
-    val label = JLabel(s"${LABEL_PREFIX} ${c.currentPlayer.username}")
-    label.setForeground(Color.decode(c.currentPlayer.color.rgb.toString))
+    val label = JLabel(s"${LABEL_PREFIX} ${c.currentPlayer.getUsername}")
+    label.setForeground(Color.decode(c.currentPlayer.getColor.rgb.toString))
     panel.removeAll()
     panel setOpaque false
     panel add label

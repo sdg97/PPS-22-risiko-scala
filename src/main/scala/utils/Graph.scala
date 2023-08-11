@@ -1,6 +1,6 @@
 package utils
 
-import model.Player
+import model.entity.Player
 
 trait Graph:
   type Node

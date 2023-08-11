@@ -1,6 +1,7 @@
-package utils
+package model.config
 
-import model.{Continent, State}
+import model.entity.map
+import model.entity.map.{Continent, State}
 
 object Parsers:
   /**
@@ -46,6 +47,6 @@ object Parsers:
         case continentName :: other if other.nonEmpty =>
           val continentStates = other.dropRight(1).map(_.trim).toSet
           val bonus = other.last.trim.toInt
-          Some(Continent(continentName.trim, continentStates, bonus))
+          Some(map.Continent(continentName.trim, continentStates, bonus))
         case _ => None
       }
