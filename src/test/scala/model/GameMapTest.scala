@@ -45,13 +45,13 @@ class GameMapTest:
   @Test
   def testCalcTanksToPlaceWithoutContinent(): Unit =
     gameMap.calcTanksToPlace(player1)
-    assertEquals(player1.getTanksToPlace,1)
+    assertEquals(player1.tanksToPlace,1)
 
   @Test
   def testCalcTanksToPlaceWithContinent(): Unit =
     gameMap.stateByName("france").setPlayer(player1)
     gameMap.calcTanksToPlace(player1)
-    assertEquals(player1.getTanksToPlace, 5)
+    assertEquals(player1.tanksToPlace, 5)
 
   @Test
   def testAddTanks(): Unit =

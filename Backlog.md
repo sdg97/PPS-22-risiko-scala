@@ -37,14 +37,18 @@ Sprint 2: 13-19 July
 
 Sprint 3: 20-26 July
 
-|                                                              |                                                                       |           |                            |   |   |   |   |   |   |   |
-|--------------------------------------------------------------|-----------------------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
-| Product Backlog Item                                         | Sprint Task                                                           | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-| I need to configure all states and borders from config files | Make parsers to read config files and create objects                  | Lelli     | 7                          | 3 | 4 | 0 | 0 | 0 | 0 | 0 |
-|                                                              | Make the config file of states and borders                            | Lelli     | 4                          | 0 | 0 | 4 | 0 | 0 | 0 | 0 |
-| I need to have an implementation of the Continent entity     | Implement the state class and the relative methods                    | Lelli     | 3                          | 0 | 0 | 2 | 1 | 0 | 0 | 0 |
-| I need to configure continents from config file              | Make parsers to read config files and create objects                  | Lelli     | 3                          | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
-|                                                              | Make the config file of continents                                    | Lelli     | 1                          | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+|                                                                                                 |                                                      |           |                            |     |     |     |   |   |   |   |
+|-------------------------------------------------------------------------------------------------|------------------------------------------------------|-----------|----------------------------|-----|-----|-----|---|---|---|---|
+| Product Backlog Item                                                                            | Sprint Task                                          | Volunteer | Initial Estimate of Effort | 1   | 2   | 3   | 4 | 5 | 6 | 7 |
+| I need to configure all states and borders from config files                                    | Make parsers to read config files and create objects | Lelli     | 7                          | 3   | 4   | 0   | 0 | 0 | 0 | 0 |
+|                                                                                                 | Make the config file of states and borders           | Lelli     | 4                          | 0   | 0   | 4   | 0 | 0 | 0 | 0 |
+| I need to have an implementation of the Continent entity                                        | Implement the state class and the relative methods   | Lelli     | 3                          | 0   | 0   | 2   | 1 | 0 | 0 | 0 |
+| I need to configure continents from config file                                                 | Make parsers to read config files and create objects | Lelli     | 3                          | 0   | 0   | 0   | 3 | 0 | 0 | 0 |
+|                                                                                                 | Make the config file of continents                   | Lelli     | 1                          | 0   | 0   | 0   | 0 | 2 | 0 | 0 |
+| I need to have an implementation of move tanks after state conquest                             | Make the method to return the number of tanks to move | Marcolini | 4                          | 2   | 2   | 0   | 0 | 0 | 0 | 0 |
+| I need to have a graphical interface to select the number of tanks to move in a conquared state | Update the                                           | Lelli     | 3                          | 0   | 0   | 2   | 1 | 0 | 0 | 0 |
+| I need to configure continents from config file                                                 | Make parsers to read config files and create objects | Lelli     | 3                          | 0   | 0   | 0   | 3 | 0 | 0 | 0 |
+|                                                                                                 | Make the config file of continents                   | Lelli     | 1                          | 0   | 0   | 0   | 0 | 2 | 0 | 0 |
 
 Sprint 4: 27-2 July-August
 

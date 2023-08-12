@@ -13,16 +13,16 @@ enum MessageAttackPhase:
   case Winner
 
 trait AttackManager:
-  def attack(typeOfMap:VersionMap): Unit
-  def getAttacker: State
-  def getDefender:State
-  def getRollDiceAttacker: Seq[Int]
-  def getRollDiceDefender: Seq[Int]
-  def getMessage: MessageAttackPhase
+  def attackPhase(typeOfMap:VersionMap): Unit
+  def attacker: State
+  def defender:State
+  def rollDiceAttacker: Seq[Int]
+  def rollDiceDefender: Seq[Int]
+  def resultMessage: MessageAttackPhase
   def setDefaultSettings:Unit
   def setAttacker(state:State):Unit
   def setDefender(state:State):Unit
-  def getNumberOfDice(attacker: State, defender: State): (Int, Int)
+  def numberOfDice(attacker: State, defender: State): (Int, Int)
   def numberOfTanksToMove(attacker:State):Int
 
 //esiste solo quell'implementazione valida
@@ -33,13 +33,13 @@ object AttackManager:
 
     private var attackerState:State=null
     private var defenderState:State=null
-    private var rollDiceAttacker: Seq[Int] = null
-    private var rollDiceDefender: Seq[Int] = null
+    private var resultRollDiceAttacker: Seq[Int] = null
+    private var resultRollDiceDefender: Seq[Int] = null
     private var numberOfRollDiceAttacker: Int = 0
     private var numberOfRollDiceDefender: Int = 0
     private var message:MessageAttackPhase= null
 
-    override def getNumberOfDice(attacker: State, defender: State): (Int, Int) = (attacker, defender) match
+    override def numberOfDice(attacker: State, defender: State): (Int, Int) = (attacker, defender) match
       case (attacker, defender) if attacker.numberOfTanks > 3 && defender.numberOfTanks >= 3 => (3, 3)
       case (attacker, defender) if attacker.numberOfTanks > 3 && defender.numberOfTanks < 3 => (3, defender.numberOfTanks)
       case (attacker, defender) if attacker.numberOfTanks <= 3 && defender.numberOfTanks >= 3 => (attacker.numberOfTanks - 1, 3)
@@ -80,12 +80,12 @@ object AttackManager:
       case _ => MessageAttackPhase.ContinueAttack
 
 
-    override def attack(typeOfMap:VersionMap): Unit =
-      numberOfRollDiceAttacker=getNumberOfDice(attackerState, defenderState)._1
-      numberOfRollDiceDefender=getNumberOfDice(attackerState, defenderState)._2
-      rollDiceAttacker=rollDice("attacker", attackerState)
-      rollDiceDefender=rollDice("defender", defenderState)
-      val result=attackProcess(rollDiceAttacker,rollDiceDefender)
+    override def attackPhase(typeOfMap:VersionMap): Unit =
+      numberOfRollDiceAttacker=numberOfDice(attackerState, defenderState)._1
+      numberOfRollDiceDefender=numberOfDice(attackerState, defenderState)._2
+      resultRollDiceAttacker=rollDice("attacker", attackerState)
+      resultRollDiceDefender=rollDice("defender", defenderState)
+      val result=attackProcess(resultRollDiceAttacker,resultRollDiceDefender)
       attackerState.removeTanks(result._1)
       defenderState.removeTanks(result._2)
       message=attackResult(attackerState,defenderState, typeOfMap)
@@ -93,15 +93,15 @@ object AttackManager:
     override def numberOfTanksToMove(attacker: State): Int = attacker match
       case attacker if (attacker.numberOfTanks - 1).equals(numberOfRollDiceAttacker) => numberOfRollDiceAttacker
       case _ => attacker.numberOfTanks
-    override def getAttacker: State = attackerState
+    override def attacker: State = attackerState
 
-    override def getDefender: State = defenderState
+    override def defender: State = defenderState
 
-    override def getRollDiceAttacker: Seq[Int] = rollDiceAttacker
+    override def rollDiceAttacker: Seq[Int] = resultRollDiceAttacker
 
-    override def getRollDiceDefender: Seq[Int] = rollDiceDefender
+    override def rollDiceDefender: Seq[Int] = resultRollDiceDefender
 
-    override def getMessage: MessageAttackPhase = message
+    override def resultMessage: MessageAttackPhase = message
 
     override def setAttacker(state: State): Unit = attackerState=state
 
@@ -110,8 +110,8 @@ object AttackManager:
     override def setDefaultSettings: Unit =
       attackerState=null
       defenderState=null
-      rollDiceAttacker= null
-      rollDiceDefender= null
+      resultRollDiceAttacker= null
+      resultRollDiceDefender= null
       numberOfRollDiceAttacker= 0
       numberOfRollDiceDefender= 0
       message= null

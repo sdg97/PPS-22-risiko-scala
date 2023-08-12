@@ -188,7 +188,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
       buttonClose.setEnabled(true)
     }
     else if(controller.resultAttack().equals(MessageAttackPhase.Winner)){
-      labelPlayerMessage.setText("""<html>Congratulation """+stateAttack.player.getUsername+""",<br>you are the WINNER!!! </html>""")
+      labelPlayerMessage.setText("""<html>Congratulation """+stateAttack.player.username+""",<br>you are the WINNER!!! </html>""")
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
       panelAttackPhase.remove(buttonDefence)

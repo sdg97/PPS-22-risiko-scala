@@ -21,7 +21,7 @@ class AssignTest extends AnyFunSpec with Matchers:
           Player("gianluca")
         )
         players assign states
-        val sizes = states.groupBy(_.player.getUsername)
+        val sizes = states.groupBy(_.player.username)
           .map(_._2.size)
         val max = sizes.max
         sizes.foreach(s =>{
@@ -40,7 +40,7 @@ class AssignTest extends AnyFunSpec with Matchers:
         )
         players assign states
         players.foreach(p => {
-          val playersStates = states.filter(s => s.player.getUsername == p.getUsername)
+          val playersStates = states.filter(s => s.player.username == p.username)
           playersStates assign players.START_TANK_NUMBER(VersionMap.Classic)
           val sizes = playersStates.map(_.numberOfTanks)
           val max = sizes.max

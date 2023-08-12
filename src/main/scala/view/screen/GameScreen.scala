@@ -122,7 +122,7 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
       screen.add(btnState)
       buttonMap += (state.name -> btnState)
       buttonMap(state.name).setText(state.numberOfTanks.toString)
-      buttonMap(state.name).setColor(new Color(state.player.getColor.rgb))
+      buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
 
   private def resetButton(): Unit =
@@ -147,7 +147,7 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
     currentPlayerComponent.update()
     controller.allStates.foreach(state => {
       buttonMap(state.name).setText(state.numberOfTanks.toString)
-      buttonMap(state.name).setColor(new Color(state.player.getColor.rgb))
+      buttonMap(state.name).setColor(new Color(state.player.color.rgb))
     })
     resetButton()
 

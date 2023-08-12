@@ -65,22 +65,22 @@ object ModelModule:
 
 
       override def addTank(stateName: String): Unit =
-        if(currentPlayer.equals(gameMap.stateByName(stateName).player) && currentPlayer.getTanksToPlace > 0)
+        if(currentPlayer.equals(gameMap.stateByName(stateName).player) && currentPlayer.tanksToPlace > 0)
           gameMap.stateByName(stateName).addTanks(1)
-          currentPlayer.setTanksToPlace(currentPlayer.getTanksToPlace-1)
+          currentPlayer.setTanksToPlace(currentPlayer.tanksToPlace-1)
 
-      override def tanksToPlace: Int = currentPlayer.getTanksToPlace
+      override def tanksToPlace: Int = currentPlayer.tanksToPlace
       override def switchTurnPhaseActionAvailable :  Set[RisikoAction] = turnPhasesManager.permittedAction
 
       override def switchPhase(a: RisikoSwitchPhaseAction): Unit = a match
         case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcTanksToPlace(currentPlayer)
         case _ => turnPhasesManager.trigger(a)
 
-      override def attack(): Unit = attackManager.attack(setTypeOfMap())
+      override def attack(): Unit = attackManager.attackPhase(setTypeOfMap())
 
-      override def attackResult(): MessageAttackPhase = attackManager.getMessage
+      override def attackResult(): MessageAttackPhase = attackManager.resultMessage
 
-      override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = attackManager.getNumberOfDice(attacker, defender)
+      override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = attackManager.numberOfDice(attacker, defender)
 
 
       override def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
@@ -94,9 +94,9 @@ object ModelModule:
 
       private def checkWinner(): Boolean = currentPlayerStates.size >= 24
 
-      override def rollDiceAttacker(): Seq[Int] = attackManager.getRollDiceAttacker
+      override def rollDiceAttacker(): Seq[Int] = attackManager.rollDiceAttacker
 
-      override def rollDiceDefender(): Seq[Int] = attackManager.getRollDiceDefender
+      override def rollDiceDefender(): Seq[Int] = attackManager.rollDiceDefender
 
       override def numberOfTanksToMove(attacker: State): Int = attackManager.numberOfTanksToMove(attacker)
 
@@ -115,9 +115,9 @@ object ModelModule:
 
       override def setTypeOfMap(): VersionMap = gameSettingManager.getTypeOfMap()
 
-      override def getAttacker(): State = attackManager.getAttacker
+      override def getAttacker(): State = attackManager.attacker
 
-      override def getDefender(): State = attackManager.getDefender
+      override def getDefender(): State = attackManager.defender
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase
