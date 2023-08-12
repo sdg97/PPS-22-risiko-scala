@@ -9,7 +9,7 @@ import scala.util.Random
 class TurnManagerTest extends AnyFunSpec with Matchers:
   describe(" Turn Manager "){
     it(" should have a circular way to get the next ") {
-      val turnManager: TurnManager[Player] = TurnManager(Set(
+      val turnManager: TurnManager[Player] = TurnManager(List(
         Player("Simone"),
         Player("Martin"),
         Player("Pietro")))

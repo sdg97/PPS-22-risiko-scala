@@ -7,7 +7,7 @@ import model.manager.{MessageAttackPhase, MessageSetting, RisikoAction, RisikoPh
 trait Controller:
   def startNewGame(): Unit
 
-  def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap: String): MessageSetting
+  def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap: String): MessageSetting
 
   def deployTroops(): Unit
 

@@ -50,8 +50,8 @@ object AssignGivenInstances:
         accountables.foreach{s => s.addTanks(assigment(s))}
         accountables
 
-  given Assign[Set[Player], Set[State]] with
-    extension (accountables: Set[Player]) def assign(assignable: Set[State]): Set[Player] =
+  given Assign[List[Player], Set[State]] with
+    extension (accountables: List[Player]) def assign(assignable: Set[State]): List[Player] =
       fairAssign(accountables.toSeq, assignable.toSeq).foreach { t => t._2.foreach { s => s.setPlayer(t._1) } }
       accountables
 

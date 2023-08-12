@@ -16,7 +16,7 @@ object ControllerModule:
     class ControllerImpl extends Controller:
       def startNewGame() =
         context.view.showSettingsView()
-      def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String) =
+      def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap:String) =
         context.model.setGameSettings(inputDataPlayer, typeOfMap)
       
       def deployTroops() =

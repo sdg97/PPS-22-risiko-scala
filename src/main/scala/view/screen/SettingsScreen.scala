@@ -17,6 +17,8 @@ import scala.swing.{Dimension, Font, Graphics2D, Image, Insets, Menu, MenuBar, M
 import model.entity.Player
 import model.entity.map.State
 
+import scala.collection.mutable.ListBuffer
+
 /**
  * View for setup simulation.
  */
@@ -43,7 +45,7 @@ private[view] object SettingsScreen {
     panel.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
 
-    val panelInfoPlayer = new JPanel(null) {
+    val panelInitialMenu = new JPanel(null) {
       setBounds(300, 80, 400, 520)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.gray, 30))
@@ -63,7 +65,7 @@ private[view] object SettingsScreen {
     }
     labelNumberOfPlayers.setBounds(70, 40, 120, 40)
 
-    val panelInfo = new JPanel() {
+    val panelInfoPlayers = new JPanel() {
       setBounds(30, 90, 350, 250)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.BLACK, 10))
@@ -79,13 +81,15 @@ private[view] object SettingsScreen {
 
     val comboBoxMenu=new JComboBox[String](Array("3","4","5","6")){}
     comboBoxMenu.setBounds(200, 52, 80,18)
-    setPanelInfo(3,panelInfo)
+    setPanelInfo(3,panelInfoPlayers)
 
     comboBoxMenu.addActionListener((_: ActionEvent) => {
-      panelInfo.removeAll()
+      panelInfoPlayers.removeAll()
 
       val numberOfPlayer = comboBoxMenu.getSelectedItem().toString.toInt
-      setPanelInfo(numberOfPlayer,panelInfo)
+      setPanelInfo(numberOfPlayer,panelInfoPlayers)
+      panelInfoPlayers.revalidate()
+      panelInfoPlayers.repaint()
 
     })
 
@@ -108,19 +112,19 @@ private[view] object SettingsScreen {
     labelError.setBounds(30, 470, 340, 40)
 
     buttonStart.addActionListener((_) => {
-      if (panelInfo.getComponentCount == 0) {
+      if (panelInfoPlayers.getComponentCount == 0) {
         labelError.setText("Choose the number of players")
       }
       else {
         val numberOfPlayer = comboBoxMenu.getSelectedItem().toString.toInt
-        var inputDataPlayer: Set[(String, String)] = Set()
+        var inputDataPlayer: ListBuffer[(String, String)] = ListBuffer()
         var i = 1;
         while (i <= numberOfPlayer) {
-          inputDataPlayer = inputDataPlayer + ((panelInfo.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer" + i)).get.getText,
-            panelInfo.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor" + i)).get.getSelectedItem.toString))
+          inputDataPlayer = inputDataPlayer += ((panelInfoPlayers.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer" + i)).get.getText,
+            panelInfoPlayers.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor" + i)).get.getSelectedItem.toString))
           i += 1
         }
-        val message=c.setGameSettings(inputDataPlayer,typeOfMap)
+        val message=c.setGameSettings(inputDataPlayer.toList,typeOfMap)
         if(message.equals(MessageSetting.ErrorIncompleteUsernames))
           labelError.setText("All username field must be completed")
         else if(message.equals(MessageSetting.ErrorDuplicateUsername))
@@ -188,14 +192,14 @@ private[view] object SettingsScreen {
     labelVersionMap.setBounds(70, 360, 120, 40)
 
 
-    panelInfoPlayer.add(labelNumberOfPlayers)
-    panelInfoPlayer.add(comboBoxMenu)
-    panelInfoPlayer.add(panelInfo)
-    panelInfoPlayer.add(labelVersionMap)
-    panelInfoPlayer.add(comboBoxVersionMap)
-    panelInfoPlayer.add(buttonStart)
-    panelInfoPlayer.add(labelError)
-    panel.add(panelInfoPlayer)
+    panelInitialMenu.add(labelNumberOfPlayers)
+    panelInitialMenu.add(comboBoxMenu)
+    panelInitialMenu.add(panelInfoPlayers)
+    panelInitialMenu.add(labelVersionMap)
+    panelInitialMenu.add(comboBoxVersionMap)
+    panelInitialMenu.add(buttonStart)
+    panelInitialMenu.add(labelError)
+    panel.add(panelInitialMenu)
 
 
     panel

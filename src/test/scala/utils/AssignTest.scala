@@ -14,7 +14,7 @@ class AssignTest extends AnyFunSpec with Matchers:
     describe(" of a States Set to a Players Set") {
       it(" should be fair") {
         val states: Set[State] = statesFromFile("src/main/resources/config/states.txt")
-        val players = Set(Player("simone"),
+        val players = List(Player("simone"),
           Player("pietro"),
           Player("martin"),
           Player("mirko"),
@@ -32,7 +32,7 @@ class AssignTest extends AnyFunSpec with Matchers:
     describe(" of Troops to States in a random way") {
       it(" should be fair") {
         val states: Set[State] = statesFromFile("src/main/resources/config/states.txt")
-        val players = Set(Player("simone"),
+        val players = List(Player("simone"),
           Player("pietro"),
           Player("martin"),
           Player("mirko"),

@@ -44,7 +44,7 @@ object ModelModule:
 
       override def stateByName(stateName: String): State = gameMap.stateByName(stateName)
 
-      override def setGameSettings(inputDataPlayer: Set[(String, String)], typeOfMap:String): MessageSetting =
+      override def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap:String): MessageSetting =
         val message=gameSettingManager.setGameSettings(inputDataPlayer, typeOfMap)
         if(message.equals(MessageSetting.CorrectSettings)){
           SetupFromFiles.setup(gameMap, setTypeOfMap())
@@ -59,7 +59,7 @@ object ModelModule:
 
       override def deployTroops(): Unit = println("troop deployed")
 
-      override def players: Set[Player] = turnManager.get.all
+      override def players: List[Player] = turnManager.get.all
 
       override def allStates: Set[State] = gameMap.nodes
 
@@ -94,9 +94,9 @@ object ModelModule:
 
       private def checkWinner(): Boolean = currentPlayerStates.size >= 24
 
-      override def rollDiceAttacker(): Seq[Int] = attackManager.rollDiceAttacker
+      override def rollDiceAttacker(): Seq[Int] = attackManager.diceRollAttacker
 
-      override def rollDiceDefender(): Seq[Int] = attackManager.rollDiceDefender
+      override def rollDiceDefender(): Seq[Int] = attackManager.diceRollDefender
 
       override def numberOfTanksToMove(attacker: State): Int = attackManager.numberOfTanksToMove(attacker)
 

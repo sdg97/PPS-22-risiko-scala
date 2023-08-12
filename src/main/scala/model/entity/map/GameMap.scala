@@ -75,7 +75,7 @@ class GameMap extends Graph:
    */
   def playerStates(player: Player): Set[State] = _nodes.filter(_.player == player)
   
-  def assignStatesToPlayers(players: Set[Player], versionMap: VersionMap): Unit =
+  def assignStatesToPlayers(players: List[Player], versionMap: VersionMap): Unit =
     import utils.AssignGivenInstances.given
     players assign nodes
     players.foreach(p =>
