@@ -14,13 +14,10 @@ import view.ViewModule.Requirements
 
 object ModelModule:
 
-  type Requirements = ControllerModule.Provider
-
   trait Provider:
     val model: Model
 
   trait Component:
-    context: Requirements =>
 
     import java.io.File
     import scala.io.Source
@@ -33,7 +30,6 @@ object ModelModule:
       private var turnPhasesManager = TurnPhasesManager()
       private var gameSettingManager = GameSettingManager()
       
-
       override def neighborStatesOfPlayer(stateName: String): Set[String] = gameMap.neighborStatesOfPlayer(stateName, currentPlayer)
       override def neighborStatesOfEnemies(stateName: String): Set[String] = gameMap.neighborStatesOfEnemies(stateName, currentPlayer)
 
@@ -122,6 +118,5 @@ object ModelModule:
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase
 
-  trait Interface extends Provider with Component:
-    self: Requirements =>
+  trait Interface extends Provider with Component
 

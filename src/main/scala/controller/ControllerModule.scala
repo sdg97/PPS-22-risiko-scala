@@ -18,11 +18,6 @@ object ControllerModule:
         context.view.showSettingsView()
       def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap:String) =
         context.model.setGameSettings(inputDataPlayer, typeOfMap)
-      
-      def deployTroops() =
-        model.deployTroops()
-        context.view.showGameView()
-        view.update()
       override def neighborStatesOfEnemies(stateName: String): Set[String] = model.neighborStatesOfEnemies(stateName)
       override def neighborStatesOfPlayer(state: String): Set[String] = model.neighborStatesOfPlayer(state)
       override def stateByName(stateName: String): State = model.stateByName(stateName)

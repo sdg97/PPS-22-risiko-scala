@@ -9,8 +9,6 @@ trait Controller:
 
   def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap: String): MessageSetting
 
-  def deployTroops(): Unit
-
   /**
    * @param stateName the state's name from which to search for neighbors
    * @return a Set of the names of neighboring states with the state passed as a parameter and owned by enemy players
