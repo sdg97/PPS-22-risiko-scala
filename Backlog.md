@@ -37,6 +37,7 @@ Sprint 2: 13-19 July
 
 Sprint 3: 20-26 July
 
+
 |                                                              |                                                      |           |                            |   |   |   |   |   |   |   |
 |--------------------------------------------------------------|------------------------------------------------------|-----------|----------------------------|---|---|---|---|---|---|---|
 | Product Backlog Item                                         | Sprint Task                                          | Volunteer | Initial Estimate of Effort | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
@@ -48,6 +49,8 @@ Sprint 3: 20-26 July
 | Refactor                                                     | Refactor the previus sprint code                     | Del Gatto | 10                         | 2 | 2 | 1 | 2 | 0 | 0 | 0 |
 | View                                                         | Switch phase component                               | Del Gatto | 6                          | 0 | 0 | 0 | 0 | 3 | 3 | 0 |
 | View                                                         | Current player component                             | Del Gatto | 3                          | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| I need to have an implementation of move tanks after state conquest                             | Make the method to return the number of tanks to move | Marcolini | 4                          | 2   | 2   | 0   | 0 | 0 | 0 | 0 |
+| I need to have a graphical interface to select the number of tanks to move in a conquared state | Update the                                           | Lelli     | 3                          | 0   | 0   | 2   | 1 | 0 | 0 | 0 |
 
 Sprint 4: 27-2 July-August
 

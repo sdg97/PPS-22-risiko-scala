@@ -1,13 +1,15 @@
 package view.component
 
+import model.entity.map.Position
 import view.window.MyButtonClickEvent
+
 import java.awt.geom.{Ellipse2D, Point2D}
 import java.awt.{Color, Font, Graphics, Graphics2D}
 import javax.swing.{BorderFactory, JButton}
 import scala.collection.mutable.ListBuffer
 import scala.swing.Color
 
-class JButtonExtended(posX: Int, posY: Int) extends JButton() {
+class JButtonExtended(position: Position) extends JButton() {
   private var _isNeighbour: Boolean = false
   private var _color: Color = Color.DARK_GRAY
 
@@ -43,5 +45,5 @@ class JButtonExtended(posX: Int, posY: Int) extends JButton() {
       setForeground(Color.WHITE)
     super.paintComponent(g)
   }
-  setBounds(posX, posY, 40, 40)
+  setBounds(position._1, position._2, 40, 40)
 }

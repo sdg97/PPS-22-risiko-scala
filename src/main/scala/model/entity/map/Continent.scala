@@ -1,7 +1,6 @@
 package model.entity.map
 
 import model.entity.map.Continent
-
 trait Continent:
   /**
    * @return the name of the continent.

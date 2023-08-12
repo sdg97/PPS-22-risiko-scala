@@ -15,28 +15,28 @@ class AttackManagerTest extends AnyFunSpec with Matchers:
     attackManager.setAttacker(attacker)
     attackManager.setDefender(defender)
 
-    attackManager.attack(VersionMap.Classic)
+    attackManager.attackPhase(VersionMap.Classic)
 
     it("should have a way to get the number of Attacker's dice"){
-      assert(attackManager.getNumberOfDice(State("Peru", 4, Player("Martin", PlayerColor.RED), (20, 50)),State("Argentina", 2, Player("Pietro", PlayerColor.YELLOW), (50, 90)))._1.equals(3))
+      assert(attackManager.numberOfDice(State("Peru", 4, Player("Martin", PlayerColor.RED), (20, 50)),State("Argentina", 2, Player("Pietro", PlayerColor.YELLOW), (50, 90)))._1.equals(3))
     }
 
     it("should have a way to get the number of Defender's dice") {
-      assert(attackManager.getNumberOfDice(State("Peru", 4, Player("Martin", PlayerColor.RED), (20, 50)), State("Argentina", 2, Player("Pietro", PlayerColor.YELLOW), (50, 90)))._2.equals(2))
+      assert(attackManager.numberOfDice(State("Peru", 4, Player("Martin", PlayerColor.RED), (20, 50)), State("Argentina", 2, Player("Pietro", PlayerColor.YELLOW), (50, 90)))._2.equals(2))
     }
 
     it("should have a way to get the result of Attacker's roll dice") {
-      assert(attackManager.getRollDiceAttacker.size.equals(3))
+      assert(attackManager.rollDiceAttacker.size.equals(3))
     }
 
     it("should have a way to get the result of Defender's roll dice") {
-      assert(attackManager.getRollDiceDefender.size.equals(2))
+      assert(attackManager.rollDiceDefender.size.equals(2))
     }
 
     it("should have a way to get the result of attack") {
-      assert(attackManager.getMessage.equals(MessageAttackPhase.ConqueredState) ||
-        attackManager.getMessage.equals(MessageAttackPhase.LoseAttack) ||
-        attackManager.getMessage.equals(MessageAttackPhase.ContinueAttack))
+      assert(attackManager.resultMessage.equals(MessageAttackPhase.ConqueredState) ||
+        attackManager.resultMessage.equals(MessageAttackPhase.LoseAttack) ||
+        attackManager.resultMessage.equals(MessageAttackPhase.ContinueAttack))
     }
 
     it("should have a way to get the number of tank to move in a conquered state"){
@@ -45,11 +45,11 @@ class AttackManagerTest extends AnyFunSpec with Matchers:
 
     it("should have a way to set default attack settings"){
       attackManager.setDefaultSettings
-      assert(attackManager.getAttacker == (null))
-      assert(attackManager.getDefender == (null))
-      assert(attackManager.getRollDiceAttacker == (null))
-      assert(attackManager.getRollDiceDefender == (null))
-      assert(attackManager.getMessage == null)
+      assert(attackManager.attacker == (null))
+      assert(attackManager.defender == (null))
+      assert(attackManager.rollDiceAttacker == (null))
+      assert(attackManager.rollDiceDefender == (null))
+      assert(attackManager.resultMessage == null)
     }
 
   }
