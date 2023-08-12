@@ -30,7 +30,6 @@ object ModelModule:
       private var turnPhasesManager = TurnPhasesManager()
       private var gameSettingManager = GameSettingManager()
       
-
       override def neighborStatesOfPlayer(stateName: String): Set[String] = gameMap.neighborStatesOfPlayer(stateName, currentPlayer)
       override def neighborStatesOfEnemies(stateName: String): Set[String] = gameMap.neighborStatesOfEnemies(stateName, currentPlayer)
 

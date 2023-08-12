@@ -1,10 +1,9 @@
 package view.component
 
 import controller.Controller
-
 import javax.swing.{JLabel, JPanel}
 
-private[view] class CurrentPhaseComponent(c: Controller):
+private[view] class CurrentPhaseComponent(private val c: Controller):
   private val panel = new JPanel()
   private val LABEL_PREFIX = "Phase: "
   def get() =

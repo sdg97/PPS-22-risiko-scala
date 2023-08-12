@@ -6,7 +6,7 @@ import model.entity.Player
 import java.awt.Color
 import javax.swing.{JLabel, JPanel}
 
-private[view] class CurrentPlayerComponent(c: Controller):
+private[view] class CurrentPlayerComponent(private val c: Controller):
   private val panel = new JPanel()
   private val LABEL_PREFIX = "Player:"
   def get() =
