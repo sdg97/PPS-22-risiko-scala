@@ -4,13 +4,13 @@ import model.entity.map.State
 import model.entity.Player
 
 type Position = (Int, Int)
-
+type StateName = String
 trait State:
   /**
    *
    * @return the name of the state.
    */
-  def name: String
+  def name: StateName
 
   /**
    *
@@ -50,13 +50,13 @@ trait State:
 
 object State:
 
-  private class StateImpl(_name: String, var _numberOfTanks: Int, var _player: Player, _position: Position) extends State:
-    override def name: String = _name
+  private class StateImpl(_name: StateName, var _numberOfTanks: Int, var _player: Player, _position: Position) extends State:
+    override def name: StateName = _name
     override def numberOfTanks: Int = _numberOfTanks
 
     override def player: Player = _player
 
-    override def position: (Int, Int) = _position
+    override def position: Position = _position
 
     override def setPlayer(p: Player): Unit =
       _player = p
@@ -67,11 +67,11 @@ object State:
     override def removeTanks(numberOfTanksToRemove: Int): Unit =
       _numberOfTanks = _numberOfTanks - numberOfTanksToRemove
 
-  def apply(name: String, numberOfTanks: Int, player: Player, position: Position): State =
+  def apply(name: StateName, numberOfTanks: Int, player: Player, position: Position): State =
     new StateImpl(name, numberOfTanks, player, position)
 
-  def apply(name: String) : State =
+  def apply(name: StateName) : State =
     new StateImpl(name, 0, Player("mock"), (0, 0))
 
-  def apply(name: String, numberOfTanks: Int, player: Player): State =
+  def apply(name: StateName, numberOfTanks: Int, player: Player): State =
     new StateImpl(name, numberOfTanks, player, (0, 0))

@@ -20,8 +20,20 @@ object SetupFromFiles:
     readLinesFromFile(resultVersionMap._3).flatMap(ContinentParser.parse).foreach(gameMap.addContinent)
   }
 
+  /**
+   * method to read all lines of a file
+   *
+   * @param file file in which read the lines
+   * @return a Seq of all the lines of the file
+   */
   private def readLinesFromFile(file: File): Seq[String] = Source.fromFile(file).getLines().toList
 
+  /**
+   * method to obtain the correct config files associated with the map version chosen by the user
+   *
+   * @param versionMap the version of the map chosen by the user
+   * @return the config files associated with the map version
+   */
   private def setTypeOfMap(versionMap:VersionMap) = versionMap match
     case VersionMap.Classic =>
       (File("src/main/resources/config/states.txt"), File("src/main/resources/config/borders.txt"), File("src/main/resources/config/continents.txt"))
