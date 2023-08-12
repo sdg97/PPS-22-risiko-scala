@@ -6,7 +6,7 @@ import controller.ControllerModule.*
 import java.awt.BorderLayout
 import javax.swing.{JFrame, JPanel, WindowConstants}
 
-class GameWindow(c: Controller) {
+private[view] class GameWindow(private val c: Controller) {
   private val TITLE = "Risiko"
   private val ICON_PATH = "/map_ref.png"
   private val frame = new JFrame(TITLE)

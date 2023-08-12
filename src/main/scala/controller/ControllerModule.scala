@@ -24,6 +24,7 @@ object ControllerModule:
       override def currentPlayerStates: Set[State] = model.currentPlayerStates
       override def currentPlayer: Player = model.currentPlayer
       override def allStates: Set[State] = model.allStates
+      override def updateView(): Unit = view.update()
       override def addTank(stateName: String): Unit =
         model.addTank(stateName)
         view.update()

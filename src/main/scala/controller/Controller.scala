@@ -46,6 +46,11 @@ trait Controller:
   def allStates: Set[State]
 
   /**
+   * method to update the view with updated state's data
+   */
+  def updateView(): Unit
+
+  /**
    * @param stateName the name of the state to assign the tanks to
    * @return a Set of all states owned by the current player
    */
