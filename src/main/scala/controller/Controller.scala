@@ -2,12 +2,12 @@ package controller
 
 import model.entity.Player
 import model.entity.map.State
-import model.manager.{MessageAttackPhase, MessageSetting, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, VersionMap}
+import model.manager.{MessageAttackPhase, SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, VersionMap}
 
 trait Controller:
   def startNewGame(): Unit
 
-  def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap: String): MessageSetting
+  def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap: String): SettingResult
 
   /**
    * @param stateName the state's name from which to search for neighbors

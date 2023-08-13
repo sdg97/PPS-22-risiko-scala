@@ -2,7 +2,7 @@ package view.screen
 
 
 import controller.Controller
-import model.manager.MessageSetting
+import model.manager.SettingResult
 import utils.shiftLeft
 
 import java.awt.event.ActionEvent
@@ -125,13 +125,13 @@ private[view] object SettingsScreen {
           i += 1
         }
         val message=c.setGameSettings(inputDataPlayer.toList,typeOfMap)
-        if(message.equals(MessageSetting.ErrorIncompleteUsernames))
+        if(message.equals(SettingResult.ErrorIncompleteUsernames))
           labelError.setText("All username field must be completed")
-        else if(message.equals(MessageSetting.ErrorDuplicateUsername))
+        else if(message.equals(SettingResult.ErrorDuplicateUsername))
           labelError.setText("The username must be assigned at only one player")
-        else if(message.equals(MessageSetting.ErrorSameColorsSelected))
+        else if(message.equals(SettingResult.ErrorSameColorsSelected))
           labelError.setText("The color must be assigned at only one player")
-        else if(message.equals(MessageSetting.ErrorVersionOfMap))
+        else if(message.equals(SettingResult.ErrorVersionOfMap))
           labelError.setText("Select the correct version of Map")
         else
           c.showGameView

@@ -4,7 +4,7 @@ import controller.Controller
 import model.manager.MessageAttackPhase
 import model.entity.Player
 import model.entity.map.State
-import view.component.{DadoComponent, JButtonExtended, SelectPhaseComponent}
+import view.component.{DiceComponent, JButtonExtended, SelectPhaseComponent}
 import view.screen.GameScreen
 
 import java.awt.*
@@ -134,7 +134,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
     showAttackPlayerDice(panelDadoAttack)
 
     for (i <- 0 to rollDiceAttack.size - 1) {
-      val component = panelDadoAttack.getComponent(i).asInstanceOf[DadoComponent]
+      val component = panelDadoAttack.getComponent(i).asInstanceOf[DiceComponent]
       component.setValue(rollDiceAttack(i))
 
     }
@@ -151,7 +151,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
 
     showDefenderPlayerDice(panelDadoDefender)
     for (i <- 0 to rollDiceDefender.size-1 ) {
-      val component = panelDadoDefender.getComponent(i).asInstanceOf[DadoComponent]
+      val component = panelDadoDefender.getComponent(i).asInstanceOf[DiceComponent]
       component.setValue(rollDiceDefender(i))
     }
     panelDadoDefender.revalidate()
@@ -265,7 +265,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
     else
       numberOfDice =controller.rollDiceAttacker().size
     for (_ <- 1 to numberOfDice) {
-      val dadoComponentAttack = new DadoComponent("attacker")
+      val dadoComponentAttack = new DiceComponent("attacker")
       dadoComponentAttack.setPreferredSize(new Dimension(50, 50))
       dadoComponentAttack.setValue(1)
       panelDadoAttack.add(dadoComponentAttack)
@@ -284,7 +284,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
     else
       numberOfDice = controller.rollDiceDefender().size
     for (_ <- 1 to numberOfDice) {
-      val dadoComponentDefence = new DadoComponent("defender")
+      val dadoComponentDefence = new DiceComponent("defender")
       dadoComponentDefence.setPreferredSize(new Dimension(50, 50))
       dadoComponentDefence.setValue(1)
       panelDadoDefender.add(dadoComponentDefence)

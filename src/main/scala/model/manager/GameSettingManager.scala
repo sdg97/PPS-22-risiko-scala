@@ -1,8 +1,8 @@
 package model.manager
 
-import model.manager.{GameSettingManager, MessageSetting}
+import model.manager.{GameSettingManager, SettingResult}
 
-enum MessageSetting:
+enum SettingResult:
   case ErrorIncompleteUsernames
   case ErrorDuplicateUsername
   case ErrorSameColorsSelected
@@ -16,24 +16,24 @@ enum VersionMap:
 trait GameSettingManager:
   type PlayerSettings= List[(String, String)]
   type TypeMap= String
-  def setGameSettings(inputDataPlayer: PlayerSettings, typeOfMap:TypeMap):MessageSetting
-  def getTypeOfMap():VersionMap
+  def setGameSettings(inputDataPlayer: PlayerSettings, typeOfMap:TypeMap):SettingResult
+  def typeOfMap():VersionMap
 
 object GameSettingManager:
   def apply():GameSettingManager=GameSettingManagerImpl()
 
   private class GameSettingManagerImpl()extends GameSettingManager:
     private var map:TypeMap=""
-    override def setGameSettings(inputDataPlayer: PlayerSettings, typeOfMap:TypeMap): MessageSetting = (inputDataPlayer, typeOfMap) match
-      case _ if inputDataPlayer.exists(_._1 == "") => MessageSetting.ErrorIncompleteUsernames
-      case _ if inputDataPlayer.exists(element => inputDataPlayer.count(_._2 == element._2) > 1) => MessageSetting.ErrorSameColorsSelected
-      case _ if inputDataPlayer.exists(element => inputDataPlayer.count(_._1 == element._1) > 1) => MessageSetting.ErrorDuplicateUsername
-      case _ if map.equals("") => MessageSetting.ErrorVersionOfMap
+    override def setGameSettings(inputDataPlayer: PlayerSettings, typeOfMap:TypeMap): SettingResult = (inputDataPlayer, typeOfMap) match
+      case _ if inputDataPlayer.exists(_._1 == "") => SettingResult.ErrorIncompleteUsernames
+      case _ if inputDataPlayer.exists(element => inputDataPlayer.count(_._2 == element._2) > 1) => SettingResult.ErrorSameColorsSelected
+      case _ if inputDataPlayer.exists(element => inputDataPlayer.count(_._1 == element._1) > 1) => SettingResult.ErrorDuplicateUsername
+      case _ if map.equals("") => SettingResult.ErrorVersionOfMap
       case _ =>
         map=typeOfMap
-        MessageSetting.CorrectSettings
+        SettingResult.CorrectSettings
 
-    override def getTypeOfMap(): VersionMap = map match
+    override def typeOfMap(): VersionMap = map match
       case "Classic" => VersionMap.Classic
       case "Europe" => VersionMap.Europe
       case _ => null

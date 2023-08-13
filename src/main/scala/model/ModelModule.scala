@@ -9,7 +9,7 @@ import model.manager.RisikoPhase.*
 import model.config.SetupFromFiles
 import model.entity.{Player, PlayerColor}
 import model.entity.map.{GameMap, State}
-import model.manager.{AttackManager, GameSettingManager, MessageAttackPhase, MessageSetting, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, TurnManager, TurnPhasesManager, VersionMap}
+import model.manager.{AttackManager, GameSettingManager, MessageAttackPhase, SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, TurnManager, TurnPhasesManager, VersionMap}
 import view.ViewModule.Requirements
 
 object ModelModule:
@@ -40,9 +40,9 @@ object ModelModule:
 
       override def stateByName(stateName: String): State = gameMap.stateByName(stateName)
 
-      override def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap:String): MessageSetting =
+      override def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap:String): SettingResult =
         val message=gameSettingManager.setGameSettings(inputDataPlayer, typeOfMap)
-        if(message.equals(MessageSetting.CorrectSettings)){
+        if(message.equals(SettingResult.CorrectSettings)){
           SetupFromFiles.setup(gameMap, setTypeOfMap())
           turnManager = Some(TurnManager(inputDataPlayer.map(element =>
             Player(element._1, PlayerColor.valueOf(element._2))
@@ -109,7 +109,7 @@ object ModelModule:
         gameSettingManager = GameSettingManager()
         
 
-      override def setTypeOfMap(): VersionMap = gameSettingManager.getTypeOfMap()
+      override def setTypeOfMap(): VersionMap = gameSettingManager.typeOfMap()
 
       override def getAttacker(): State = attackManager.attacker
 

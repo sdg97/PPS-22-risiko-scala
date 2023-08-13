@@ -3,7 +3,7 @@ package view.component
 import java.awt.{Color, Graphics, Graphics2D}
 import javax.swing.JComponent
 
-class DadoComponent(typeOfPlayer:String) extends JComponent{
+class DiceComponent(typeOfPlayer:String) extends JComponent{
   private var value: Int = 1
 
   def setValue(newValue: Int): Unit = {
