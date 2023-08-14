@@ -13,7 +13,7 @@ object TurnManager:
 
   private case class TurnManagerImpl[T](private val toManage: List[T])
     extends TurnManager[T]:
-    private val iterator: Iterator[T] = LazyList.continually(toManage.toList).flatten.iterator
+    private val iterator: Iterator[T] = LazyList.continually(toManage).flatten.iterator
     private var curr :Option[T] = None
     override def next(): T=
       curr = Some(iterator.next())

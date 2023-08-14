@@ -28,7 +28,7 @@ object GameSettingManager:
       case _ if inputDataPlayer.exists(_._1 == "") => SettingResult.ErrorIncompleteUsernames
       case _ if inputDataPlayer.exists(element => inputDataPlayer.count(_._2 == element._2) > 1) => SettingResult.ErrorSameColorsSelected
       case _ if inputDataPlayer.exists(element => inputDataPlayer.count(_._1 == element._1) > 1) => SettingResult.ErrorDuplicateUsername
-      case _ if map.equals("") => SettingResult.ErrorVersionOfMap
+      case _ if typeOfMap.equals("") => SettingResult.ErrorVersionOfMap
       case _ =>
         map=typeOfMap
         SettingResult.CorrectSettings
