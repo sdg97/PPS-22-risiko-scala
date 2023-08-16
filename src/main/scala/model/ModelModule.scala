@@ -7,9 +7,9 @@ import controller.ControllerModule
 import model.manager.RisikoRequest.*
 import model.manager.RisikoPhase.*
 import model.config.SetupFromFiles
-import model.entity.{Player, PlayerColor}
+import model.entity.{Goal, Player, PlayerColor}
 import model.entity.map.{GameMap, State}
-import model.manager.{AttackManager, GameSettingManager, MessageAttackPhase, SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, TurnManager, TurnPhasesManager, VersionMap}
+import model.manager.{AttackManager, GameSettingManager, MessageAttackPhase, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, TurnManager, TurnPhasesManager, VersionMap}
 import view.ViewModule.Requirements
 
 object ModelModule:
@@ -29,6 +29,7 @@ object ModelModule:
       private var turnManager : Option[TurnManager[Player]] = None
       private var turnPhasesManager = TurnPhasesManager()
       private var gameSettingManager = GameSettingManager()
+      private var _goal : Option[Goal] = None
       
       override def neighborStatesOfPlayer(stateName: String): Set[String] = gameMap.neighborStatesOfPlayer(stateName, currentPlayer)
       override def neighborStatesOfEnemies(stateName: String): Set[String] = gameMap.neighborStatesOfEnemies(stateName, currentPlayer)
@@ -50,6 +51,7 @@ object ModelModule:
           turnManager.get.next()
           gameMap.assignStatesToPlayers(turnManager.get.all,setTypeOfMap())
           gameMap.calcTanksToPlace(currentPlayer)
+          _goal = if setTypeOfMap() == VersionMap.Europe then Some(Goal("Conquer 13 States")) else Some(Goal("Conquer 24 States"))
         }
         message
 
@@ -117,6 +119,8 @@ object ModelModule:
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase
+
+      override def goal = _goal.get
 
   trait Interface extends Provider with Component
 

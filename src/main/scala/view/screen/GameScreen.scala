@@ -37,6 +37,7 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
   private val currentPlayerComponent = new CurrentPlayerComponent(controller)
   private val selectPhaseComponent = new SelectPhaseComponent(controller)
   private val currentPhaseComponent = new CurrentPhaseComponent(controller)
+  private val goalComponent = new GoalComponent(controller)
 
   val screen = new Background(null, controller.setTypeOfMap())
 
@@ -44,7 +45,8 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
   turnPanel.add(currentPlayerComponent.get())
   turnPanel.add(currentPhaseComponent.get())
   turnPanel.add(selectPhaseComponent.get())
-  turnPanel.setBounds(0,0,700,  40)
+  turnPanel.add(goalComponent.get())
+  turnPanel.setBounds(0,0,800,  40)
   screen.add(turnPanel)
 
   private val tanksPanel = new JPanel()

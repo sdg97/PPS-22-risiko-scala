@@ -69,5 +69,7 @@ object ControllerModule:
       override def getDefender(): State = model.getDefender()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
+
+      override def goal = model.goal
   trait Interface extends Provider with Component:
     self: Requirements =>
