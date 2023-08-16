@@ -1,8 +1,8 @@
 package model
 
-import model.entity.Player
+import model.entity.{Goal, Player}
 import model.entity.map.State
-import model.manager.{MessageAttackPhase, SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, VersionMap}
+import model.manager.{MessageAttackPhase, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, VersionMap}
 
 trait Model {
 
@@ -100,4 +100,7 @@ trait Model {
   def setDefaultInitialSettings(): Unit
 
   def setTypeOfMap(): VersionMap
+
+  def goal: Goal
+
 }
