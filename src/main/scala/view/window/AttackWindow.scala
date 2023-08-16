@@ -300,6 +300,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
     }
 
     val arrayOfTankToMove: ArrayBuffer[String]= ArrayBuffer()
+    arrayOfTankToMove+=""
     for(i<-controller.numberOfDiceForPlayers(stateAttack,stateDefender)._1 to (numberOfTanks-1)){
       arrayOfTankToMove+=i.toString
     }
@@ -310,11 +311,14 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
 
 
     comboBoxMenu.addActionListener((_: ActionEvent) => {
-      buttonClose.setEnabled(true)
+      if(!comboBoxMenu.getSelectedItem().toString.equals("")){
+        buttonClose.setEnabled(true)
 
-      val numberOfTank = comboBoxMenu.getSelectedItem().toString.toInt
-      controller.moveTanks(stateAttacks,stateDefenders,numberOfTank)
-      comboBoxMenu.setEnabled(false)
+        val numberOfTank = comboBoxMenu.getSelectedItem().toString.toInt
+        controller.moveTanks(stateAttacks, stateDefenders, numberOfTank)
+        comboBoxMenu.setEnabled(false)
+      }
+
     })
 
     panel.add(labelNumberOfTanksToMove)
