@@ -12,11 +12,20 @@ import model.entity.map.{GameMap, State}
 import model.manager.{AttackManager, GameSettingManager, MessageAttackPhase, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, TurnManager, TurnPhasesManager, VersionMap}
 import view.ViewModule.Requirements
 
+/**
+ * The module that represent the Model
+ */
 object ModelModule:
 
+  /**
+   * What the module provide to the other module
+   */
   trait Provider:
     val model: Model
 
+  /**
+   * The module component used by the provider
+   */
   trait Component:
 
     import java.io.File
@@ -122,5 +131,8 @@ object ModelModule:
 
       override def goal = _goal.get
 
+  /**
+   * Module interface for mixing the module with the others MVC modules
+   */
   trait Interface extends Provider with Component
 
