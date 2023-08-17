@@ -121,12 +121,12 @@ trait TraversableGraph extends GraphWithEdge:
    * @param edge: edge between the nodes
    */
   abstract override def addEdge(node1: Node, node2: Node, edge: Edge) =
-    val n1Neighbours = getNeighbours(n1,e)
+    val n1Neighbours = getNeighbours(node1,edge)
     if !n1Neighbours.isEmpty
-      then throw CantConnectTwoDifferentNodeWithTheSameEdge(n1,n1Neighbours.head, n2, e)
-    _currentNode = if first then Some(n1) else _currentNode
+      then throw CantConnectTwoDifferentNodeWithTheSameEdge(node1,n1Neighbours.head, node2, edge)
+    _currentNode = if first then Some(node1) else _currentNode
     first = false
-    super.addEdge(n1,n2,e)
+    super.addEdge(node1,node2,edge)
 
   /**
    * Set the current node.
@@ -135,9 +135,13 @@ trait TraversableGraph extends GraphWithEdge:
    * @param node the node to set
    */
   def currentNode(node: Node) =
-    if !g.nodes.contains(n) then
-      throw NodeNotFound(n)
-    _currentNode = Some(n)
+    if !g.nodes.contains(node) then
+      throw NodeNotFound(node)
+    _currentNode = Some(node)
+
+  /**
+   * @return the current node
+   */
   def currentNode = _currentNode
 
   /**

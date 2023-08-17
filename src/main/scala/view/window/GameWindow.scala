@@ -24,7 +24,7 @@ private[view] class GameWindow(private val controller: Controller) {
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setVisible(true)
     frame.setResizable(false)
-    c.startNewGame()
+    controller.startNewGame()
 
   /**
    * Show a new screen
@@ -32,7 +32,7 @@ private[view] class GameWindow(private val controller: Controller) {
    */
   def changeScreen(screen: JPanel) =
     frame.getContentPane.removeAll()
-    frame.getContentPane.add(p, BorderLayout.CENTER)
+    frame.getContentPane.add(screen, BorderLayout.CENTER)
     frame.pack()
 
 }

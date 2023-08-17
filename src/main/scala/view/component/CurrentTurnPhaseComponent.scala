@@ -25,5 +25,5 @@ private[view] class CurrentPhaseComponent(private val controller: Controller):
    */
   def update() =
     panel.removeAll()
-    panel add JLabel(s"${LABEL_PREFIX} ${c.currentTurnPhase.toString}")
+    panel add JLabel(s"${LABEL_PREFIX} ${controller.currentTurnPhase.toString}")
     panel.setSize(panel.getPreferredSize())

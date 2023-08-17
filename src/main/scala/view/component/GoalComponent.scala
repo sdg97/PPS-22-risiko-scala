@@ -12,7 +12,7 @@ import javax.swing.{JLabel, JPanel}
  */
 private[view] class GoalComponent(private val controller: Controller):
   private val panel = new JPanel()
-  private val description = c.goal.description
+  private val description = controller.goal.description
 
   /**
    * @return the component

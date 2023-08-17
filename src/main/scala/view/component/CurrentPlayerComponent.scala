@@ -26,8 +26,8 @@ private[view] class CurrentPlayerComponent(private val controller: Controller):
    * update the component with updated data
    */
   def update() =
-    val label = JLabel(s"${LABEL_PREFIX} ${c.currentPlayer.username}")
-    label.setForeground(Color.decode(c.currentPlayer.color.rgb.toString))
+    val label = JLabel(s"${LABEL_PREFIX} ${controller.currentPlayer.username}")
+    label.setForeground(Color.decode(controller.currentPlayer.color.rgb.toString))
     panel.removeAll()
     panel setOpaque false
     panel add label

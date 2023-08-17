@@ -79,7 +79,7 @@ class GameMap extends Graph:
     import utils.AssignGivenInstances.given
     players assign nodes
     players.foreach(p =>
-      playerStates(p) assign players.START_TANK_NUMBER(versionMap)
+      playerStates(p) assign players.getStartTankNumber(versionMap)
     )
 
   /**
