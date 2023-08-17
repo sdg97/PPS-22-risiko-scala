@@ -7,14 +7,26 @@ import java.awt.event.ActionEvent
 import javax.swing.{JButton, JPanel, SwingUtilities}
 import scala.+:
 import scala.collection.mutable.ListBuffer
-private[view] class SelectPhaseComponent(private val c: Controller) {
+
+/**
+ * Component that allow to select the turn phase
+ * @param controller
+ */
+private[view] class SelectPhaseComponent(private val controller: Controller) {
 
   private val panel = new JPanel()
 
+  /**
+   *
+   * @return the component
+   */
   def get() =
     update()
     panel
 
+  /**
+   * update the component with updated data
+   */
   def update() =
     panel.removeAll()
     panel.revalidate()
@@ -30,6 +42,10 @@ private[view] class SelectPhaseComponent(private val c: Controller) {
     )
     panel.setSize(panel.getPreferredSize())
 
+  /**
+   * Enabled or dabled the components button
+   * @param boolean
+   */
   def setButtonsEnabled(boolean: Boolean): Unit =
     panel.getComponents.filter(_.isInstanceOf[JButton]).foreach(
       button => button.setEnabled(boolean)
