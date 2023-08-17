@@ -25,9 +25,7 @@ import scala.collection.mutable.ListBuffer
 private[view] object SettingsScreen {
   def apply(c: Controller) =
 
-
-
-    val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File("src/main/resources/img_map.png"))
+    val backgroundImage: Image = javax.imageio.ImageIO.read(getClass.getResourceAsStream("/img_map.png"))
     val panel = new JPanel(null) {
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)

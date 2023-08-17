@@ -9,10 +9,10 @@ import scala.swing.{Dimension, Image}
 class Background(layoutManager: LayoutManager, versionMap:VersionMap) extends JPanel() {
 
   private def setImage():String = versionMap match {
-    case VersionMap.Europe => "src/main/resources/img_map_europe.png"
-    case VersionMap.Classic => "src/main/resources/img_map.png"
+    case VersionMap.Europe => "/img_map_europe.png"
+    case VersionMap.Classic => "/img_map.png"
   }
-  val backgroundImage: Image = javax.imageio.ImageIO.read(new java.io.File(setImage()))
+  val backgroundImage: Image = javax.imageio.ImageIO.read(getClass.getResourceAsStream(setImage()))
   setLayout(layoutManager)
   
   override def paintComponent(g: Graphics): Unit = {
