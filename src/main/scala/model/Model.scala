@@ -79,10 +79,21 @@ trait Model {
    */
   def tanksToPlace: Int
 
+  /**
+   * @return the actions available to change phase of the turn
+   */
   def switchTurnPhaseActionAvailable: Set[RisikoAction]
 
+  /**
+   * Switch phase turn
+   * @param action to switch turn phase
+   */
   def switchPhase(a: RisikoSwitchPhaseAction): Unit
 
+  /**
+   *
+   * @return the current turn phase
+   */
   def currentPhase: RisikoPhase
 
   /**
@@ -101,6 +112,9 @@ trait Model {
 
   def setTypeOfMap(): VersionMap
 
+  /**
+   * @return the goal for win the game
+   */
   def goal: Goal
 
 }
