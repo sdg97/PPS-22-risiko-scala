@@ -12,7 +12,6 @@ private[view] class GameWindow(private val c: Controller) {
   private val frame = new JFrame(TITLE)
 
   def show() =
-    // Imposta le dimensioni del frame e visualizzalo
     frame.setIconImage(javax.imageio.ImageIO.read(getClass.getResourceAsStream(ICON_PATH)))
     frame.pack()
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)

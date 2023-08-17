@@ -89,6 +89,9 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
   private def getStateSelected: State =
     controller.stateByName(buttonMap.find((_, button) => button.isSelected).get._1)
 
+  /**
+   * method to update the phase component and all the buttons in the states with updated data
+   */
   def update(): Unit =
     if(buttonMap.head._2.isEnabled)
       selectPhaseComponent.update()
@@ -100,6 +103,10 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
     })
     resetButton()
 
+  /**
+   * method to enable and disable all buttons in the game screen to prevent the user from do actions at certain times
+   * @param enable the boolean to set if the buttons are clickable or not
+   */
   def setClickable(enable:Boolean): Unit =
     buttonMap.values.foreach(_.setEnabled(enable))
     selectPhaseComponent.setButtonsEnabled(enable)
