@@ -63,7 +63,7 @@ object ControllerModule:
 
       override def rollDiceDefender(): Seq[Int] = model.rollDiceDefender()
 
-      override def numberOfTanksToMove(): Int = model.numberOfTanksToMove()
+      override def numberOfTanksToMove(): Seq[Int] = model.numberOfTanksToMove()
 
       override def setAttackerState(state: State): Unit = model.setAttackerState(state)
 

@@ -109,7 +109,7 @@ trait Controller:
    * @return the number of tanks to move in conquered state
    *
    */
-  def numberOfTanksToMove(): Int
+  def numberOfTanksToMove(): Seq[Int]
 
   /**
    *

@@ -109,11 +109,11 @@ class TankMovementPhase extends AttackPhase{
    * @return the tanks to movement in conquered state
    * @param attackManager instance of attack's phase manager
    */
-  private def tankMovement(attackManager: AttackManager): Int =
+  private def tankMovement(attackManager: AttackManager): Seq[Int] =
     val diceAttacker=attackManager.numberOfDiceAttacker()
     attackManager.attacker match
-    case stateAttacker if (stateAttacker.numberOfTanks - 1).equals(diceAttacker) => diceAttacker
-    case _ => attackManager.attacker.numberOfTanks
+    case stateAttacker if (stateAttacker.numberOfTanks - 1).equals(diceAttacker) => Seq(diceAttacker)
+    case _ => Seq.range(attackManager.numberOfDiceAttacker(),attackManager.attacker.numberOfTanks)
   override def execute(attackManager: AttackManager): Unit =
     attackManager.setNumberOfTanksToMove(tankMovement(attackManager))
 }

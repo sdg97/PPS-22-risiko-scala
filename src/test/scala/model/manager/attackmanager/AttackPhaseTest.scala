@@ -46,7 +46,7 @@ class AttackPhaseTest extends AnyFunSpec with Matchers:
     it("should determine the number of tank to move in the conquered state correctly"){
       val tankMovementPhase=new TankMovementPhase
       tankMovementPhase.execute(attackManager)
-      assert(attackManager.numberOfTanksToMove().equals(3))
+      assert(attackManager.numberOfTanksToMove().equals(Seq(3)))
     }
   }
 

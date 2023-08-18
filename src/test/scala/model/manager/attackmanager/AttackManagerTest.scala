@@ -22,8 +22,6 @@ class AttackManagerTest extends AnyFunSpec with Matchers:
       assert(attackManager.numberOfDiceDefender().equals(2))
     }
 
-
-
     it("should have a way to get the result of Attacker's roll dice") {
       attackManager.executeAttack(VersionMap.Classic)
       assert(attackManager.rollDiceAttacker.size.equals(3))
