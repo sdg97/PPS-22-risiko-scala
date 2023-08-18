@@ -69,8 +69,6 @@ trait Controller:
 
   def attackPhase(): Unit
 
-  def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int)
-
   /**
    *
    * moves tanks from a state to another state
@@ -104,3 +102,7 @@ trait Controller:
   def setDefaultInitialSettings(): Unit
 
   def setTypeOfMap(): VersionMap
+
+  def numberOfDiceAttacker(): Int
+
+  def numberOfDiceDefender(): Int

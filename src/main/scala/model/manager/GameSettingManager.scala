@@ -13,9 +13,9 @@ enum VersionMap:
   case Europe
   case Classic
 
+type PlayerSettings = List[(String, String)]
+type TypeMap = String
 trait GameSettingManager:
-  type PlayerSettings= List[(String, String)]
-  type TypeMap= String
   def setGameSettings(inputDataPlayer: PlayerSettings, typeOfMap:TypeMap):SettingResult
   def typeOfMap():VersionMap
 

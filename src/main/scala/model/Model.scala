@@ -52,8 +52,6 @@ trait Model {
 
   def setDefender(state: State): Unit
 
-  def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int)
-
   def numberOfTanksToMove(attacker: State): Int
 
   /**
@@ -100,4 +98,8 @@ trait Model {
   def setDefaultInitialSettings(): Unit
 
   def setTypeOfMap(): VersionMap
+
+  def numberOfDiceAttacker(): Int
+
+  def numberOfDiceDefender(): Int
 }

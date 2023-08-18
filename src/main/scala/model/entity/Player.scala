@@ -14,9 +14,29 @@ enum PlayerColor(val rgb: Int):
   case PURPLE extends PlayerColor(0x4C0099)
 
 trait Player:
+  /**
+   *
+   * @return the name of the Player.
+   */
   def username: String
+
+  /**
+   *
+   * @return the color of the Player.
+   */
   def color: PlayerColor
+
+  /**
+   *
+   * @return the number of tanks to place for the Player.
+   */
   def tanksToPlace: Int
+
+  /**
+   * method to set the number of tanks to place for the Player.
+   *
+   * @param tanksNumber the number of tanks to place.
+   */
   def setTanksToPlace(tanksNumber: Int): Unit
 
 

@@ -259,9 +259,9 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
     panelDadoAttack.removeAll()
     panelDadoAttack.revalidate()
     panelDadoAttack.repaint()
-    var numberOfDice=0
+    var numberOfDice=controller.numberOfDiceAttacker()
     if(controller.rollDiceAttacker()==null)
-      numberOfDice=controller.numberOfDiceForPlayers(stateAttack,stateDefender)._1
+      numberOfDice=controller.numberOfDiceAttacker()
     else
       numberOfDice =controller.rollDiceAttacker().size
     for (_ <- 1 to numberOfDice) {
@@ -278,9 +278,9 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
     panelDadoDefender.removeAll()
     panelDadoDefender.revalidate()
     panelDadoDefender.repaint()
-    var numberOfDice = 0
+    var numberOfDice = controller.numberOfDiceDefender()
     if (controller.rollDiceDefender() == null)
-      numberOfDice = controller.numberOfDiceForPlayers(stateAttack, stateDefender)._2
+      numberOfDice = controller.numberOfDiceDefender()
     else
       numberOfDice = controller.rollDiceDefender().size
     for (_ <- 1 to numberOfDice) {
@@ -301,7 +301,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
 
     val arrayOfTankToMove: ArrayBuffer[String]= ArrayBuffer()
     arrayOfTankToMove+=""
-    for(i<-controller.numberOfDiceForPlayers(stateAttack,stateDefender)._1 to (numberOfTanks-1)){
+    for(i<-controller.numberOfDiceAttacker() to (numberOfTanks-1)){
       arrayOfTankToMove+=i.toString
     }
 

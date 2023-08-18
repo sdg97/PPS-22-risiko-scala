@@ -45,7 +45,7 @@ private[view] object SettingsScreen {
     panel.setPreferredSize(new Dimension(1000, 650)) // Imposta le dimensioni del pannello
 
 
-    val panelInitialMenu = new JPanel(null) {
+    val initialSettingsPanel = new JPanel(null) {
       setBounds(300, 80, 400, 520)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.gray, 30))
@@ -65,7 +65,7 @@ private[view] object SettingsScreen {
     }
     labelNumberOfPlayers.setBounds(70, 40, 120, 40)
 
-    val panelInfoPlayers = new JPanel() {
+    val infoPlayerPanel = new JPanel() {
       setBounds(30, 90, 350, 250)
       setBackground(Color.gray)
       setBorder(BorderFactory.createLineBorder(Color.BLACK, 10))
@@ -81,15 +81,15 @@ private[view] object SettingsScreen {
 
     val comboBoxMenu=new JComboBox[String](Array("3","4","5","6")){}
     comboBoxMenu.setBounds(200, 52, 80,18)
-    setPanelInfo(3,panelInfoPlayers)
+    setPanelInfo(3,infoPlayerPanel)
 
     comboBoxMenu.addActionListener((_: ActionEvent) => {
-      panelInfoPlayers.removeAll()
+      infoPlayerPanel.removeAll()
 
       val numberOfPlayer = comboBoxMenu.getSelectedItem().toString.toInt
-      setPanelInfo(numberOfPlayer,panelInfoPlayers)
-      panelInfoPlayers.revalidate()
-      panelInfoPlayers.repaint()
+      setPanelInfo(numberOfPlayer,infoPlayerPanel)
+      infoPlayerPanel.revalidate()
+      infoPlayerPanel.repaint()
 
     })
 
@@ -112,7 +112,7 @@ private[view] object SettingsScreen {
     labelError.setBounds(30, 470, 340, 40)
 
     buttonStart.addActionListener((_) => {
-      if (panelInfoPlayers.getComponentCount == 0) {
+      if (infoPlayerPanel.getComponentCount == 0) {
         labelError.setText("Choose the number of players")
       }
       else {
@@ -120,8 +120,8 @@ private[view] object SettingsScreen {
         var inputDataPlayer: ListBuffer[(String, String)] = ListBuffer()
         var i = 1;
         while (i <= numberOfPlayer) {
-          inputDataPlayer = inputDataPlayer += ((panelInfoPlayers.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer" + i)).get.getText,
-            panelInfoPlayers.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor" + i)).get.getSelectedItem.toString))
+          inputDataPlayer = inputDataPlayer += ((infoPlayerPanel.getComponents().filter(_.isInstanceOf[JTextField]).map(_.asInstanceOf[JTextField]).find(_.getName.equals("txtFieldPlayer" + i)).get.getText,
+            infoPlayerPanel.getComponents().filter(_.isInstanceOf[JComboBox[String]]).map(_.asInstanceOf[JComboBox[String]]).find(_.getName.equals("cmbColor" + i)).get.getSelectedItem.toString))
           i += 1
         }
         val message=c.setGameSettings(inputDataPlayer.toList,typeOfMap)
@@ -192,14 +192,14 @@ private[view] object SettingsScreen {
     labelVersionMap.setBounds(70, 360, 120, 40)
 
 
-    panelInitialMenu.add(labelNumberOfPlayers)
-    panelInitialMenu.add(comboBoxMenu)
-    panelInitialMenu.add(panelInfoPlayers)
-    panelInitialMenu.add(labelVersionMap)
-    panelInitialMenu.add(comboBoxVersionMap)
-    panelInitialMenu.add(buttonStart)
-    panelInitialMenu.add(labelError)
-    panel.add(panelInitialMenu)
+    initialSettingsPanel.add(labelNumberOfPlayers)
+    initialSettingsPanel.add(comboBoxMenu)
+    initialSettingsPanel.add(infoPlayerPanel)
+    initialSettingsPanel.add(labelVersionMap)
+    initialSettingsPanel.add(comboBoxVersionMap)
+    initialSettingsPanel.add(buttonStart)
+    initialSettingsPanel.add(labelError)
+    panel.add(initialSettingsPanel)
 
 
     panel

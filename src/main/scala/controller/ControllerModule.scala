@@ -40,8 +40,6 @@ object ControllerModule:
 
       override def attackPhase(): Unit = model.attack()
 
-      override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = model.numberOfDiceForPlayers(attacker, defender)
-
       override def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
         model.moveTanks(fromStateName, toStateName, numberOfTanks)
         view.update()
@@ -67,6 +65,10 @@ object ControllerModule:
       override def getAttacker(): State = model.getAttacker()
 
       override def getDefender(): State = model.getDefender()
+
+      override def numberOfDiceAttacker(): Int = model.numberOfDiceAttacker()
+
+      override def numberOfDiceDefender(): Int = model.numberOfDiceDefender()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
   trait Interface extends Provider with Component:

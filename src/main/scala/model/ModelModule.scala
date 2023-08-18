@@ -72,13 +72,9 @@ object ModelModule:
         case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcTanksToPlace(currentPlayer)
         case _ => turnPhasesManager.trigger(a)
 
-      override def attack(): Unit = attackManager.attackPhase(setTypeOfMap())
+      override def attack(): Unit = attackManager.executeAttack(setTypeOfMap())
 
       override def attackResult(): MessageAttackPhase = attackManager.resultMessage
-
-      override def numberOfDiceForPlayers(attacker: State, defender: State): (Int, Int) = attackManager.numberOfDice(attacker, defender)
-
-
       override def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
         gameMap.moveTanks(fromStateName, toStateName, numberOfTanks)
         println(turnManager.get.current)
@@ -114,6 +110,10 @@ object ModelModule:
       override def getAttacker(): State = attackManager.attacker
 
       override def getDefender(): State = attackManager.defender
+
+      override def numberOfDiceAttacker(): Int = attackManager.numberOfDiceAttacker()
+
+      override def numberOfDiceDefender(): Int = attackManager.numberOfDiceDefender()
 
       override def currentPhase: RisikoPhase =
         turnPhasesManager.currentPhase
