@@ -16,7 +16,7 @@ object SetupFromFiles:
   def setup(gameMap: GameMap, versionMap:VersionMap): Unit = {
     val resultVersionMap = setTypeOfMap(versionMap)
     readLinesFromFile(resultVersionMap._1).flatMap(StateParser.parse).foreach(gameMap.addNode)
-    readLinesFromFile(resultVersionMap._2).flatMap(BorderParser.parse).foreach { (state1, state2) => gameMap.addEdge(state1, state2) }
+    readLinesFromFile(resultVersionMap._2).flatMap(BorderParser.parse).foreach((state1, state2) => gameMap.addEdge(state1, state2))
     readLinesFromFile(resultVersionMap._3).flatMap(ContinentParser.parse).foreach(gameMap.addContinent)
   }
 
