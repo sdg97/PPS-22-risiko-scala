@@ -23,11 +23,11 @@ object SetupFromFiles:
   /**
    * method to read all lines of a file
    *
-   * @param file file in which read the lines
+   * @param filePath file in which read the lines
    * @return a Seq of all the lines of the file
    */
-  private def readLinesFromFile(file: String): Seq[String] =
-    Source.fromInputStream(getClass.getResourceAsStream(file)).getLines().toList
+  private def readLinesFromFile(filePath: String): Seq[String] =
+    Source.fromInputStream(getClass.getResourceAsStream(filePath)).getLines().toList
 
   /**
    * method to obtain the correct config files associated with the map version chosen by the user
