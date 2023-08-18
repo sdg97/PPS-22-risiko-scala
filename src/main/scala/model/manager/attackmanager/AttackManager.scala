@@ -43,14 +43,14 @@ trait AttackManager:
    *
    * @param diceRollAttacker the result of roll dice by attacker player.
    */
-  def setDiceRollAttacker(diceRollAttacker:DiceRoll):Unit
+  def setRollDiceAttacker(diceRollAttacker:DiceRoll):Unit
 
   /**
    * method to set the result of roll dice by defender player.
    *
    * @param diceRollDefender the result of roll dice by defender player.
    */
-  def setDiceRollDefender(diceRollDefender:DiceRoll):Unit
+  def setRollDiceDefender(diceRollDefender:DiceRoll):Unit
 
   /**
    *
@@ -194,9 +194,9 @@ object AttackManager:
 
     override def setDefender(state: State): Unit = defenderState=state
 
-    override def setDiceRollAttacker(diceRollAttacker: DiceRoll): Unit = resultDiceRollAttacker=diceRollAttacker
+    override def setRollDiceAttacker(diceRollAttacker: DiceRoll): Unit = resultDiceRollAttacker=diceRollAttacker
 
-    override def setDiceRollDefender(diceRollDefender: DiceRoll): Unit = resultDiceRollDefender=diceRollDefender
+    override def setRollDiceDefender(diceRollDefender: DiceRoll): Unit = resultDiceRollDefender=diceRollDefender
 
     override def setResultMessage(messageAttack: MessageAttackPhase): Unit = message=messageAttack
 

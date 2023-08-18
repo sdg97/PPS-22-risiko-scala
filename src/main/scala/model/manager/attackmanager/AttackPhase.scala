@@ -32,8 +32,8 @@ class RollingDicePhase extends AttackPhase{
     case _ => null
 
   override def execute(attackManager: AttackManager): Unit =
-    attackManager.setDiceRollAttacker(rollDicePhase("attacker",attackManager.numberOfDiceAttacker()))
-    attackManager.setDiceRollDefender(rollDicePhase("defender",attackManager.numberOfDiceDefender()))
+    attackManager.setRollDiceAttacker(rollDicePhase("attacker",attackManager.numberOfDiceAttacker()))
+    attackManager.setRollDiceDefender(rollDicePhase("defender",attackManager.numberOfDiceDefender()))
 }
 
 /**
