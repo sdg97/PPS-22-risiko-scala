@@ -184,7 +184,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
       }
     }
     else if (controller.resultOfAttack().equals(MessageAttackPhase.LoseAttack)) {
-      labelPlayerMessage.setText("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + stateDefender.name + """</html>""".stripMargin)
+      labelPlayerMessage.setText("""<html>Sorry, but you can't attack <br>because you have only one tank <br> in """ + stateDefender.name + """</html>""".stripMargin)
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
       panelAttackPhase.remove(buttonDefence)
