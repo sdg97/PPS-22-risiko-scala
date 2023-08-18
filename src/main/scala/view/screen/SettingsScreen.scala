@@ -20,7 +20,7 @@ import model.entity.map.State
 import scala.collection.mutable.ListBuffer
 
 /**
- * View for setup simulation.
+ * Component that allow to show the menu to insert the players’s data and select the type of Risiko’s map
  */
 private[view] object SettingsScreen {
   def apply(c: Controller) =

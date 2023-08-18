@@ -50,9 +50,9 @@ object ControllerModule:
         model.switchPhase(a)
         view.update()
 
-      override def resultAttack(): MessageAttackPhase = model.attackResult()
+      override def resultOfAttack(): MessageAttackPhase = model.resultOfAttack()
 
-      override def attackPhase(): Unit = model.attack()
+      override def executeAttack(): Unit = model.executeAttack()
 
       override def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
         model.moveTanks(fromStateName, toStateName, numberOfTanks)
@@ -62,11 +62,11 @@ object ControllerModule:
 
       override def rollDiceDefender(): Seq[Int] = model.rollDiceDefender()
 
-      override def numberOfTanksToMove(attacker: State): Int = model.numberOfTanksToMove(attacker)
+      override def numberOfTanksToMove(): Int = model.numberOfTanksToMove()
 
-      override def setAttacker(state: State): Unit = model.setAttacker(state)
+      override def setAttackerState(state: State): Unit = model.setAttackerState(state)
 
-      override def setDefender(state: State): Unit = model.setDefender(state)
+      override def setDefenderState(state: State): Unit = model.setDefenderState(state)
 
       override def setDefaultAttackSettings: Unit = model.setDefaultAttackSettings
 
@@ -74,11 +74,11 @@ object ControllerModule:
 
       override def setDefaultInitialSettings(): Unit = model.setDefaultInitialSettings()
 
-      override def setTypeOfMap(): VersionMap = model.setTypeOfMap()
+      override def typeOfMap(): VersionMap = model.typeOfMap()
 
-      override def getAttacker(): State = model.getAttacker()
+      override def attackerState(): State = model.attackerState()
 
-      override def getDefender(): State = model.getDefender()
+      override def defenderState(): State = model.defenderState()
 
       override def numberOfDiceAttacker(): Int = model.numberOfDiceAttacker()
 

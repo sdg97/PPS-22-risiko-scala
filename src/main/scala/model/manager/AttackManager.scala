@@ -55,13 +55,13 @@ trait AttackManager:
    *
    * @return the result of roll dice by attacker player.
    */
-  def diceRollAttacker: DiceRoll
+  def rollDiceAttacker: DiceRoll
 
   /**
    *
    * @return the result of roll dice by defender player.
    */
-  def diceRollDefender: DiceRoll
+  def rollDiceDefender: DiceRoll
 
   /**
    *
@@ -77,7 +77,7 @@ trait AttackManager:
   def setResultMessage(messageAttack:MessageAttackPhase): Unit
 
   /**
-   * method to set the default initial settings.
+   * method to set the default initial settings of attack phase.
    *
    */
   def setDefaultSettings:Unit
@@ -183,9 +183,9 @@ object AttackManager:
 
     override def defender: State = defenderState
 
-    override def diceRollAttacker: DiceRoll = resultDiceRollAttacker
+    override def rollDiceAttacker: DiceRoll = resultDiceRollAttacker
 
-    override def diceRollDefender: DiceRoll = resultDiceRollDefender
+    override def rollDiceDefender: DiceRoll = resultDiceRollDefender
 
     override def resultMessage: MessageAttackPhase = message
 

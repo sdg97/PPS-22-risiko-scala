@@ -47,7 +47,7 @@ class DiceComparisonPhase extends AttackPhase{
    * @param numberDice   the number of player's dice
    */
   private def diceComparison(attackManager: AttackManager): Unit = {
-    val (wagonLostAttacker, wagonLostDefender) = attackManager.diceRollAttacker.sorted.reverse.zip(attackManager.diceRollDefender.sorted.reverse).foldLeft((0, 0)) {
+    val (wagonLostAttacker, wagonLostDefender) = attackManager.rollDiceAttacker.sorted.reverse.zip(attackManager.rollDiceDefender.sorted.reverse).foldLeft((0, 0)) {
       case ((lostAttacker, lostDefender), (attackerRoll, defenderRoll)) =>
         if (attackerRoll > defenderRoll)
           (lostAttacker, lostDefender + 1)

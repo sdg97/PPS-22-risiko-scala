@@ -50,21 +50,19 @@ object ModelModule:
 
       override def stateByName(stateName: String): State = gameMap.stateByName(stateName)
 
-      override def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap:String): SettingResult =
-        val message=gameSettingManager.setGameSettings(inputDataPlayer, typeOfMap)
+      override def setGameSettings(inputDataPlayer: List[(String, String)], versionOfMap:String): SettingResult =
+        val message=gameSettingManager.setGameSettings(inputDataPlayer, versionOfMap)
         if(message.equals(SettingResult.CorrectSettings)){
-          SetupFromFiles.setup(gameMap, setTypeOfMap())
+          SetupFromFiles.setup(gameMap, typeOfMap())
           turnManager = Some(TurnManager(inputDataPlayer.map(element =>
             Player(element._1, PlayerColor.valueOf(element._2))
           )))
           turnManager.get.next()
-          gameMap.assignStatesToPlayers(turnManager.get.all,setTypeOfMap())
+          gameMap.assignStatesToPlayers(turnManager.get.all,typeOfMap())
           gameMap.calcTanksToPlace(currentPlayer)
-          _goal = if setTypeOfMap() == VersionMap.Europe then Some(Goal("Conquer 13 States")) else Some(Goal("Conquer 24 States"))
+          _goal = if typeOfMap() == VersionMap.Europe then Some(Goal("Conquer 13 States")) else Some(Goal("Conquer 24 States"))
         }
         message
-
-      override def deployTroops(): Unit = println("troop deployed")
 
       override def players: List[Player] = turnManager.get.all
 
@@ -83,9 +81,9 @@ object ModelModule:
         case EndTurn => turnPhasesManager.trigger(a); turnManager.get.next(); gameMap.calcTanksToPlace(currentPlayer)
         case _ => turnPhasesManager.trigger(a)
 
-      override def attack(): Unit = attackManager.executeAttack(setTypeOfMap())
+      override def executeAttack(): Unit = attackManager.executeAttack(typeOfMap())
 
-      override def attackResult(): MessageAttackPhase = attackManager.resultMessage
+      override def resultOfAttack(): MessageAttackPhase = attackManager.resultMessage
       override def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
         gameMap.moveTanks(fromStateName, toStateName, numberOfTanks)
         println(turnManager.get.current)
@@ -95,17 +93,15 @@ object ModelModule:
           gameMap.calcTanksToPlace(currentPlayer)
         }
 
-      private def checkWinner(): Boolean = currentPlayerStates.size >= 24
+      override def rollDiceAttacker(): Seq[Int] = attackManager.rollDiceAttacker
 
-      override def rollDiceAttacker(): Seq[Int] = attackManager.diceRollAttacker
+      override def rollDiceDefender(): Seq[Int] = attackManager.rollDiceDefender
 
-      override def rollDiceDefender(): Seq[Int] = attackManager.diceRollDefender
+      override def numberOfTanksToMove(): Int = attackManager.numberOfTanksToMove()
 
-      override def numberOfTanksToMove(attacker: State): Int = attackManager.numberOfTanksToMove()
+      override def setAttackerState(state: State): Unit = attackManager.setAttacker(state)
 
-      override def setAttacker(state: State): Unit = attackManager.setAttacker(state)
-
-      override def setDefender(state: State): Unit = attackManager.setDefender(state)
+      override def setDefenderState(state: State): Unit = attackManager.setDefender(state)
 
       override def setDefaultAttackSettings: Unit = attackManager.setDefaultSettings
 
@@ -116,11 +112,11 @@ object ModelModule:
         gameSettingManager = GameSettingManager()
         
 
-      override def setTypeOfMap(): VersionMap = gameSettingManager.typeOfMap()
+      override def typeOfMap(): VersionMap = gameSettingManager.typeOfMap()
 
-      override def getAttacker(): State = attackManager.attacker
+      override def attackerState(): State = attackManager.attacker
 
-      override def getDefender(): State = attackManager.defender
+      override def defenderState(): State = attackManager.defender
 
       override def numberOfDiceAttacker(): Int = attackManager.numberOfDiceAttacker()
 

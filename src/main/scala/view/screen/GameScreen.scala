@@ -39,7 +39,7 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
   private val currentPhaseComponent = new CurrentPhaseComponent(controller)
   private val goalComponent = new GoalComponent(controller)
 
-  val screen = new Background(null, controller.setTypeOfMap())
+  val screen = new Background(null, controller.typeOfMap())
 
   private val turnPanel = new JPanel()
   turnPanel.add(currentPlayerComponent.get())
@@ -126,8 +126,8 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
         else if (btnState.isNeighbour) {
           println("isNeighbour")
           //if i click on a neighbor state I do an attack
-          controller.setAttacker(getStateSelected)
-          controller.setDefender(controller.stateByName(getStateNameFromButton(btnState)))
+          controller.setAttackerState(getStateSelected)
+          controller.setDefenderState(controller.stateByName(getStateNameFromButton(btnState)))
           val gameWindowAttack = new GameWindowAttack(this, controller)
           resetButton()
         } else if (!btnState.isSelected && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer) && controller.stateByName(getStateNameFromButton(btnState)).numberOfTanks > 1) {

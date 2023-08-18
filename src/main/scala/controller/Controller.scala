@@ -11,6 +11,13 @@ trait Controller:
    */
   def startNewGame(): Unit
 
+  /**
+   * method that initializes the game in case of correct insert of input data by players
+   *
+   * @return the result of the check about the input data inserted by players
+   * @param inputDataPlayer the players’s initial settings
+   * @param typeOfMap       the type of map selected
+   */
   def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap: String): SettingResult
 
   /**
@@ -76,9 +83,16 @@ trait Controller:
    */
   def switchPhase(action: RisikoSwitchPhaseAction): Unit
 
-  def resultAttack(): MessageAttackPhase
+  /**
+   *
+   * @return the message about different scenarios that could be happen at the end of attack phase.
+   */
+  def resultOfAttack(): MessageAttackPhase
 
-  def attackPhase(): Unit
+  /**
+   * method that organize and execute the attack process.
+   */
+  def executeAttack(): Unit
 
   /**
    *
@@ -90,7 +104,11 @@ trait Controller:
    */
   def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit
 
-  def numberOfTanksToMove(attacker: State): Int
+  /**
+   * @return the number of tanks to move in conquered state
+   *
+   */
+  def numberOfTanksToMove(): Int
 
   /**
    *
@@ -98,28 +116,71 @@ trait Controller:
    */
   def currentTurnPhase: RisikoPhase
 
-  def setAttacker(state: State): Unit
+  /**
+   * method to set state from which starts the attack.
+   *
+   * @param state state from which starts the attack.
+   */
+  def setAttackerState(state: State): Unit
 
-  def setDefender(state: State): Unit
+  /**
+   * method to set the attacked state.
+   *
+   * @param state the attacked state.
+   */
+  def setDefenderState(state: State): Unit
 
+  /**
+   * @return the result of roll dice by attacker player.
+   */
   def rollDiceAttacker(): Seq[Int]
 
+  /**
+   * @return the result of roll dice by defender player.
+   */
   def rollDiceDefender(): Seq[Int]
 
+  /**
+   * method to set the default initial settings of attack phase.
+   */
   def setDefaultAttackSettings: Unit
 
-  def getAttacker(): State
+  /**
+   * @return the state from which starts the attack.
+   */
+  def attackerState(): State
 
-  def getDefender(): State
+  /**
+   * @return the attacked state.
+   */
+  def defenderState(): State
 
+  /**
+   * method that allow to show the game view 
+   *
+   */
   def showGameView: Unit
 
+  /**
+   * method to set the default initial settings of system, to restart a new game.
+   */
   def setDefaultInitialSettings(): Unit
 
-  def setTypeOfMap(): VersionMap
-  
+  /**
+   * @return the type of map selected by the players
+   */
+  def typeOfMap(): VersionMap
+
+  /**
+   * @return the number of attacker player's dice
+   *
+   */
   def numberOfDiceAttacker(): Int
 
+  /**
+   * @return the number of defender player's dice
+   *
+   */
   def numberOfDiceDefender(): Int
   /**
    * @return the goal for win the game

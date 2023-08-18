@@ -31,11 +31,11 @@ class AttackManagerTest extends AnyFunSpec with Matchers:
     attackManager.executeAttack(VersionMap.Classic)
 
     it("should have a way to get the result of Attacker's roll dice") {
-      assert(attackManager.diceRollAttacker.size.equals(3))
+      assert(attackManager.rollDiceAttacker.size.equals(3))
     }
 
     it("should have a way to get the result of Defender's roll dice") {
-      assert(attackManager.diceRollDefender.size.equals(2))
+      assert(attackManager.rollDiceDefender.size.equals(2))
     }
 
     it("should have a way to get the result of attack") {
@@ -56,8 +56,8 @@ class AttackManagerTest extends AnyFunSpec with Matchers:
       attackManager.setDefaultSettings
       assert(attackManager.attacker == (null))
       assert(attackManager.defender == (null))
-      assert(attackManager.diceRollAttacker == (null))
-      assert(attackManager.diceRollDefender == (null))
+      assert(attackManager.rollDiceAttacker == (null))
+      assert(attackManager.rollDiceDefender == (null))
       assert(attackManager.resultMessage == null)
     }
 
