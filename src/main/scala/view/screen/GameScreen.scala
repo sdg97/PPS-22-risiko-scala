@@ -37,6 +37,7 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
   private val currentPlayerComponent = new CurrentPlayerComponent(controller)
   private val selectPhaseComponent = new SelectPhaseComponent(controller)
   private val currentPhaseComponent = new CurrentPhaseComponent(controller)
+  private val goalComponent = new GoalComponent(controller)
 
   val screen = new Background(null, controller.setTypeOfMap())
 
@@ -44,7 +45,8 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
   turnPanel.add(currentPlayerComponent.get())
   turnPanel.add(currentPhaseComponent.get())
   turnPanel.add(selectPhaseComponent.get())
-  turnPanel.setBounds(0,0,700,  40)
+  turnPanel.add(goalComponent.get())
+  turnPanel.setBounds(0,0,800,  40)
   screen.add(turnPanel)
 
   private val tanksPanel = new JPanel()
@@ -87,6 +89,9 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
   private def getStateSelected: State =
     controller.stateByName(buttonMap.find((_, button) => button.isSelected).get._1)
 
+  /**
+   * method to update the phase component and all the buttons in the states with updated data
+   */
   def update(): Unit =
     if(buttonMap.head._2.isEnabled)
       selectPhaseComponent.update()
@@ -98,6 +103,10 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
     })
     resetButton()
 
+  /**
+   * method to enable and disable all buttons in the game screen to prevent the user from do actions at certain times
+   * @param enable the boolean to set if the buttons are clickable or not
+   */
   def setClickable(enable:Boolean): Unit =
     buttonMap.values.foreach(_.setEnabled(enable))
     selectPhaseComponent.setButtonsEnabled(enable)

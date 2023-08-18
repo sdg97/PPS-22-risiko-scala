@@ -13,13 +13,30 @@ class JButtonExtended(position: Position) extends JButton() {
   private var _isNeighbour: Boolean = false
   private var _color: Color = Color.DARK_GRAY
 
+  /**
+   * method for setting whether the current button is bordering the selected button
+   * @param value the boolean to set if the button is neighbor or not
+   */
   def setIsNeighbour(value: Boolean): Unit =
     _isNeighbour = value
 
+  /**
+   *
+   * @return true if the button is bordering the selected button
+   */
   def isNeighbour: Boolean =
     _isNeighbour
 
+  /**
+   *
+   * @return the color of the button
+   */
   def color: Color = _color
+
+  /**
+   * method to set a color to a button
+   * @param c the color to set the button
+   */
   def setColor(c: Color): Unit = _color = c
 
   setBorder(BorderFactory.createEmptyBorder())

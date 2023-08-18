@@ -1,8 +1,8 @@
 package model
 
-import model.entity.Player
+import model.entity.{Goal, Player}
 import model.entity.map.State
-import model.manager.{MessageAttackPhase, SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, VersionMap}
+import model.manager.{MessageAttackPhase, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, VersionMap}
 
 trait Model {
 
@@ -12,9 +12,9 @@ trait Model {
 
   def deployTroops(): Unit
 
-  def getAttacker(): State
+  def attackerState(): State
 
-  def getDefender(): State
+  def defenderState(): State
 
   /**
    * @param stateName the state's name from which to search for neighbors
@@ -42,7 +42,7 @@ trait Model {
 
   def attack(): Unit
 
-  def attackResult(): MessageAttackPhase
+  def resultOfAttack(): MessageAttackPhase
 
   def rollDiceAttacker(): Seq[Int]
 
@@ -77,10 +77,21 @@ trait Model {
    */
   def tanksToPlace: Int
 
+  /**
+   * @return the actions available to change phase of the turn
+   */
   def switchTurnPhaseActionAvailable: Set[RisikoAction]
 
+  /**
+   * Switch phase turn
+   * @param action to switch turn phase
+   */
   def switchPhase(a: RisikoSwitchPhaseAction): Unit
 
+  /**
+   *
+   * @return the current turn phase
+   */
   def currentPhase: RisikoPhase
 
   /**
@@ -102,4 +113,11 @@ trait Model {
   def numberOfDiceAttacker(): Int
 
   def numberOfDiceDefender(): Int
+
+  /**
+   * @return the goal for win the game
+   */
+  def goal: Goal
+
+
 }

@@ -56,8 +56,15 @@ object Player:
     new PlayerImpl(username,null)
 
 
+  /**
+   * Add some useful function to a list of players
+   */
   extension (players: List[Player])
-    def START_TANK_NUMBER(typeOfMap:VersionMap) = typeOfMap match
+
+    /**
+     * Get the number of tanks for each player at the start of the game
+     */
+    def getStartTankNumber(typeOfMap:VersionMap) = typeOfMap match
       case version if version.equals(VersionMap.Classic) => players.size match
         case 3 => 35
         case 4 => 30

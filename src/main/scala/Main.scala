@@ -1,6 +1,11 @@
 import controller.*
 import model.*
 import view.*
+
+/**
+ * Object that represent the MVC architecural pattern.
+ * Mix the Model, View and Controller module
+ */
 object MVC
   extends ModelModule.Interface
     with ViewModule.Interface
@@ -11,5 +16,8 @@ object MVC
   override val view = new ViewImpl()
   override val controller = new ControllerImpl()
 
+/**
+ * The application starting point
+ */
 object Main extends App:
   MVC.view.show()

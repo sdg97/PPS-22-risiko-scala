@@ -7,15 +7,14 @@ import java.awt.Color
 import javax.swing.{JLabel, JPanel}
 
 /**
- * Component that show the player that are playing
+ * Component that show the goal for win the game
  * @param controller
  */
-private[view] class CurrentPlayerComponent(private val controller: Controller):
+private[view] class GoalComponent(private val controller: Controller):
   private val panel = new JPanel()
-  private val LABEL_PREFIX = "Player:"
+  private val description = controller.goal.description
 
   /**
-   *
    * @return the component
    */
   def get() =
@@ -26,8 +25,7 @@ private[view] class CurrentPlayerComponent(private val controller: Controller):
    * update the component with updated data
    */
   def update() =
-    val label = JLabel(s"${LABEL_PREFIX} ${controller.currentPlayer.username}")
-    label.setForeground(Color.decode(controller.currentPlayer.color.rgb.toString))
+    val label = JLabel(s"${description}")
     panel.removeAll()
     panel setOpaque false
     panel add label

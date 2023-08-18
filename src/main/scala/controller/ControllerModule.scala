@@ -5,12 +5,26 @@ import model.entity.Player
 import model.entity.map.State
 import model.manager.{MessageAttackPhase, SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, VersionMap}
 import view.*
+
+/**
+ * The module that represent the Controller
+ */
 object ControllerModule:
+
+  /**
+   * What the module provide to the other module
+   */
   trait Provider:
     val controller: Controller
 
+  /**
+   * The requirements necessary for the functioning of the module
+   */
   type Requirements = ViewModule.Provider with ModelModule.Provider
 
+  /**
+   * The module component used by the provider
+   */
   trait Component:
     context: Requirements =>
     class ControllerImpl extends Controller:
@@ -71,5 +85,11 @@ object ControllerModule:
       override def numberOfDiceDefender(): Int = model.numberOfDiceDefender()
 
       override def currentTurnPhase: RisikoPhase = model.currentPhase
+
+      override def goal = model.goal
+
+  /**
+   * Module interface for mixing the module with the others MVC modules
+   */
   trait Interface extends Provider with Component:
     self: Requirements =>

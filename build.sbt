@@ -7,7 +7,7 @@ lazy val root = (project in file("."))
   .settings(
     scalaVersion := "3.1.2",
     name := "risiko-scala",
-    assembly / mainClass := Some("view.GuiProgramOne"),
+    assembly / mainClass := Some("Main"),
     assembly / assemblyJarName := "risiko.jar",
     // javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
     libraryDependencies ++= Seq(

@@ -1,10 +1,14 @@
 package controller
 
-import model.entity.Player
+import model.entity.{Goal, Player}
 import model.entity.map.State
-import model.manager.{MessageAttackPhase, SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, VersionMap}
+import model.manager.{MessageAttackPhase, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, VersionMap}
 
 trait Controller:
+
+  /**
+   * Start a new game
+   */
   def startNewGame(): Unit
 
   def setGameSettings(inputDataPlayer: List[(String, String)], typeOfMap: String): SettingResult
@@ -61,9 +65,16 @@ trait Controller:
    */
   def tanksToPlace: Int
 
+  /**
+   * @return the actions available to change phase of the turn
+   */
   def switchTurnPhaseActionAvailable: Set[RisikoAction]
 
-  def switchPhase(a: RisikoSwitchPhaseAction): Unit
+  /**
+   * Switch phase turn
+   * @param action to switch turn phase
+   */
+  def switchPhase(action: RisikoSwitchPhaseAction): Unit
 
   def resultAttack(): MessageAttackPhase
 
@@ -81,6 +92,10 @@ trait Controller:
 
   def numberOfTanksToMove(attacker: State): Int
 
+  /**
+   *
+   * @return the current turn phase
+   */
   def currentTurnPhase: RisikoPhase
 
   def setAttacker(state: State): Unit
@@ -102,7 +117,12 @@ trait Controller:
   def setDefaultInitialSettings(): Unit
 
   def setTypeOfMap(): VersionMap
-
+  
   def numberOfDiceAttacker(): Int
 
   def numberOfDiceDefender(): Int
+  /**
+   * @return the goal for win the game
+   */
+  def goal: Goal
+

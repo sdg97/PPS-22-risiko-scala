@@ -4,7 +4,7 @@ import model.config.Parsers.{BorderParser, ContinentParser, StateParser}
 import model.entity.map.{Continent, GameMap, State}
 import model.manager.VersionMap
 
-import java.io.File
+import java.io.{File, FileInputStream}
 import scala.io.Source
 
 object SetupFromFiles:
@@ -16,7 +16,7 @@ object SetupFromFiles:
   def setup(gameMap: GameMap, versionMap:VersionMap): Unit = {
     val resultVersionMap = setTypeOfMap(versionMap)
     readLinesFromFile(resultVersionMap._1).flatMap(StateParser.parse).foreach(gameMap.addNode)
-    readLinesFromFile(resultVersionMap._2).flatMap(BorderParser.parse).foreach { (state1, state2) => gameMap.addEdge(state1, state2) }
+    readLinesFromFile(resultVersionMap._2).flatMap(BorderParser.parse).foreach((state1, state2) => gameMap.addEdge(state1, state2))
     readLinesFromFile(resultVersionMap._3).flatMap(ContinentParser.parse).foreach(gameMap.addContinent)
   }
 
@@ -26,7 +26,8 @@ object SetupFromFiles:
    * @param file file in which read the lines
    * @return a Seq of all the lines of the file
    */
-  private def readLinesFromFile(file: File): Seq[String] = Source.fromFile(file).getLines().toList
+  private def readLinesFromFile(file: String): Seq[String] =
+    Source.fromInputStream(getClass.getResourceAsStream(file)).getLines().toList
 
   /**
    * method to obtain the correct config files associated with the map version chosen by the user
@@ -34,9 +35,10 @@ object SetupFromFiles:
    * @param versionMap the version of the map chosen by the user
    * @return the config files associated with the map version
    */
+
   private def setTypeOfMap(versionMap:VersionMap) = versionMap match
     case VersionMap.Classic =>
-      (File("src/main/resources/config/states.txt"), File("src/main/resources/config/borders.txt"), File("src/main/resources/config/continents.txt"))
+      ("/config/states.txt", "/config/borders.txt", "/config/continents.txt")
     case VersionMap.Europe =>
-      (File("src/main/resources/config/states_europe.txt"), File("src/main/resources/config/borders_europe.txt"), File("src/main/resources/config/continents_europe.txt"))
+      ("/config/states_europe.txt", "/config/borders_europe.txt","/config/continents_europe.txt")
     case _ => null

@@ -3,13 +3,41 @@ package model.manager
 import model.entity.PlayerColor.{BLACK, BLUE, YELLOW}
 import model.manager.TurnManager
 
+/**
+ * Player turn alternation manager
+ * @tparam T: the players type managed by the TurnManager
+ */
 trait TurnManager[T]:
+
+  /**
+   *
+   * @return List of the players managed
+   */
   def all: List[T]
+
+  /**
+   * the current player
+   * @return
+   */
   def current: T
+
+  /**
+   * Switch to the next player
+   * @return the next player
+   */
   def next(): T
 
+/**
+ * TurnManager factory
+ */
 object TurnManager:
-  def apply[T](elems: List[T]): TurnManager[T] = TurnManagerImpl(elems)
+
+  /**
+   * @param players: List of the players managed
+   * @tparam T: the players type managed by the TurnManager
+   * @return a new TurnManager manage the list of players in a circular and sequential way
+   */
+  def apply[T](players: List[T]): TurnManager[T] = TurnManagerImpl(players)
 
   private case class TurnManagerImpl[T](private val toManage: List[T])
     extends TurnManager[T]:
