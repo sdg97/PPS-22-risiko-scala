@@ -87,7 +87,6 @@ object ModelModule:
       override def resultOfAttack(): MessageAttackPhase = attackManager.resultMessage
       override def moveTanks(fromStateName: String, toStateName: String, numberOfTanks: Int): Unit =
         gameMap.moveTanks(fromStateName, toStateName, numberOfTanks)
-        println(turnManager.get.current)
         if(turnPhasesManager.currentPhase == Move){
           turnPhasesManager.trigger(MoveRequest)
           turnManager.get.next()
@@ -98,7 +97,7 @@ object ModelModule:
 
       override def rollDiceDefender(): Seq[Int] = attackManager.rollDiceDefender
 
-      override def numberOfTanksToMove(): Int = attackManager.numberOfTanksToMove()
+      override def numberOfTanksToMove(): Seq[Int] = attackManager.numberOfTanksToMove()
 
       override def setAttackerState(state: State): Unit = attackManager.setAttacker(state)
 

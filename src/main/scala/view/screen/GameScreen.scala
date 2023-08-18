@@ -124,7 +124,6 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
         if (btnState.isSelected)
           resetButton()
         else if (btnState.isNeighbour) {
-          println("isNeighbour")
           //if i click on a neighbor state I do an attack
           controller.setAttackerState(getStateSelected)
           controller.setDefenderState(controller.stateByName(getStateNameFromButton(btnState)))
@@ -132,7 +131,6 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
           resetButton()
         } else if (!btnState.isSelected && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer) && controller.stateByName(getStateNameFromButton(btnState)).numberOfTanks > 1) {
           resetButton()
-          println("isSelected")
           //set button as selected
           btnState.setSelected(true)
           //set neighbor states

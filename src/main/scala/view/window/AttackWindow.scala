@@ -173,8 +173,8 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
       buttonClose.setBounds(140, 220, 120, 50)
       labelPlayerMessage.setBounds(40, 340, 300, 80)
       val numberOfTanks=controller.numberOfTanksToMove()
-      if ((stateAttack.numberOfTanks)-1 == numberOfTanks) {
-        controller.moveTanks(stateAttack.name, stateDefender.name, numberOfTanks)
+      if (numberOfTanks.size==1) {
+        controller.moveTanks(stateAttack.name, stateDefender.name, numberOfTanks.head)
         controller.updateView()
         buttonClose.setEnabled(true)
       }
@@ -184,7 +184,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
       }
     }
     else if (controller.resultOfAttack().equals(MessageAttackPhase.LoseAttack)) {
-      labelPlayerMessage.setText("""<html>Sorry, but you can't attack <br>because you have only one wagon <br> in """ + stateDefender.name + """</html>""".stripMargin)
+      labelPlayerMessage.setText("""<html>Sorry, but you can't attack <br>because you have only one tank <br> in """ + stateDefender.name + """</html>""".stripMargin)
       controller.updateView()
       panelAttackPhase.remove(buttonAttack)
       panelAttackPhase.remove(buttonDefence)
@@ -315,7 +315,7 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
    * @param stateDefender
    * @param numberOfTanks
    */
-  def showNumberOfTanksToMove(panel: JPanel, buttonClose:JButton, stateAttack:String, stateDefender: String, numberOfTanks:Int):Unit={
+  def showNumberOfTanksToMove(panel: JPanel, buttonClose:JButton, stateAttack:String, stateDefender: String, numberOfTanks:Seq[Int]):Unit={
     val labelNumberOfTanksToMove=new JLabel(){
       setText("""<html>Select the number of tank to move, in the conquared state </html>""")
       setFont(new Font("Arial", 12, 17))
@@ -325,8 +325,8 @@ class GameWindowAttack(gameScreen:GameScreen,controller: Controller) {
 
     val arrayOfTankToMove: ArrayBuffer[String]= ArrayBuffer()
     arrayOfTankToMove+=""
-    for(i<-controller.numberOfDiceAttacker() to (numberOfTanks-1)){
-      arrayOfTankToMove+=i.toString
+    numberOfTanks.foreach{element=>
+      arrayOfTankToMove+=element.toString
     }
 
     val comboBoxMenu=new JComboBox[String](arrayOfTankToMove.toArray){

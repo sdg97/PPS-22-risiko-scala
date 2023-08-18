@@ -17,6 +17,7 @@ enum MessageAttackPhase:
   case Winner
 
 type DiceRoll = Seq[Int]
+type NumberOfTank= Seq[Int]
 type CountUsersDice = (Int, Int)
 trait AttackManager:
   /**
@@ -43,14 +44,14 @@ trait AttackManager:
    *
    * @param diceRollAttacker the result of roll dice by attacker player.
    */
-  def setDiceRollAttacker(diceRollAttacker:DiceRoll):Unit
+  def setRollDiceAttacker(diceRollAttacker:DiceRoll):Unit
 
   /**
    * method to set the result of roll dice by defender player.
    *
    * @param diceRollDefender the result of roll dice by defender player.
    */
-  def setDiceRollDefender(diceRollDefender:DiceRoll):Unit
+  def setRollDiceDefender(diceRollDefender:DiceRoll):Unit
 
   /**
    *
@@ -101,14 +102,14 @@ trait AttackManager:
    * @return the number of tanks to move in conquered state
    *
    */
-  def numberOfTanksToMove():Int
+  def numberOfTanksToMove():NumberOfTank
 
   /**
    * method to set the tanks to move in conquered state
    *
    * @param tanksToMove the number of tanks to move in conquered state
    */
-  def setNumberOfTanksToMove(tanksToMove:Int):Unit
+  def setNumberOfTanksToMove(tanksToMove:NumberOfTank):Unit
 
   /**
    * @return the number of attacker player's dice
@@ -135,7 +136,7 @@ object AttackManager:
     private var numberOfDiceAttackerState: Int = 0
     private var numberOfDiceDefenderState: Int = 0
     private var message:MessageAttackPhase= null
-    private var tanksToMove:Int=0;
+    private var tanksToMove:Seq[Int]=Seq(0);
 
     private var currentPhase: AttackPhase = _
 
@@ -194,15 +195,15 @@ object AttackManager:
 
     override def setDefender(state: State): Unit = defenderState=state
 
-    override def setDiceRollAttacker(diceRollAttacker: DiceRoll): Unit = resultDiceRollAttacker=diceRollAttacker
+    override def setRollDiceAttacker(diceRollAttacker: DiceRoll): Unit = resultDiceRollAttacker=diceRollAttacker
 
-    override def setDiceRollDefender(diceRollDefender: DiceRoll): Unit = resultDiceRollDefender=diceRollDefender
+    override def setRollDiceDefender(diceRollDefender: DiceRoll): Unit = resultDiceRollDefender=diceRollDefender
 
     override def setResultMessage(messageAttack: MessageAttackPhase): Unit = message=messageAttack
 
-    override def numberOfTanksToMove(): Int = tanksToMove
+    override def numberOfTanksToMove(): NumberOfTank = tanksToMove
 
-    override def setNumberOfTanksToMove(tanks: Int): Unit = tanksToMove=tanks
+    override def setNumberOfTanksToMove(tanks: NumberOfTank): Unit = tanksToMove=tanks
 
     override def numberOfDiceAttacker(): Int =
       numberOfDiceAttackerState=numberOfDice()._1
