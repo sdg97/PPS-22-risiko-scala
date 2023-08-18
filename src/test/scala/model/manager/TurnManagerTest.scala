@@ -1,4 +1,4 @@
-package model
+package model.manager
 
 import model.entity.Player
 import model.manager.TurnManager

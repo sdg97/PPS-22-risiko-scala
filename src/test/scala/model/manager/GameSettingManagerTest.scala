@@ -1,4 +1,4 @@
-package model
+package model.manager
 
 import model.manager.{GameSettingManager, SettingResult, VersionMap}
 import org.scalatest.funspec.AnyFunSpec

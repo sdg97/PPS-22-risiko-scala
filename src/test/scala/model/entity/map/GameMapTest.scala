@@ -1,9 +1,9 @@
-package model
+package model.entity.map
 
-import model.entity.{Player, PlayerColor}
 import model.entity.map.{Continent, GameMap, State}
-import org.junit.{Before, Test}
+import model.entity.{Player, PlayerColor}
 import org.junit.Assert.{assertEquals, assertFalse, assertTrue}
+import org.junit.{Before, Test}
 
 class GameMapTest:
 

@@ -1,6 +1,8 @@
-package model.manager
+package model.manager.attackmanager
 
 import model.entity.map.{GameMap, State}
+import model.manager.attackmanager.{AttackManager, MessageAttackPhase,AttackPhase}
+import model.manager.{VersionMap}
 
 import scala.util.Random
 

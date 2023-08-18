@@ -3,7 +3,8 @@ package controller
 import model.*
 import model.entity.Player
 import model.entity.map.State
-import model.manager.{MessageAttackPhase, SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, VersionMap}
+import model.manager.attackmanager.MessageAttackPhase
+import model.manager.{SettingResult, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, VersionMap}
 import view.*
 
 /**

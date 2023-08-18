@@ -1,4 +1,5 @@
-package model
+package model.entity
+
 import model.entity.Player
 import model.entity.PlayerColor.BLACK
 import org.scalatest.flatspec.AnyFlatSpec

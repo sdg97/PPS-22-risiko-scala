@@ -1,8 +1,9 @@
-package model
+package model.manager.attackmanager
 
-import model.entity.{Player, PlayerColor}
 import model.entity.map.{GameMap, State}
-import model.manager.{AttackManager, MessageAttackPhase, TankMovementPhase, VersionMap}
+import model.entity.{Player, PlayerColor}
+import model.manager.VersionMap
+import model.manager.attackmanager.{AttackManager, MessageAttackPhase, TankMovementPhase}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 

@@ -2,7 +2,8 @@ package model
 
 import model.entity.{Goal, Player}
 import model.entity.map.State
-import model.manager.{MessageAttackPhase, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, VersionMap}
+import model.manager.attackmanager.MessageAttackPhase
+import model.manager.{RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, VersionMap}
 
 trait Model {
 

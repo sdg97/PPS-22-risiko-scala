@@ -1,9 +1,9 @@
 package view.window
 
 import controller.Controller
-import model.manager.MessageAttackPhase
 import model.entity.Player
 import model.entity.map.State
+import model.manager.attackmanager.MessageAttackPhase
 import view.component.{DiceComponent, JButtonExtended, SelectPhaseComponent}
 import view.screen.GameScreen
 

@@ -9,7 +9,8 @@ import model.manager.RisikoPhase.*
 import model.config.SetupFromFiles
 import model.entity.{Goal, Player, PlayerColor}
 import model.entity.map.{GameMap, State}
-import model.manager.{AttackManager, GameSettingManager, MessageAttackPhase, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, TurnManager, TurnPhasesManager, VersionMap}
+import model.manager.attackmanager.{AttackManager, MessageAttackPhase}
+import model.manager.{GameSettingManager, RisikoAction, RisikoPhase, RisikoSwitchPhaseAction, SettingResult, TurnManager, TurnPhasesManager, VersionMap}
 import view.ViewModule.Requirements
 
 /**
@@ -107,7 +108,7 @@ object ModelModule:
 
       override def setDefaultInitialSettings(): Unit =
         gameMap = new GameMap()
-        attackManager = manager.AttackManager(gameMap)
+        attackManager = AttackManager(gameMap)
         turnPhasesManager = TurnPhasesManager()
         gameSettingManager = GameSettingManager()
         

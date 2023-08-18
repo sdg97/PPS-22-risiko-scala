@@ -1,7 +1,8 @@
-package model.manager
+package model.manager.attackmanager
 
 import model.*
 import model.entity.map.{GameMap, State}
+import model.manager.*
 
 import scala.collection.immutable.Seq
 import scala.util.Random
