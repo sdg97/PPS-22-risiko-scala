@@ -8,7 +8,7 @@ lazy val root = (project in file("."))
     scalaVersion := "3.1.2",
     name := "risiko-scala",
     assembly / mainClass := Some("Main"),
-    assembly / assemblyJarName := "risiko.jar",
+    assembly / assemblyJarName := "PPS-22-risiko-scala.jar",
     // javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
