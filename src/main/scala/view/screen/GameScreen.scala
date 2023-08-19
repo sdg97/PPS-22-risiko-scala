@@ -114,27 +114,25 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
       selectPhaseComponent.update()
 
   private def createButtonActionListener(btnState: JButtonExtended): ActionListener = (e: ActionEvent) => {
+    val state = controller.stateByName(getStateNameFromButton(btnState))
     controller.currentTurnPhase match {
       case RisikoPhase.StartTurn =>
         resetButton()
-        controller.addTank(getStateNameFromButton(btnState))
+        controller.addTank(state.name)
         tanksToPlaceLabel.setText(s"Tanks to be placed: ${controller.tanksToPlace}")
-
       case RisikoPhase.Attack =>
         if (btnState.isSelected)
           resetButton()
         else if (btnState.isNeighbour) {
           //if i click on a neighbor state I do an attack
           controller.setAttackerState(getStateSelected)
-          controller.setDefenderState(controller.stateByName(getStateNameFromButton(btnState)))
+          controller.setDefenderState(state)
           val gameWindowAttack = new GameWindowAttack(this, controller)
           resetButton()
-        } else if (!btnState.isSelected && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer) && controller.stateByName(getStateNameFromButton(btnState)).numberOfTanks > 1) {
+        } else if (!btnState.isSelected && state.player == controller.currentPlayer && state.numberOfTanks > 1) {
           resetButton()
-          //set button as selected
           btnState.setSelected(true)
-          //set neighbor states
-          setNeighbourStates(controller.neighborStatesOfEnemies(getStateNameFromButton(btnState)), Color.RED)
+          setNeighbourStates(controller.neighborStatesOfEnemies(state.name), Color.RED)
         }
       case RisikoPhase.Move =>
         if (btnState.isSelected)
@@ -142,23 +140,19 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
         else if (btnState.isNeighbour) {
           val movePanel = new MoveWindow(this, controller, getStateSelected.name, getStateNameFromButton(btnState))
           resetButton()
-        } else if (!btnState.isSelected && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer)) {
+        } else if (!btnState.isSelected && state.player == controller.currentPlayer) {
           resetButton()
-          //set button as selected
           btnState.setSelected(true)
-          //set neighbor states
-          setNeighbourStates(controller.neighborStatesOfPlayer(getStateNameFromButton(btnState)), Color.BLACK)
+          setNeighbourStates(controller.neighborStatesOfPlayer(state.name), Color.BLACK)
         }
     }
   }
-
   private def setNeighbourStates(stateNames: Set[String], borderColor: Color): Unit = {
     stateNames.foreach { stateName =>
       buttonMap(stateName).setIsNeighbour(true)
       buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(borderColor, 2))
     }
   }
-
   private def createButtonMouseListener(btnState: JButtonExtended): MouseListener = new MouseAdapter {
     override def mouseEntered(evt: MouseEvent): Unit = {
       if (!btnState.isSelected && !btnState.isNeighbour && controller.stateByName(getStateNameFromButton(btnState)).player.equals(controller.currentPlayer)) {
@@ -171,4 +165,3 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
       }
     }
   }
-
