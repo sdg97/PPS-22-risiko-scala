@@ -134,10 +134,7 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
           //set button as selected
           btnState.setSelected(true)
           //set neighbor states
-          controller.neighborStatesOfEnemies(getStateNameFromButton(btnState)).foreach(stateName => {
-            buttonMap(stateName).setIsNeighbour(true)
-            buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2))
-          })
+          setNeighbourStates(controller.neighborStatesOfEnemies(getStateNameFromButton(btnState)), Color.RED)
         }
       case RisikoPhase.Move =>
         if (btnState.isSelected)
@@ -150,11 +147,15 @@ private class GameScreenImpl(controller: Controller) extends GameScreen:
           //set button as selected
           btnState.setSelected(true)
           //set neighbor states
-          controller.neighborStatesOfPlayer(getStateNameFromButton(btnState)).foreach(stateName => {
-            buttonMap(stateName).setIsNeighbour(true)
-            buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 2))
-          })
+          setNeighbourStates(controller.neighborStatesOfPlayer(getStateNameFromButton(btnState)), Color.BLACK)
         }
+    }
+  }
+
+  private def setNeighbourStates(stateNames: Set[String], borderColor: Color): Unit = {
+    stateNames.foreach { stateName =>
+      buttonMap(stateName).setIsNeighbour(true)
+      buttonMap(stateName).setBorder(javax.swing.BorderFactory.createLineBorder(borderColor, 2))
     }
   }
 
